@@ -16,6 +16,7 @@ import type { TableColumnsType, TableProps } from "antd";
 import { EditOutlined, ReloadOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { notification } from "antd";
+import moment from "moment";
 
 const { Option } = Select;
 type TableRowSelection<T> = TableProps<T>["rowSelection"];
@@ -48,9 +49,7 @@ interface IIssues {
 // interface DataTypeFor
 
 const Configuration = () => {
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
+  
 
   const [buttonName, setButtonName] = useState("Department");
   const [selectedTab, setSelectedTab] = useState("1");
@@ -98,7 +97,7 @@ const Configuration = () => {
   const fetchDataForDepartment = async () => {
     try {
       const response = await axios.get(
-        "https://localhost:7267/api/Master/GetAllDepartments"
+        "https://localhost:7267/api/Master/GetDepartmentsByActive?isActive=true"
       );
       setDepartments(response.data);
       console.log(response.data, "dataaa");
@@ -186,9 +185,9 @@ const Configuration = () => {
     console.log("Received values:", values);
 
     if (canEdit) {
-      var data = { ...values, createdBy: "adminuser", modifiedBy: "adminn" };
+      var data = { ...values,departmentId:selectedRow[0].departmentId,createdBy:'' ,modifiedBy: "adminn" };
     } else {
-      var data = { ...values, createdBy: "adminuser", modifiedBy: "adminn" };
+      var data = { ...values, createdBy: "adminuser"};
     }
     // Add logic to save department data
     setIsModalVisible(false);
@@ -273,6 +272,29 @@ const Configuration = () => {
         message: "Error",
         description: "Failed to update department status. Please try again.",
       });
+    }
+  }
+  const handleActiveStatusChange = async(value: string)=>{
+    if(value === 'Active'){
+    try {
+        const response = await axios.get(
+          "https://localhost:7267/api/Master/GetDepartmentsByActive?isActive=true"
+        );
+        setDepartments(response.data);
+        console.log(response.data, "dataaa");
+      } catch (error) {
+        console.error("Error fetching departments:", error);
+      }
+    }else{
+        try {
+            const response = await axios.get(
+              "https://localhost:7267/api/Master/GetDepartmentsByActive?isActive=false"
+            );
+            setDepartments(response.data);
+            console.log(response.data, "dataaa");
+          } catch (error) {
+            console.error("Error fetching departments:", error);
+          }
     }
   }
 
@@ -407,6 +429,7 @@ const Configuration = () => {
     {
       title: "CreatedOn",
       dataIndex: "createdDate",
+      render: (text: string) => moment(text).format("YYYY-MM-DD"),
     },
     {
       title: "Edit",
@@ -434,27 +457,28 @@ const Configuration = () => {
     {
       title: "Role ID",
       dataIndex: "roleId",
-      width: 150,
+      
     },
     {
       title: "Role Name",
       dataIndex: "roleName",
-      width: 150,
+      
     },
     {
       title: "CreatedBy",
       dataIndex: "createdBy",
-      width: 200,
+      
     },
     {
       title: "CreatedOn",
       dataIndex: "createdDate",
-      width: 200,
+      render: (text: string) => moment(text).format("YYYY-MM-DD"),
+      
     },
     {
       title: "Department",
       dataIndex: "departmentId",
-      width: 200,
+      
     },
 
     {
@@ -493,27 +517,28 @@ const Configuration = () => {
     {
       title: "Issue ID",
       dataIndex: "issueId",
-      width: 100,
+      
     },
     {
       title: "Issue Name",
       dataIndex: "issueName",
-      width: 100,
+      
     },
     {
       title: "Department",
       dataIndex: "departmentId",
-      width: 300,
+      
     },
     {
       title: "CreatedBy",
       dataIndex: "createdBy",
-      width: 300,
+      
     },
     {
       title: "CreatedOn",
       dataIndex: "createDate",
-      width: 300,
+      render: (text: string) => moment(text).format("YYYY-MM-DD"),
+      
     },
     {
       title: "Edit",
@@ -537,7 +562,7 @@ const Configuration = () => {
     },
   ];
   return (
-    <div>
+    <div className="comonclass">
       <h1>Configuration</h1>
       <div style={{ display: "Flex", justifyContent: "space-between" }}>
         <div style={{ alignItems: "screenLeft" }}>
@@ -554,7 +579,7 @@ const Configuration = () => {
       />
         </div>
         <div style={{ display: "Flex", gap: "10px" }}>
-          <Select defaultValue="Active" className="selectclass">
+          <Select defaultValue="Active" className="selectclass" onChange={(value) => handleActiveStatusChange(value)}>
             <Option value="Active">Active</Option>
             <Option value="InActive">InActive</Option>
           </Select>
@@ -679,15 +704,6 @@ const Configuration = () => {
             canEdit ? defaultValues : { departmentId: "", departmentName: "" }
           }
         >
-          <Form.Item
-            label="Department ID"
-            name="departmentId"
-            rules={[
-              { required: true, message: "Please input the Department ID!" },
-            ]}
-          >
-            <Input onKeyDown={handleDepartmentIdKeyDown} />
-          </Form.Item>
 
           <Form.Item
             label="Department Name"

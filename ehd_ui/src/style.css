@@ -94,10 +94,12 @@ LoginForm.css */
 .buttonclass{
     background-color:rgba(80, 65, 188, 1);
     width: 140px;
+    font-family:Georgia, 'Times New Roman', Times, serif;
   }
 .tabclass{
     width: 80%;
     margin-left: 10%;
+    font-family:Georgia, 'Times New Roman', Times, serif;
 }
 
 .tabActive {
@@ -111,6 +113,7 @@ LoginForm.css */
   }
   .headerclass{
     padding-left: 200px;
+    font-family:Georgia, 'Times New Roman', Times, serif
   }
    .ant-tabs-card >.ant-tabs-nav .ant-tabs-tab:hover{
     color:#000;
@@ -138,12 +141,17 @@ LoginForm.css */
    }
    .selectclass{
     margin-left: -15%;
+    width: 100px;
+    font-family:Georgia, 'Times New Roman', Times, serif
+
    }
    .activeclass{
     background-color: #73d13d;
     color:#ffffff;
     font-weight: bold;
     width: 90px;
+    font-family:Georgia, 'Times New Roman', Times, serif
+    
    }
    .deactiveclass{
     background-color: #ff4d4f;
