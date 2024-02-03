@@ -1,3 +1,169 @@
-body{
-    background-color: azure;
+LoginForm.css */
+
+.login-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+  margin: 0 auto;
 }
+
+.image-block {
+  flex: 1;
+}
+
+.form-block {
+  flex: 1;
+  margin-left: 20px; 
+}
+
+.loginDiv {
+  color: #391085;
+  font-size: 35px;
+}
+
+.logo-image {
+  width: 80%; 
+  height: auto; 
+}
+
+
+.ant-layout .ant-layout-sider{
+    background-color: #003eb3;
+    float: left;
+    width: 20%;
+}
+.ant-layout-content {
+    float: right;
+
+  
+  
+  }
+  .ant-layout .ant-layout-sider-trigger {
+    background-color: #4d84eb;
+  }
+.container {
+    height: 64;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16;
+  }
+  .images {
+    height: 90px; 
+    transition: all 0.3s; 
+  }
+  
+  .images.collapsed {
+    height: 50px; 
+  }
+  .line{
+    width:80%;
+  }
+  .menus{
+    background-color: #003eb3;
+    font-size: 1rem;
+    text-align: left;
+    padding-top: 12px;
+    color: white;
+  }
+ 
+  .tooltip-content {
+    display: flex;
+    align-items: center;
+ 
+   }
+  
+  .tooltip-avatar {
+    display: flex;
+    align-items: center;
+    margin-left: 82%;
+    margin-top: 2%;
+    padding: 0%;
+    
+  }
+ 
+  .arrowdropicon{
+   font-size: 35px;
+
+  } 
+.ant-dropdown .ant-dropdown-menu .ant-dropdown-menu-item-icon{
+    font-size: 20px;
+  }
+  
+.buttonclass{
+    background-color:rgba(80, 65, 188, 1);
+    width: 140px;
+  }
+.tabclass{
+    width: 80%;
+    margin-left: 10%;
+}
+
+.tabActive {
+    background-color: #1890ff;
+    color: #fff;
+  }
+  
+.tabInactive {
+    background-color: #d57e21;
+    color: #000;
+  }
+  .headerclass{
+    padding-left: 200px;
+  }
+   .ant-tabs-card >.ant-tabs-nav .ant-tabs-tab:hover{
+    color:#000;
+   }
+   .ant-tabs-card.ant-tabs-top >.ant-tabs-nav .ant-tabs-tab{
+    border-radius:0;
+   }
+   
+   .ant-tabs-card >.ant-tabs-nav .ant-tabs-tab{
+    background: #D3CBFB;
+    font-weight: bold;
+    width: 120px;
+    text-align: center;
+   }
+   .ant-tabs-card >.ant-tabs-nav .ant-tabs-tab-active{
+    background: rgba(80, 65, 188, 1);
+    color:#ffffff;
+    font-weight: bold;
+   }
+   .ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+    color: #ffffff;
+   }
+   .ant-tabs-card.ant-tabs-top >.ant-tabs-nav .ant-tabs-tab+.ant-tabs-tab{
+    margin-left: -3px;
+   }
+   .selectclass{
+    margin-left: -15%;
+   }
+   .activeclass{
+    background-color: #73d13d;
+    color:#ffffff;
+    font-weight: bold;
+    width: 90px;
+   }
+   .deactiveclass{
+    background-color: #ff4d4f;
+    color:#ffffff;
+    font-weight: bold;
+    width: 90px;
+   }
+   .modalclass{
+    font-weight: bold;
+   }
+   .modalTitleStyle{
+    font-size: large;
+    font-weight: bolder;
+    color: rgba(80, 65, 188, 1);
+    font-family:Georgia, 'Times New Roman', Times, serif
+   }
+
+   .searchclass{
+    margin-left: -600px;
+   }
+
+   
+  
