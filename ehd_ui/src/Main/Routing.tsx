@@ -3,6 +3,7 @@ import CommonLayout from "./Layout";
 import { useContext, useEffect, useState } from "react";
 import { contextAuth } from "./GlobalState";
 import { Login } from "./LoginComponent";
+import Configuration from "../Admin/Configuration/configuration";
 
 export function RoutingComponent() {
   const [role, setRole] = useContext<any>(contextAuth);
@@ -112,7 +113,8 @@ export function RoutingComponent() {
           element={
             "isAuthenticated" ? (
               <CommonLayout userRoles={role}>
-                <h1>Configurations</h1>
+                {/* <h1>Configurations</h1> */}
+                <Configuration/>
               </CommonLayout>
             ) : (
               <Navigate to="/" replace />
