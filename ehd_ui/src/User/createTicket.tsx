@@ -1,6 +1,5 @@
 import { Button, Card } from "antd";
 import React, { useState, useEffect } from "react";
-import "./createTicket.css";
 import TextArea from "antd/es/input/TextArea";
 import axios, { AxiosResponse } from "axios";
 
@@ -32,7 +31,7 @@ interface PriorityType {
   // modifiedBy: null | string;
   // isActive: boolean;
 }
-const HelpdeskForm: React.FC = () => {
+const CreateTicket: React.FC = () => {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [department, setDepartment] = useState("Select Department");
   const [selectedDepartmentId, setSelectedDepartmentId] = useState<
@@ -46,11 +45,11 @@ const HelpdeskForm: React.FC = () => {
   const [priorityTypes, setPriorityTypes] = useState<PriorityType[]>([]);
   const [dynamicOption, setDynamicOption] = useState("");
 
-  const empID = "E0003";
+  const empID = localStorage.getItem("EmployeeId");
 
   useEffect(() => {
     axios
-      .get("https://localhost:7267/api/Master/GetActivePriority")
+      .get("/api/Master/GetActivePriority")
       .then((response: AxiosResponse<PriorityType[]>) => {
         setPriorityTypes(response.data);
         console.log(response.data);
@@ -62,7 +61,7 @@ const HelpdeskForm: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get("https://localhost:7267/api/Master/GetActiveDepartments")
+      .get("/api/Master/GetActiveDepartments")
 
       .then((response: AxiosResponse<Department[]>) => {
         setDepartments(response.data);
@@ -89,7 +88,7 @@ const HelpdeskForm: React.FC = () => {
     if (selectedDepartmentId) {
       axios
         .get(
-          ` https://localhost:7267/api/Ticket/GetIssueTypeByDepartmentId?departmentId=${selectedDepartmentId}`
+          ` /api/Ticket/GetIssueTypeByDepartmentId?departmentId=${selectedDepartmentId}`
         )
         .then((response: AxiosResponse<IssueType[]>) => {
           setIssueTypes(response.data);
@@ -133,7 +132,7 @@ const HelpdeskForm: React.FC = () => {
     };
 
     axios
-      .post("https://localhost:7267/api/Ticket/CreateTicket", payload)
+      .post("/api/Ticket/CreateTicket", payload)
       .then((response) => {
         console.log("Ticket created successfully:", response.data);
         handleClear();
@@ -263,4 +262,4 @@ const HelpdeskForm: React.FC = () => {
   );
 };
 
-export default HelpdeskForm;
+export default CreateTicket;

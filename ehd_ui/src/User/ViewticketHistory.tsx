@@ -3,7 +3,6 @@ import { Button, Input, Modal, Table } from "antd";
 import axios from "axios";
 import type { TableColumnsType } from "antd";
 import moment from "moment";
-import "./ViewticketHistory.css";
 import { RedoOutlined } from "@ant-design/icons";
 
 interface DataType {
