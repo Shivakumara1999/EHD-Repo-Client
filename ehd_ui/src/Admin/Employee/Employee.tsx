@@ -2,6 +2,7 @@ import { Button, Divider, Modal, Select, Table, TableColumnsType } from "antd";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { EditFilled, ReloadOutlined } from "@ant-design/icons";
+import AddEmployee from "./AddEmployee";
 
 interface DataType {
   key: React.Key;
@@ -212,7 +213,7 @@ const EmployeeComponent: React.FC = () => {
 
   return (
     <div>
-      <Button>Add Employee</Button>
+      <AddEmployee/>
       <ReloadOutlined
         onClick={() => {
           refreshFunction();
