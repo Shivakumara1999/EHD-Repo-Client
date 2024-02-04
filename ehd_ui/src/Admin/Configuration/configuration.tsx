@@ -73,8 +73,11 @@ const Configuration = () => {
   const [roles, setRoles] = useState<IRoles[]>([]);
   const [issues, setIssues] = useState<IIssues[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [activeStatus, setActiveStatus] = useState('Active');
+  
 
   const refreshFunction=()=>{
+    setActiveStatus('Active');
     setButtonName("Department");
     setSelectedTab('1');
     setIsModalVisible(false);
@@ -92,6 +95,7 @@ const Configuration = () => {
       fetchDataForRoles();
       fetchDataForIssues();
       setSelectedRowKeys([]);
+      handleActiveStatusChange('Active');
   }
 
   const fetchDataForDepartment = async () => {
@@ -100,7 +104,6 @@ const Configuration = () => {
         "https://localhost:7267/api/Master/GetDepartmentsByActive?isActive=true"
       );
       setDepartments(response.data);
-      console.log(response.data, "dataaa");
     } catch (error) {
       console.error("Error fetching departments:", error);
     }
@@ -112,7 +115,6 @@ const Configuration = () => {
         "https://localhost:7267/api/Master/GetAllRoles"
       );
       setRoles(response.data);
-      console.log(response.data, "dataaa1111");
     } catch (error) {
       console.error("Error fetching departments:", error);
     }
@@ -124,7 +126,6 @@ const Configuration = () => {
         "https://localhost:7267/api/Master/GetAllIssueTypes"
       );
       setIssues(response.data);
-      console.log(response.data, "dataaa1111");
     } catch (error) {
       console.error("Error fetching departments:", error);
     }
@@ -134,7 +135,6 @@ const Configuration = () => {
     fetchDataForRoles();
     fetchDataForIssues();
   }, []);
-  console.log(departments.length, "department");
   const departmentData: IDepartment[] = [];
   const rolesData: IRoles[] = [];
   const issuesdata: IIssues[] = [];
@@ -182,7 +182,6 @@ const Configuration = () => {
   };
 
   const onFinish = async (values: any) => {
-    console.log("Received values:", values);
 
     if (canEdit) {
       var data = { ...values,departmentId:selectedRow[0].departmentId,createdBy:'' ,modifiedBy: "adminn" };
@@ -238,13 +237,13 @@ const Configuration = () => {
       setCallModal("departmentmodal");
     }
   };
+
   const handleActiveClick = async () => {
     // Extract departmentIds from selected rows
     const selectedDepartmentIds = selectedRow.map((row) => row.departmentId);
   
     // Create the object with the desired format
     const requestData ={ id: selectedDepartmentIds };
-    console.log(requestData,"dataaaaaaaaaaa")
   
     try {
       // Make the API call
@@ -253,14 +252,6 @@ const Configuration = () => {
         requestData
       );
   
-      // Handle the response as needed
-      console.log("API response:", response.data);
-  
-      // You can also trigger a reload or perform other actions if needed
-      // For example:
-      // fetchDataForDepartment();
-      // fetchDataForRoles();
-      // fetchDataForIssues();
       notification.success({
         message: "Success",
         description:'Department status updated succesfully',
@@ -275,13 +266,13 @@ const Configuration = () => {
     }
   }
   const handleActiveStatusChange = async(value: string)=>{
+    setActiveStatus(value);
     if(value === 'Active'){
     try {
         const response = await axios.get(
           "https://localhost:7267/api/Master/GetDepartmentsByActive?isActive=true"
         );
         setDepartments(response.data);
-        console.log(response.data, "dataaa");
       } catch (error) {
         console.error("Error fetching departments:", error);
       }
@@ -291,7 +282,6 @@ const Configuration = () => {
               "https://localhost:7267/api/Master/GetDepartmentsByActive?isActive=false"
             );
             setDepartments(response.data);
-            console.log(response.data, "dataaa");
           } catch (error) {
             console.error("Error fetching departments:", error);
           }
@@ -303,7 +293,6 @@ const Configuration = () => {
   
     // Create the object with the desired format
     const requestData ={ id: selectedDepartmentIds };
-    console.log(requestData,"dataaaaaaaaaaa")
   
     try {
       // Make the API call
@@ -311,15 +300,6 @@ const Configuration = () => {
         "https://localhost:7267/api/Master/EditDepartmentIsActive?Is_Active=false",
         requestData
       );
-  
-      // Handle the response as needed
-      console.log("API response:", response.data);
-  
-      // You can also trigger a reload or perform other actions if needed
-      // For example:
-      // fetchDataForDepartment();
-      // fetchDataForRoles();
-      // fetchDataForIssues();
       notification.success({
         message: "Success",
         description:'Department status updated succesfully',
@@ -335,16 +315,7 @@ const Configuration = () => {
   };
  
 
-  //   const handleEdit=(record: IDepartment)=> {
-  //     setIsModalVisible(true);
-  //     console.log(selectedRowKeys,"handleedit")
-  //     console.log(record,"recordd")
-  //     SetCanEdit(true);
-  //     setDefaultValues({departmentId:record.departmentId,departmentName:record.departmentName})
-  //     console.log(form.getFieldsValue,"valueeee")
-  // }
   const handleEdit = (record: IDepartment) => {
-    console.log(record, "recorddd");
     setIsModalVisible(true);
     SetCanEdit(true);
     form.setFieldsValue({
@@ -353,30 +324,21 @@ const Configuration = () => {
     });
   };
   const handleRoleEdit = (record: IRoles) => {
-    // setIsModalVisible(true);
-    console.log(record, "recorddd");
+    
     SetCanEdit(true);
-    // form.setFieldsValue({
-    //   departmentId: record.departmentId,
-    //   departmentName: record.departmentName,
-    // });
+    
   };
   
   const handleIssueEdit = (record: IIssues) => {
-    // setIsModalVisible(true);
-    console.log(record, "recorddd");
+    
     SetCanEdit(true);
-    // form.setFieldsValue({
-    //   departmentId: record.departmentId,
-    //   departmentName: record.departmentName,
-    // });
+    
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
     SetCanEdit(false);
     setDefaultValues({ departmentId: "", departmentName: "" });
-    console.log(defaultValues, "defaultValues");
   };
   const handleDepartmentIdKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>
@@ -403,17 +365,6 @@ const Configuration = () => {
 
   
   const columns1: TableColumnsType<IDepartment> = [
-    // {
-    //     title: 'Select',
-    //     dataIndex: 'select',
-    //     width: 50,
-    //     render: (_, record) => (
-    //       <Checkbox
-    //         onChange={(e) => handleCheckboxChange(e, record)}
-    //         checked={selectedRowKeys.includes(record.key.toString())}
-    //       />
-    //     ),
-    //   },
     {
       title: "Department ID",
       dataIndex: "departmentId",
@@ -501,16 +452,6 @@ const Configuration = () => {
         </span>
       ),
     },
-    // {
-    //   title: "Edit",
-    //   render: (_, record) => (
-    //     <span>
-    //       <a onClick={() => handleEdit(record)}>
-    //         <EditOutlined />
-    //       </a>
-    //     </span>
-    //   ),
-    // },
   ];
 
   const columns3: TableColumnsType<IIssues> = [
@@ -579,14 +520,14 @@ const Configuration = () => {
       />
         </div>
         <div style={{ display: "Flex", gap: "10px" }}>
-          <Select defaultValue="Active" className="selectclass" onChange={(value) => handleActiveStatusChange(value)}>
+          <Select defaultValue={activeStatus} className="selectclass" onChange={(value) => handleActiveStatusChange(value)}>
             <Option value="Active">Active</Option>
             <Option value="InActive">InActive</Option>
           </Select>
-          <Button className="activeclass" onClick={handleActiveClick}>
+          <Button className="activeclass" onClick={handleActiveClick} disabled={ activeStatus === 'Active' ? true : false}>
             Active
           </Button>
-          <Button className="deactiveclass" onClick={handleDeactiveClick}>
+          <Button className="deactiveclass" onClick={handleDeactiveClick} disabled={ activeStatus === 'Active' ? false : true}>
             Deactive
           </Button>
           <ReloadOutlined
@@ -613,13 +554,11 @@ const Configuration = () => {
                   rowSelection={{
                     type: "checkbox",
                     onChange: (_, selectedRows) => {
-                        console.log(selectedRows,"valuee")
                       const keys = selectedRows.map((row) =>
                         row.key.toString()
                       );
                       setSelectedRowKeys(keys);
                       setSelectedRow(selectedRows);
-                      console.log(selectedRows, "selectedRows");
                     },
                   }}
                 />
@@ -639,8 +578,6 @@ const Configuration = () => {
                         row.key.toString()
                       );
                       setSelectedRowKeysforrole(keys);
-                      //   setSelectedRow(selectedRows);
-                      console.log(selectedRows, "selectedRows");
                     },
                   }}
                 />
@@ -660,8 +597,6 @@ const Configuration = () => {
                         row.key.toString()
                       );
                       setSelectedRowKeysforissues(keys);
-                      //   setSelectedRow(selectedRows);
-                      console.log(selectedRows, "selectedRows");
                     },
                   }}
                 />
@@ -688,7 +623,6 @@ const Configuration = () => {
             type="primary"
             onClick={() => {
               form.submit();
-              console.log("Form values:", form.getFieldsValue());
             }}
             className="activeclass"
           >
