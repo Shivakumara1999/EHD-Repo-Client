@@ -1,8 +1,17 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { Button, Card, Col, Dropdown, Input, Modal, Row, Select, message } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Dropdown,
+  Input,
+  Modal,
+  Row,
+  Select,
+  message,
+} from "antd";
 import Meta from "antd/es/card/Meta";
 import Search from "antd/es/input/Search";
-import "./style.css";
 import axios from "axios";
 
 const { Option } = Select;
@@ -32,13 +41,13 @@ interface Ticket {
 }
 
 interface Count {
-    totalTicketsCount: number;
-    activeTicketsCount: number;
-    overDueTicketsCount: number;
-    closedTicketsCount: number;
-    rejectedTicketsCount: number;
-    reRaisedTicketsCount: number;
-  }
+  totalTicketsCount: number;
+  activeTicketsCount: number;
+  overDueTicketsCount: number;
+  closedTicketsCount: number;
+  rejectedTicketsCount: number;
+  reRaisedTicketsCount: number;
+}
 
 const ITDepart: React.FC = () => {
   const [tableData, setData] = useState<Array<any>>([]);
@@ -72,10 +81,11 @@ const ITDepart: React.FC = () => {
   const [Deparmentid, setDeparmentid] = useState("");
   const [departments, setDepartments] = useState<Ticket[]>([]);
   const [counts, setCounts] = useState<Count>();
-  const [userData, setUserData] = useState<any>()
+  const [userData, setUserData] = useState<any>();
   const [isUserInfoModalOpen, setIsUserInfoModelOpen] = useState(false);
 
-  const departmentId = localStorage.getItem("departmentId") || "D01";
+  const departmentId = localStorage.getItem("DepartmentId") || "";
+  console.log("ticket"+departmentId);
 
   const getCategoryName = () => {
     switch (selectedCategory) {
@@ -99,132 +109,149 @@ const ITDepart: React.FC = () => {
   };
 
   const getActiveData = () => {
-     axios.get(`/api/Ticket/GetAllActiveTickets?departmentId=${departmentId}`)
-       .then(response => {
-         setActiveData(response.data);  
-       })
-       .catch(error => {
-         message.error("Failed to fetch data");
-       });
-   };
-  
-   const getDueData = () => {
-     axios.get(`/api/Ticket/GetAllOverDueTickets?departmentId=${departmentId}`)
-       .then(response => {
-         setActiveData(response.data);  
-       })
-       .catch(error => {
-         message.error("Failed to fetch data");
-       });
-   };
-   const getClosedData = () => {
-     axios.get(`/api/Ticket/GetAllClosedTickets?departmentId=${departmentId}`)
-       .then(response => {
-         setActiveData(response.data);  
-       })
-       .catch(error => {
-         message.error("Failed to fetch data");
-       });
-   };
-   const getReraisedData = () => {
-     axios.get(`/api/Ticket/GetAllReRaisedTickets?departmentId=${departmentId}`)
-       .then(response => {
-         setActiveData(response.data);  
-       })
-       .catch(error => {
-         message.error("Failed to fetch data");
-       });
-   };
-   const getRejectedData = () => {
-     axios.get(`/api/Ticket/GetAllRejectedTickets?departmentId=${departmentId}`)
-       .then(response => {
-         setActiveData(response.data);  
-       })
-       .catch(error => {
-         message.error("Failed to fetch data");
-       });
-   };
-  
-   const renderMeta = (ticket: any) => {
-      const createdDate = new Date(ticket.createdDate);
-      const currentDate = new Date();
-   
-      console.log('createdDate:', createdDate);
-      console.log('currentDate:', currentDate);
-   
-      const timeDifference = currentDate.getTime() - createdDate.getTime();  
-      const secondsDifference = Math.floor(timeDifference / 1000);
-      const minutesDifference = Math.floor(secondsDifference / 60);
-      const hoursDifference = Math.floor(minutesDifference / 60);
-   
-      let formattedCreatedDate = '';
-   
-      if (secondsDifference <= 60) {
-          formattedCreatedDate = secondsDifference === 1 ? '1 second ago' : `${secondsDifference} seconds ago`;
-      } else if (minutesDifference < 60) {
-          formattedCreatedDate = minutesDifference === 1 ? '1 minute ago' : `${minutesDifference} minutes ago`;
-      } else if (hoursDifference < 24) {
-          formattedCreatedDate = hoursDifference === 1 ? '1 hour ago' : `${hoursDifference} hours ago`;
-      } else {
-          const day = createdDate.getDate();
-          const month = createdDate.getMonth() + 1;
-          const year = createdDate.getFullYear();
-          formattedCreatedDate = `${day}/${month}/${year}`;
-      }
-   
-      const dueDate = new Date(ticket.ticketDate);
-      let formattedDueDate = '';
-   
-      if (dueDate > currentDate) {
-        const timeDifference = dueDate.getTime() - currentDate.getTime();
-        const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
-        formattedDueDate = `${daysDifference} day${daysDifference > 1 ? 's' : ''} `;
-      } else {
-        const day = dueDate.getDate();
-        const month = dueDate.getMonth() + 1;
-        const year = dueDate.getFullYear();
-        formattedDueDate = `${day}/${month}/${year}`;
-      }
-
-      const handleUserClick = async (employeeId: string) => {
-        axios({
-          method: 'get',
-          url: `/api/User/GetUserByEmployeeId?employeeId=${employeeId}`
+    axios
+      .get(`/api/Ticket/GetAllActiveTickets?departmentId=${departmentId}`)
+      .then((response) => {
+        setActiveData(response.data);
       })
-      .then((response:any) => {
-        setUserData(response.data);
+      .catch((error) => {
+        message.error("Failed to fetch data");
+      });
+  };
+
+  const getDueData = () => {
+    axios
+      .get(`/api/Ticket/GetAllOverDueTickets?departmentId=${departmentId}`)
+      .then((response) => {
+        setActiveData(response.data);
+      })
+      .catch((error) => {
+        message.error("Failed to fetch data");
+      });
+  };
+  const getClosedData = () => {
+    axios
+      .get(`/api/Ticket/GetAllClosedTickets?departmentId=${departmentId}`)
+      .then((response) => {
+        setActiveData(response.data);
+      })
+      .catch((error) => {
+        message.error("Failed to fetch data");
+      });
+  };
+  const getReraisedData = () => {
+    axios
+      .get(`/api/Ticket/GetAllReRaisedTickets?departmentId=${departmentId}`)
+      .then((response) => {
+        setActiveData(response.data);
+      })
+      .catch((error) => {
+        message.error("Failed to fetch data");
+      });
+  };
+  const getRejectedData = () => {
+    axios
+      .get(`/api/Ticket/GetAllRejectedTickets?departmentId=${departmentId}`)
+      .then((response) => {
+        setActiveData(response.data);
+      })
+      .catch((error) => {
+        message.error("Failed to fetch data");
+      });
+  };
+
+  const renderMeta = (ticket: any) => {
+    const createdDate = new Date(ticket.createdDate);
+    const currentDate = new Date();
+
+    console.log("createdDate:", createdDate);
+    console.log("currentDate:", currentDate);
+
+    const timeDifference = currentDate.getTime() - createdDate.getTime();
+    const secondsDifference = Math.floor(timeDifference / 1000);
+    const minutesDifference = Math.floor(secondsDifference / 60);
+    const hoursDifference = Math.floor(minutesDifference / 60);
+
+    let formattedCreatedDate = "";
+
+    if (secondsDifference <= 60) {
+      formattedCreatedDate =
+        secondsDifference === 1
+          ? "1 second ago"
+          : `${secondsDifference} seconds ago`;
+    } else if (minutesDifference < 60) {
+      formattedCreatedDate =
+        minutesDifference === 1
+          ? "1 minute ago"
+          : `${minutesDifference} minutes ago`;
+    } else if (hoursDifference < 24) {
+      formattedCreatedDate =
+        hoursDifference === 1 ? "1 hour ago" : `${hoursDifference} hours ago`;
+    } else {
+      const day = createdDate.getDate();
+      const month = createdDate.getMonth() + 1;
+      const year = createdDate.getFullYear();
+      formattedCreatedDate = `${day}/${month}/${year}`;
+    }
+
+    const dueDate = new Date(ticket.ticketDate);
+    let formattedDueDate = "";
+
+    if (dueDate > currentDate) {
+      const timeDifference = dueDate.getTime() - currentDate.getTime();
+      const daysDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
+      formattedDueDate = `${daysDifference} day${
+        daysDifference > 1 ? "s" : ""
+      } `;
+    } else {
+      const day = dueDate.getDate();
+      const month = dueDate.getMonth() + 1;
+      const year = dueDate.getFullYear();
+      formattedDueDate = `${day}/${month}/${year}`;
+    }
+
+    const handleUserClick = async (employeeId: string) => {
+      axios({
+        method: "get",
+        url: `/api/User/GetUserByEmployeeId?employeeId=${employeeId}`,
+      })
+        .then((response: any) => {
+          setUserData(response.data);
           console.log(userData);
           setIsUserInfoModelOpen(true);
-      })
-      .catch((error:any) => {
+        })
+        .catch((error: any) => {
           message.error(error.message);
-      })
-      };
-   
-   
-      return (
-        <Meta
-          title={
-            <>
-              {ticket.issue} <span style={{ color: 'grey' }}>#{ticket.ticketId}</span>
-            </>
-          }
-          description={
-            <>
-              <a href="#!" onClick={() => handleUserClick(ticket.employeeId)}>
-                {ticket.userName}
-              </a> • <span style={{ fontWeight: 'bold' }}>Created </span>: <span style={{ fontWeight: 'bold' }}>{formattedCreatedDate}</span> • <span style={{ fontWeight: 'bold' }}>Due in</span>: <span style={{ fontWeight: 'bold' }}>{formattedDueDate}</span>
-              <p>
-                <span style={{ color: 'black', fontWeight: 'bold' }}>
-                  {ticket.ticketDescription}
-                </span>
-              </p>
-            </>
-          }
-        />
-      );
+        });
     };
-   
+
+    return (
+      <Meta
+        title={
+          <>
+            {ticket.issue}{" "}
+            <span style={{ color: "grey" }}>#{ticket.ticketId}</span>
+          </>
+        }
+        description={
+          <>
+            <a href="#!" onClick={() => handleUserClick(ticket.employeeId)}>
+              {ticket.userName}
+            </a>{" "}
+            • <span style={{ fontWeight: "bold" }}>Created </span>:{" "}
+            <span style={{ fontWeight: "bold" }}>{formattedCreatedDate}</span> •{" "}
+            <span style={{ fontWeight: "bold" }}>Due in</span>:{" "}
+            <span style={{ fontWeight: "bold" }}>{formattedDueDate}</span>
+            <p>
+              <span style={{ color: "black", fontWeight: "bold" }}>
+                {ticket.ticketDescription}
+              </span>
+            </p>
+          </>
+        }
+      />
+    );
+  };
 
   const UpdateStatus = (
     ticketId: string,
@@ -330,7 +357,6 @@ const ITDepart: React.FC = () => {
 
   useEffect(() => {
     getData();
-    
   }, []);
 
   const handleIrrelevant = (department: string) => {
@@ -442,7 +468,9 @@ const ITDepart: React.FC = () => {
                   <span className="card-title3">Due</span>
                 </div>
                 <br />
-                <span className="card-value">{counts?.overDueTicketsCount}</span>
+                <span className="card-value">
+                  {counts?.overDueTicketsCount}
+                </span>
                 <br />
                 <a href="#!" onClick={getDueData} className="view-details">
                   View Details
@@ -494,7 +522,9 @@ const ITDepart: React.FC = () => {
                   <span className="card-title5">Re-Raised</span>
                 </div>
                 <br />
-                <span className="card-value">{counts?.reRaisedTicketsCount}</span>
+                <span className="card-value">
+                  {counts?.reRaisedTicketsCount}
+                </span>
                 <br />
                 <a href="#!" onClick={getReraisedData} className="view-details">
                   View Details
@@ -520,7 +550,9 @@ const ITDepart: React.FC = () => {
                   <span className="card-title6">Rejected</span>
                 </div>
                 <br />
-                <span className="card-value">{counts?.rejectedTicketsCount}</span>
+                <span className="card-value">
+                  {counts?.rejectedTicketsCount}
+                </span>
                 <br />
                 <a href="#!" onClick={getRejectedData} className="view-details">
                   View Details
@@ -598,7 +630,7 @@ const ITDepart: React.FC = () => {
                     Resolved?
                   </Button>
                 </div>
-               <p>{ticket.priority}</p>
+                <p>{ticket.priority}</p>
                 <Modal
                   className="modal"
                   title="Are you sure you want to accept the ticket?"
@@ -628,9 +660,8 @@ const ITDepart: React.FC = () => {
                   title="Select Department"
                   visible={confirmIrrelevantVisible}
                   onOk={() => {
-                    updateDepartment(ticket,departmentId)
+                    updateDepartment(ticket, departmentId);
                     setConfirmIrrelevantVisible(false);
-                  
                   }}
                   onCancel={() => setConfirmIrrelevantVisible(false)}
                 >
@@ -667,30 +698,39 @@ const ITDepart: React.FC = () => {
         </div>
       )}
 
-{/* User Info Modal */}
-    <Modal open={isUserInfoModalOpen} onCancel={()=>{setIsUserInfoModelOpen(false)}} title="User Informations" footer={null}>
-    <Row>
-                                    <Col span={8}>
-                                    <div>User Name</div>
-                                    <div>User Mail</div>
-                                    <div>Contact Number</div>
-                                    <div>Location</div>
-                                    </Col>
-                                    <Col span={2}>
-                                    <div> : </div>
-                                    <div> : </div>
-                                    <div> : </div>
-                                    <div> : </div>
-                                    </Col>
-                                    <Col span={14}>
-                                    <div>{userData!== undefined && userData.firstName  + ' ' + userData.lastName}</div>
-                                    <div>{userData!== undefined && userData.officialMailId}</div>
-                                    <div>{userData!== undefined && userData.contactNumber}</div>
-                                    <div>{userData!== undefined && userData.Location}</div>
-                                    </Col>
-                                </Row>
-            </Modal>
-
+      {/* User Info Modal */}
+      <Modal
+        open={isUserInfoModalOpen}
+        onCancel={() => {
+          setIsUserInfoModelOpen(false);
+        }}
+        title="User Informations"
+        footer={null}
+      >
+        <Row>
+          <Col span={8}>
+            <div>User Name</div>
+            <div>User Mail</div>
+            <div>Contact Number</div>
+            <div>Location</div>
+          </Col>
+          <Col span={2}>
+            <div> : </div>
+            <div> : </div>
+            <div> : </div>
+            <div> : </div>
+          </Col>
+          <Col span={14}>
+            <div>
+              {userData !== undefined &&
+                userData.firstName + " " + userData.lastName}
+            </div>
+            <div>{userData !== undefined && userData.officialMailId}</div>
+            <div>{userData !== undefined && userData.contactNumber}</div>
+            <div>{userData !== undefined && userData.Location}</div>
+          </Col>
+        </Row>
+      </Modal>
     </>
   );
 };
