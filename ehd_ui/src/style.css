@@ -164,7 +164,7 @@ LoginForm.css */ .login-container {
 
 /* Login Css */
 .EHD {
-  margin-top:0%;
+  margin-top: 0%;
   margin-bottom: 25%;
   font-style: italic;
 }
@@ -273,7 +273,14 @@ LoginForm.css */ .login-container {
   width: 110%;
 }
 .content-container {
-  padding-left: 3%;
+  padding-left: 2%;
+  background-color: white;
+}
+.header {
+  background-color: white;
+  padding: 0;
+  display: flex;
+  justify-content: flex-end;
 }
 .divider {
   background-color: #ffffff;
