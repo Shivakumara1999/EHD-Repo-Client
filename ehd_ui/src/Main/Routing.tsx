@@ -1,11 +1,30 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import CommonLayout from "./Layout";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { contextAuth } from "./GlobalState";
 import { Login } from "./LoginComponent";
 
 export function RoutingComponent() {
-  const [authToken, setAuthToken] = useContext<any>(contextAuth);
+  const [role, setRole] = useContext<any>(contextAuth);
+
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    localStorage.getItem("isAuthenticated") === "true"
+  );
+  const navigate = useNavigate();
+  const token = sessionStorage.getItem("token");
+  useEffect(() => {
+    if (token) {
+      setIsAuthenticated(true);
+    } else {
+      navigate("/");
+      setIsAuthenticated(false);
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    localStorage.setItem("isAuthenticated", isAuthenticated.toString());
+  }, [isAuthenticated]);
+
   return (
     <div>
       <Routes>
@@ -16,25 +35,37 @@ export function RoutingComponent() {
         <Route
           path="/user/overview"
           element={
-            <CommonLayout userRoles={authToken}>
-              <h1>Overview</h1>
-            </CommonLayout>
+            "isAuthenticated" ? (
+              <CommonLayout userRoles={role}>
+                <h1>Overview</h1>
+              </CommonLayout>
+            ) : (
+              <Navigate to="/" replace />
+            )
           }
         />
         <Route
           path="/user/createTicket"
           element={
-            <CommonLayout userRoles={authToken}>
-              <h1>Create ticket</h1>
-            </CommonLayout>
+            "isAuthenticated" ? (
+              <CommonLayout userRoles={role}>
+                <h1>Create ticket</h1>
+              </CommonLayout>
+            ) : (
+              <Navigate to="/" replace />
+            )
           }
         />
         <Route
           path="/user/viewTicket"
           element={
-            <CommonLayout userRoles={authToken}>
-              <h1>View Ticket</h1>
-            </CommonLayout>
+            "isAuthenticated" ? (
+              <CommonLayout userRoles={role}>
+                <h1>View Ticket</h1>
+              </CommonLayout>
+            ) : (
+              <Navigate to="/" replace />
+            )
           }
         />
       </Routes>
@@ -43,49 +74,73 @@ export function RoutingComponent() {
         <Route
           path="/admin/dashboard"
           element={
-            <CommonLayout userRoles={authToken}>
-              <h1>Hey admin</h1>
-            </CommonLayout>
+            "isAuthenticated" ? (
+              <CommonLayout userRoles={role}>
+                <h1>Hey admin</h1>
+              </CommonLayout>
+            ) : (
+              <Navigate to="/" replace />
+            )
           }
         />
         <Route
           path="/admin/escalations"
           element={
-            <CommonLayout userRoles={authToken}>
-              <h1>Escalations</h1>
-            </CommonLayout>
+            "isAuthenticated" ? (
+              <CommonLayout userRoles={role}>
+                <h1>Escalations</h1>
+              </CommonLayout>
+            ) : (
+              <Navigate to="/" replace />
+            )
           }
         />
         <Route
           path="/admin/employees"
           element={
-            <CommonLayout userRoles={authToken}>
-              <h1>Your employees</h1>
-            </CommonLayout>
+            "isAuthenticated" ? (
+              <CommonLayout userRoles={role}>
+                <h1>Your employees</h1>
+              </CommonLayout>
+            ) : (
+              <Navigate to="/" replace />
+            )
           }
         />
         <Route
           path="/admin/configurations"
           element={
-            <CommonLayout userRoles={authToken}>
-              <h1>Configurations</h1>
-            </CommonLayout>
+            "isAuthenticated" ? (
+              <CommonLayout userRoles={role}>
+                <h1>Configurations</h1>
+              </CommonLayout>
+            ) : (
+              <Navigate to="/" replace />
+            )
           }
         />
         <Route
           path="/admin/createTicket"
           element={
-            <CommonLayout userRoles={authToken}>
-              <h1>Create ticket</h1>
-            </CommonLayout>
+            "isAuthenticated" ? (
+              <CommonLayout userRoles={role}>
+                <h1>Create ticket</h1>
+              </CommonLayout>
+            ) : (
+              <Navigate to="/" replace />
+            )
           }
         />
         <Route
           path="/admin/viewTicket"
           element={
-            <CommonLayout userRoles={authToken}>
-              <h1>View Ticket</h1>
-            </CommonLayout>
+            "isAuthenticated" ? (
+              <CommonLayout userRoles={role}>
+                <h1>View Ticket</h1>
+              </CommonLayout>
+            ) : (
+              <Navigate to="/" replace />
+            )
           }
         />
       </Routes>
@@ -94,33 +149,49 @@ export function RoutingComponent() {
         <Route
           path="/ticketing/overviewIt"
           element={
-            <CommonLayout userRoles={authToken}>
-              <h1>Hi IT</h1>
-            </CommonLayout>
+            "isAuthenticated" ? (
+              <CommonLayout userRoles={role}>
+                <h1>Hi IT</h1>
+              </CommonLayout>
+            ) : (
+              <Navigate to="/" replace />
+            )
           }
         />
         <Route
           path="/ticketing/it"
           element={
-            <CommonLayout userRoles={authToken}>
-              <h1>IT Tickets are here</h1>
-            </CommonLayout>
+            "isAuthenticated" ? (
+              <CommonLayout userRoles={role}>
+                <h1>IT Tickets are here</h1>
+              </CommonLayout>
+            ) : (
+              <Navigate to="/" replace />
+            )
           }
         />
         <Route
           path="/ticketing/createTicketIt"
           element={
-            <CommonLayout userRoles={authToken}>
-              <h1>Create ticket</h1>
-            </CommonLayout>
+            "isAuthenticated" ? (
+              <CommonLayout userRoles={role}>
+                <h1>Create ticket</h1>
+              </CommonLayout>
+            ) : (
+              <Navigate to="/" replace />
+            )
           }
         />
         <Route
           path="/ticketing/viewTicketIt"
           element={
-            <CommonLayout userRoles={authToken}>
-              <h1>View Ticket</h1>
-            </CommonLayout>
+            "isAuthenticated" ? (
+              <CommonLayout userRoles={role}>
+                <h1>View Ticket</h1>
+              </CommonLayout>
+            ) : (
+              <Navigate to="/" replace />
+            )
           }
         />
       </Routes>
@@ -129,33 +200,49 @@ export function RoutingComponent() {
         <Route
           path="/ticketing/overviewPy"
           element={
-            <CommonLayout userRoles={authToken}>
-              <h1>Hi payroll</h1>
-            </CommonLayout>
+            "isAuthenticated" ? (
+              <CommonLayout userRoles={role}>
+                <h1>Hi payroll</h1>
+              </CommonLayout>
+            ) : (
+              <Navigate to="/" replace />
+            )
           }
         />
         <Route
           path="/ticketing/payroll"
           element={
-            <CommonLayout userRoles={authToken}>
-              <h1>Payroll Tickets are here</h1>
-            </CommonLayout>
+            "isAuthenticated" ? (
+              <CommonLayout userRoles={role}>
+                <h1>Payroll Tickets are here</h1>
+              </CommonLayout>
+            ) : (
+              <Navigate to="/" replace />
+            )
           }
         />
         <Route
           path="/ticketing/createTicketPy"
           element={
-            <CommonLayout userRoles={authToken}>
-              <h1>Create ticket py</h1>
-            </CommonLayout>
+            "isAuthenticated" ? (
+              <CommonLayout userRoles={role}>
+                <h1>Create ticket py</h1>
+              </CommonLayout>
+            ) : (
+              <Navigate to="/" replace />
+            )
           }
         />
         <Route
           path="/ticketing/viewTicketPy"
           element={
-            <CommonLayout userRoles={authToken}>
-              <h1>View Ticket py</h1>
-            </CommonLayout>
+            "isAuthenticated" ? (
+              <CommonLayout userRoles={role}>
+                <h1>View Ticket py</h1>
+              </CommonLayout>
+            ) : (
+              <Navigate to="/" replace />
+            )
           }
         />
       </Routes>
@@ -164,33 +251,49 @@ export function RoutingComponent() {
         <Route
           path="/ticketing/overviewFc"
           element={
-            <CommonLayout userRoles={authToken}>
-              <h1>Hi facility</h1>
-            </CommonLayout>
+            "isAuthenticated" ? (
+              <CommonLayout userRoles={role}>
+                <h1>Hi facility</h1>
+              </CommonLayout>
+            ) : (
+              <Navigate to="/" replace />
+            )
           }
         />
         <Route
           path="/ticketing/facility"
           element={
-            <CommonLayout userRoles={authToken}>
-              <h1>Facility Tickets are here</h1>
-            </CommonLayout>
+            "isAuthenticated" ? (
+              <CommonLayout userRoles={role}>
+                <h1>Facility Tickets are here</h1>
+              </CommonLayout>
+            ) : (
+              <Navigate to="/" replace />
+            )
           }
         />
         <Route
           path="/ticketing/createTicketFc"
           element={
-            <CommonLayout userRoles={authToken}>
-              <h1>Create ticket Facility</h1>
-            </CommonLayout>
+            "isAuthenticated" ? (
+              <CommonLayout userRoles={role}>
+                <h1>Create ticket Facility</h1>
+              </CommonLayout>
+            ) : (
+              <Navigate to="/" replace />
+            )
           }
         />
         <Route
           path="/ticketing/viewTicketFC"
           element={
-            <CommonLayout userRoles={authToken}>
-              <h1>View Ticket Facility</h1>
-            </CommonLayout>
+            "isAuthenticated" ? (
+              <CommonLayout userRoles={role}>
+                <h1>View Ticket Facility</h1>
+              </CommonLayout>
+            ) : (
+              <Navigate to="/" replace />
+            )
           }
         />
       </Routes>

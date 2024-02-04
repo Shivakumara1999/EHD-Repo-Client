@@ -1,4 +1,4 @@
-import { FrownOutlined, LockOutlined, UserOutlined } from "@ant-design/icons";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Form, Input, message } from "antd";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
@@ -9,8 +9,8 @@ import { contextAuth } from "./GlobalState";
 export function Login() {
   const [AddProjectForm] = Form.useForm();
   const navigate = useNavigate();
-  const [authToken, setAuthToken] = useContext<any>(contextAuth);
-  setAuthToken(localStorage.getItem("role"));
+  const [role, setRole] = useContext<any>(contextAuth);
+  setRole(localStorage.getItem("role"));
   const Login = (values: any) => {
     axios({
       method: "post",
@@ -24,12 +24,16 @@ export function Login() {
     })
       .then((r: any) => {
         const token = r.data;
-        localStorage.setItem("token", token);
+        sessionStorage.setItem("token", token);
         const decodedToken: any = jwtDecode(token);
         localStorage.setItem("OfficialMailId", decodedToken.OfficialMailId);
         localStorage.setItem("EmployeeId", decodedToken.EmployeeId);
         localStorage.setItem("role", decodedToken.RoleId);
-        setAuthToken(decodedToken.RoleId);
+        localStorage.setItem("DepartmentId", decodedToken.DepartmentId);
+        localStorage.setItem("DepartmentName", decodedToken.DepartmentName);
+        console.log(localStorage.getItem("DepartmentName"));
+        console.log(localStorage.getItem("DepartmentId"));
+        setRole(decodedToken.RoleId);
         if (decodedToken.RoleId === "R01") {
           navigate("/admin/dashboard");
         } else if (decodedToken.RoleId === "R02") {
