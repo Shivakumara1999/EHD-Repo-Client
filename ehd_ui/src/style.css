@@ -291,3 +291,13 @@ LoginForm.css */ .login-container {
   color: black;
   font-weight: 500;
 }
+.dropdownIcon {
+  display: flex;
+  align-items: right;
+  margin-left: 400px;
+}
+.avatar {
+  background-color: navy;
+  cursor: pointer;
+  margin-right: 50px;
+}

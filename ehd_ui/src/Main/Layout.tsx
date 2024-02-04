@@ -323,16 +323,9 @@ const CommonLayout = ({ children, userRoles }: any) => {
     );
 
     return (
-      <div style={{ display: "flex", alignItems: "right", marginLeft: 400 }}>
+      <div className="dropdownIcon">
         <Dropdown overlay={userMenu} placement="bottomRight">
-          <Avatar
-            style={{
-              backgroundColor: "navy",
-              cursor: "pointer",
-              marginRight: 50,
-            }}
-            icon={<UserOutlined />}
-          />
+          <Avatar className="avatar" icon={<UserOutlined />} />
         </Dropdown>
       </div>
     );
@@ -352,15 +345,7 @@ const CommonLayout = ({ children, userRoles }: any) => {
       </Sider>
       <Layout className="content-container">
         <Content className="content-container">
-          <Header
-            className="header"
-            // style={{
-            //   background: "#fff",
-            //   padding: 0,
-            //   display: "flex",
-            //   justifyContent: "flex-end",
-            // }}
-          >
+          <Header className="header">
             <UserDetails />
           </Header>
           {children}
