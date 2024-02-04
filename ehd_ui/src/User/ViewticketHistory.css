@@ -1,0 +1,55 @@
+.ant-table-body {
+    max-height: 600px;
+    overflow-y: auto;
+  }
+  .ant-table-body::-webkit-scrollbar {
+    width: 5px;
+    height: 6px;
+  }
+  .ant-table-body::-webkit-scrollbar-thumb {
+    background-color: #adc6ff;
+  }
+  .ant-table-body::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+  }
+ 
+  .ant-table-body{
+    height: 50vh;
+  }
+
+
+
+  .blink_me {
+  animation: blinker 2s linear infinite;
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  border-radius: 100%;
+}
+
+.green-dot {
+  border: 1px solid green;
+  background-color: green;
+}
+
+.red-dot {
+  border: 1px solid red;
+  background-color: red;
+}
+
+.yellow-dot {
+  border: 1px solid yellow;
+  background-color: yellow;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.searchclass{
+   width: 22%;
+   display: flex;
+   justify-content: space-between;
+   }

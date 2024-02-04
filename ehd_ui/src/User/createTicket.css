@@ -1,0 +1,38 @@
+.drop{
+    display: flex;
+    justify-content: space-evenly;  
+ 
+}
+ 
+.dropdown{
+    width:100%;
+    height: 40%;
+        font-size: 15px;
+    font-weight: 600;
+    padding: 6px;
+    /* max-height: 200px; */
+}
+ 
+.descriptioncard{
+margin: 2%;
+}
+.subclrbutton{
+    display: flex;
+    float: right;
+}
+ 
+.headings{
+    margin-top: -14px;
+    color: navy;
+}
+.head{
+    color: #003eb3;
+    margin-left: 20px;
+}
+ 
+.subclrbutton{
+    margin-right:22px ;
+    width: 18%;
+    display: flex;
+    justify-content: space-between;
+}
