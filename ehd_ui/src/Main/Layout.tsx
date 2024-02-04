@@ -1,4 +1,4 @@
-import { Layout, Menu } from "antd";
+import { Divider, Layout, Menu } from "antd";
 import { Link } from "react-router-dom";
 import {
   FileAddOutlined,
@@ -166,7 +166,8 @@ const CommonLayout = ({ children, userRoles }: any) => {
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider theme="light">
-        <img src="../JOY.png.webp" alt="JOY" className="joylogo" />
+        <img src="../JoyWhite.png" alt="JOY" className="joylogo" />
+        <Divider className="divider"></Divider>
         <Menu
           mode="vertical"
           className="menu-container"

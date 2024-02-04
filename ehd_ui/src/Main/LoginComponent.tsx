@@ -101,8 +101,8 @@ export function Login() {
           </Form.Item>
         </Form>
 
-        <Button type="link">
-          Forgot Password <FrownOutlined />
+        <Button className="forgotPassw" type="link">
+          Forgot Password?
           <br />
         </Button>
       </div>
