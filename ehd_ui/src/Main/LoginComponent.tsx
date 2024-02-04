@@ -1,10 +1,11 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Form, Input, message } from "antd";
+import { Button, Form, Input, Modal, message } from "antd";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { contextAuth } from "./GlobalState";
+import { ForgotPassword } from "./Forgotpassword";
 
 export function Login() {
   const [AddProjectForm] = Form.useForm();
@@ -104,11 +105,7 @@ export function Login() {
             </Button>
           </Form.Item>
         </Form>
-
-        <Button className="forgotPassw" type="link">
-          Forgot Password?
-          <br />
-        </Button>
+        <ForgotPassword />
       </div>
     </>
   );
