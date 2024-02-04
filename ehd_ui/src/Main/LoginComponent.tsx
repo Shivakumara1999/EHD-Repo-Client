@@ -2,7 +2,7 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Form, Input, message } from "antd";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import { useContext  } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { contextAuth } from "./GlobalState";
 import { ForgotPassword } from "./Forgotpassword";
@@ -39,16 +39,13 @@ export function Login() {
           navigate("/admin/dashboard");
         } else if (decodedToken.RoleId === "R02") {
           navigate("/user/overview");
-        } else if (decodedToken.RoleId === "R03") {
-          navigate("/ticketing/overviewIt");
-        } else if (decodedToken.RoleId === "R04") {
-          navigate("/ticketing/overviewPy");
-        } else if (decodedToken.RoleId === "R05") {
-          navigate("/ticketing/overviewFc");
-        } else if (decodedToken.RoleId === "R06") {
-          navigate("/ticketing");
-        } else if (decodedToken.RoleId === "R07") {
-          navigate("/ticketing");
+        } else if (
+          decodedToken.RoleId === "R03" ||
+          decodedToken.RoleId === "R04" ||
+          decodedToken.RoleId === "R05" ||
+          decodedToken.RoleId === "R06"
+        ) {
+          navigate("/ticketing/overview");
         } else {
           alert("You are not Registered");
         }
