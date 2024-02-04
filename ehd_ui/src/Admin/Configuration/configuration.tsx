@@ -17,7 +17,6 @@ import { EditOutlined, ReloadOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { notification } from "antd";
 import moment from "moment";
-// import moment from "moment";
 
 const { Option } = Select;
 type TableRowSelection<T> = TableProps<T>["rowSelection"];
@@ -36,7 +35,6 @@ interface IRoles {
   createdBy: string;
   createdDate: Date;
   departmentId: string;
-  departmentName: string;
 }
 
 interface IIssues {
@@ -45,26 +43,22 @@ interface IIssues {
   issueName: string;
   createdBy: string;
   createdDate: Date;
-  departmentName: string;
+  departmentId: string;
 }
 
 // interface DataTypeFor
 
 const Configuration = () => {
+  
+
   const [buttonName, setButtonName] = useState("Department");
   const [selectedTab, setSelectedTab] = useState("1");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [callModal, setCallModal] = useState("departmentmodal");
-  const [roleModalVisible, setRoleModalVisible] = useState(false);
-  const [issueModalVisible, setIssueModalVisible] = useState(false);
   const [form] = Form.useForm();
   const [selectedRowKeys, setSelectedRowKeys] = useState<String[]>([]);
   const [selectedRow, setSelectedRow] = useState<IDepartment[]>([]);
   const [canEdit, SetCanEdit] = useState(false);
-  const [canEditRole, SetCanEditRole] = useState(false);
-  const [canEditIssue, SetCanEditIssue] = useState(false);
-  const [Roleid, setRoleid] = useState("");
-  const [IssueDept, setIssueDept] = useState("");
   const [selectedRowKeysforrole, setSelectedRowKeysforrole] = useState<
     String[]
   >([]);
@@ -75,24 +69,17 @@ const Configuration = () => {
     departmentId: "",
     departmentName: "",
   });
-  const [defaultroleValues, setDefaultroleValues] = useState({
-    roleId: "",
-    roleName: "",
-  });
-
-  const [defaulissueValues, setDefaultissueValues] = useState({
-    Issueid: "",
-    Issuetype: "",
-  });
-
   const [departments, setDepartments] = useState<IDepartment[]>([]);
   const [roles, setRoles] = useState<IRoles[]>([]);
   const [issues, setIssues] = useState<IIssues[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [activeStatus, setActiveStatus] = useState('Active');
+  
 
-  const refreshFunction = () => {
+  const refreshFunction=()=>{
+    setActiveStatus('Active');
     setButtonName("Department");
-    setSelectedTab("1");
+    setSelectedTab('1');
     setIsModalVisible(false);
     setSelectedRowKeys([]);
     setSelectedRow([]);
@@ -103,17 +90,18 @@ const Configuration = () => {
     setDepartments([]);
     setRoles([]);
     setIssues([]);
-    setSearchTerm("");
+    setSearchTerm('');
     fetchDataForDepartment();
-    fetchDataForRoles();
-    fetchDataForIssues();
-    setSelectedRowKeys([]);
-  };
+      fetchDataForRoles();
+      fetchDataForIssues();
+      setSelectedRowKeys([]);
+      handleActiveStatusChange('Active');
+  }
 
   const fetchDataForDepartment = async () => {
     try {
       const response = await axios.get(
-        "/api/Master/GetDepartmentsByActive?isActive=true"
+        "https://localhost:7267/api/Master/GetDepartmentsByActive?isActive=true"
       );
       setDepartments(response.data);
     } catch (error) {
@@ -123,7 +111,9 @@ const Configuration = () => {
 
   const fetchDataForRoles = async () => {
     try {
-      const response = await axios.get("/api/Master/GetAllRoles?isActive=true");
+      const response = await axios.get(
+        "https://localhost:7267/api/Master/GetAllRoles"
+      );
       setRoles(response.data);
     } catch (error) {
       console.error("Error fetching departments:", error);
@@ -132,7 +122,9 @@ const Configuration = () => {
 
   const fetchDataForIssues = async () => {
     try {
-      const response = await axios.get("/api/Master/GetAllIssueTypes");
+      const response = await axios.get(
+        "https://localhost:7267/api/Master/GetAllIssueTypes"
+      );
       setIssues(response.data);
     } catch (error) {
       console.error("Error fetching departments:", error);
@@ -160,7 +152,6 @@ const Configuration = () => {
       key: i,
       roleId: roles[i].roleId,
       roleName: roles[i].roleName,
-      departmentName: roles[i].departmentName,
       createdBy: roles[i].createdBy,
       createdDate: roles[i].createdDate,
       departmentId: roles[i].departmentId,
@@ -173,7 +164,7 @@ const Configuration = () => {
       issueName: issues[i].issueName,
       createdBy: issues[i].createdBy,
       createdDate: issues[i].createdDate,
-      departmentName: issues[i].departmentName,
+      departmentId: issues[i].departmentId,
     });
   }
   const filterData = (data: any[], columnName: string) => {
@@ -190,44 +181,28 @@ const Configuration = () => {
     });
   };
 
-  const openNotificationRole = () => {
-    notification.success({
-      message: "Success",
-      description: canEditRole
-        ? "Role updated successfully"
-        : "Role added successfully",
-    });
-  };
-
-  const openNotificationIssue = () => {
-    notification.success({
-      message: "Success",
-      description: canEditRole
-        ? "Issue updated successfully"
-        : "Issue added successfully",
-    });
-  };
-
   const onFinish = async (values: any) => {
+
     if (canEdit) {
-      var data = {
-        ...values,
-        departmentId: selectedRow[0].departmentId,
-        createdBy: "",
-        modifiedBy: "adminn",
-      };
+      var data = { ...values,departmentId:selectedRow[0].departmentId,createdBy:'' ,modifiedBy: "adminn" };
     } else {
-      var data = { ...values, createdBy: "adminuser" };
+      var data = { ...values, createdBy: "adminuser"};
     }
     // Add logic to save department data
     setIsModalVisible(false);
     try {
       if (canEdit) {
         // Update Department API call
-        await axios.post("/api/Master/AddOrUpdateDepartment", data);
+        await axios.post(
+          "https://localhost:7267/api/Master/AddOrUpdateDepartment",
+          data
+        );
       } else {
         // Add Department API call
-        await axios.post("/api/Master/AddOrUpdateDepartment", data);
+        await axios.post(
+          "https://localhost:7267/api/Master/AddOrUpdateDepartment",
+          data
+        );
       }
 
       setIsModalVisible(false);
@@ -240,6 +215,7 @@ const Configuration = () => {
       fetchDataForRoles();
       fetchDataForIssues();
     } catch (error) {
+      console.error("Error:", error);
       // Handle error and display an error notification
       notification.error({
         message: "Error",
@@ -252,7 +228,7 @@ const Configuration = () => {
     setSelectedTab(key);
     if (key === "2") {
       setButtonName("Role");
-      setCallModal("showRoleModal");
+      setCallModal("rolemodal");
     } else if (key === "3") {
       setButtonName("Issue Type");
       setCallModal("issuemodal");
@@ -261,110 +237,75 @@ const Configuration = () => {
       setCallModal("departmentmodal");
     }
   };
+
   const handleActiveClick = async () => {
     // Extract departmentIds from selected rows
     const selectedDepartmentIds = selectedRow.map((row) => row.departmentId);
-
+  
     // Create the object with the desired format
-    const requestData = { id: selectedDepartmentIds };
-
+    const requestData ={ id: selectedDepartmentIds };
+  
     try {
       // Make the API call
       const response = await axios.put(
-        "/api/Master/EditDepartmentIsActive?Is_Active=true",
+        "https://localhost:7267/api/Master/EditDepartmentIsActive?Is_Active=true",
         requestData
       );
-
-      // You can also trigger a reload or perform other actions if needed
-      // For example:
-      // fetchDataForDepartment();
-      // fetchDataForRoles();
-      // fetchDataForIssues();
+  
       notification.success({
         message: "Success",
-        description: "Department status updated succesfully",
+        description:'Department status updated succesfully',
       });
     } catch (error) {
+      console.error("Error calling API:", error);
       // Handle the error as needed
       notification.error({
         message: "Error",
         description: "Failed to update department status. Please try again.",
       });
     }
-  };
-  // const handleActiveStatusChange = async(value: string)=>{
-  //   if(value === 'Active'){
-  //   try {
-  //       const response = await axios.get(
-  //         "/api/Master/GetDepartmentsByActive?isActive=true"
-  //       );
-  //       setDepartments(response.data);
-  //       console.log(response.data, "dataaa");
-  //     } catch (error) {
-  //       console.error("Error fetching departments:", error);
-  //     }
-  //   }else{
-  //       try {
-  //           const response = await axios.get(
-  //             "/api/Master/GetDepartmentsByActive?isActive=false"
-  //           );
-  //           setDepartments(response.data);
-  //           console.log(response.data, "dataaa");
-  //         } catch (error) {
-  //           console.error("Error fetching departments:", error);
-  //         }
-  //   }
-  // }
-
-  const handleActiveStatusChange = async (value: string) => {
+  }
+  const handleActiveStatusChange = async(value: string)=>{
+    setActiveStatus(value);
+    if(value === 'Active'){
     try {
-      let departmentsResponse;
-      let rolesResponse;
-      let issuesResponse;
-
-      if (value === "Active") {
-        departmentsResponse = await axios.get(
-          "/api/Master/GetDepartmentsByActive?isActive=true"
+        const response = await axios.get(
+          "https://localhost:7267/api/Master/GetDepartmentsByActive?isActive=true"
         );
-        rolesResponse = await axios.get(
-          "/api/Master/GetAllRoles?isActive=true"
-        );
-        issuesResponse = await axios.get("/api/Master/GetAllIssueTypes");
-      } else {
-        departmentsResponse = await axios.get(
-          "/api/Master/GetDepartmentsByActive?isActive=false"
-        );
-        rolesResponse = await axios.get(
-          "/api/Master/GetAllRoles?isActive=false"
-        );
-        issuesResponse = await axios.get("/api/Master/GetAllIssueTypes");
+        setDepartments(response.data);
+      } catch (error) {
+        console.error("Error fetching departments:", error);
       }
-
-      setDepartments(departmentsResponse.data);
-      setRoles(rolesResponse.data);
-      setIssues(issuesResponse.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
+    }else{
+        try {
+            const response = await axios.get(
+              "https://localhost:7267/api/Master/GetDepartmentsByActive?isActive=false"
+            );
+            setDepartments(response.data);
+          } catch (error) {
+            console.error("Error fetching departments:", error);
+          }
     }
-  };
+  }
 
-  const handleDeactiveClick = async () => {
+  const handleDeactiveClick = async() => {
     const selectedDepartmentIds = selectedRow.map((row) => row.departmentId);
-
+  
     // Create the object with the desired format
-    const requestData = { id: selectedDepartmentIds };
-
+    const requestData ={ id: selectedDepartmentIds };
+  
     try {
       // Make the API call
       const response = await axios.put(
-        "/api/Master/EditDepartmentIsActive?Is_Active=false",
+        "https://localhost:7267/api/Master/EditDepartmentIsActive?Is_Active=false",
         requestData
       );
       notification.success({
         message: "Success",
-        description: "Department status updated succesfully",
+        description:'Department status updated succesfully',
       });
     } catch (error) {
+      console.error("Error calling API:", error);
       // Handle the error as needed
       notification.error({
         message: "Error",
@@ -372,6 +313,7 @@ const Configuration = () => {
       });
     }
   };
+ 
 
   const handleEdit = (record: IDepartment) => {
     setIsModalVisible(true);
@@ -382,24 +324,15 @@ const Configuration = () => {
     });
   };
   const handleRoleEdit = (record: IRoles) => {
-    setRoleModalVisible(true);
-    SetCanEditRole(true);
-    setRoleid(record.roleId);
-    form.setFieldsValue({
-      roleId: record.roleId,
-      roleName: record.roleName,
-      departmentId: record.departmentId,
-    });
+    
+    SetCanEdit(true);
+    
   };
-
+  
   const handleIssueEdit = (record: IIssues) => {
-    setIssueModalVisible(true);
-    SetCanEditIssue(true);
-    form.setFieldsValue({
-      departmentId: record.departmentName,
-      Issueid: record.issueId,
-      issueName: record.issueName,
-    });
+    
+    SetCanEdit(true);
+    
   };
 
   const handleCancel = () => {
@@ -421,140 +354,16 @@ const Configuration = () => {
     if (callModal == "departmentmodal") {
       setIsModalVisible(true);
       form.resetFields();
-    } else if (callModal == "showRoleModal") {
-      setRoleModalVisible(true);
+    } else if (callModal == "rolemodal") {
+      console.log("role is calling");
     } else {
-      setIssueModalVisible(true);
+      console.log("issue is calling");
     }
   };
 
-  const handleRoleCancel = () => {
-    setRoleModalVisible(false);
-    SetCanEditRole(false);
-    form.setFieldsValue({
-      roleId: "",
-      roleName: "",
-      departmentId: "",
-    });
-  };
-  const handleIssueCancel = () => {
-    setIssueModalVisible(false);
-    SetCanEditIssue(false);
-  };
+  
 
-  const onFinishRole = async (values: any) => {
-    if (canEditRole) {
-      var data = {
-        ...values,
-        roleId: Roleid,
-        createdBy: "",
-        modifiedBy: "adminn",
-      };
-    } else {
-      var data = { ...values, createdBy: "adminuser", modifiedBy: "adminn" };
-    }
-    setRoleModalVisible(false);
-    try {
-      if (canEditRole) {
-        await axios.post("/api/Master/AddorUpdateRoles", data);
-      } else {
-        await axios.post("/api/Master/AddorUpdateRoles", data);
-      }
-
-      setRoleModalVisible(false);
-      SetCanEditRole(false);
-      setDefaultroleValues({ roleId: "", roleName: "" });
-      form.setFieldsValue({
-        roleId: "",
-        roleName: "",
-        departmentId: "",
-      });
-      openNotificationRole();
-      fetchDataForDepartment();
-      fetchDataForRoles();
-      fetchDataForIssues();
-    } catch (error) {
-      console.error("Error:", error);
-      notification.error({
-        message: "Error",
-        description: "Failed to save role. Please try again.",
-      });
-    }
-  };
-
-  const onFinishIssue = async (values: any) => {
-    if (canEditIssue) {
-      var data = { ...values, departmentId: IssueDept, employeeId: "E001" };
-      var dataArray1 = {
-        departmentId: data.departmentId, // replace with the actual value for departmentId
-        issueId: data.Issueid,
-        issueName: data.issueName,
-        employeeId: data.employeeId,
-      };
-      try {
-        await axios.put(
-          "/api/Master/UpdateIssueTypes/UpdateIssueType",
-          dataArray1
-        );
-
-        setIssueModalVisible(false);
-        SetCanEditIssue(false);
-        setDefaultissueValues({ Issueid: "", Issuetype: "" });
-        openNotificationIssue();
-        fetchDataForDepartment();
-        fetchDataForRoles();
-        fetchDataForIssues();
-      } catch (error) {
-        console.error("Error:", error);
-        notification.error({
-          message: "Error",
-          description: "Failed to save role. Please try again.",
-        });
-      }
-    } else {
-      var data = { ...values, issueId: 0, employeeId: "E001" };
-
-      var dataArray = [
-        {
-          departmentId: data.departmentId, // replace with the actual value for departmentId
-          issueId: data.issueId,
-          issueName: data.issueName,
-          employeeId: data.employeeId,
-        },
-      ];
-
-      setIssueModalVisible(false);
-      try {
-        if (canEditRole) {
-          await axios.post("/api/Master/AddIssueTypes", dataArray);
-        } else {
-          await axios.post("/api/Master/AddIssueTypes", dataArray);
-        }
-
-        setIssueModalVisible(false);
-        SetCanEditIssue(false);
-        setDefaultissueValues({ Issueid: "", Issuetype: "" });
-        openNotificationIssue();
-        fetchDataForDepartment();
-        fetchDataForRoles();
-        fetchDataForIssues();
-      } catch (error) {
-        console.error("Error:", error);
-        notification.error({
-          message: "Error",
-          description: "Failed to save role. Please try again.",
-        });
-      }
-    }
-  };
-  const handleAddIssueClick = () => {
-    setIssueModalVisible(true);
-    form.resetFields(); // Reset issue form fields if needed
-  };
-  const setIssueDepartment = (value: any) => {
-    setIssueDept(value);
-  };
-
+  
   const columns1: TableColumnsType<IDepartment> = [
     {
       title: "Department ID",
@@ -599,23 +408,28 @@ const Configuration = () => {
     {
       title: "Role ID",
       dataIndex: "roleId",
+      
     },
     {
       title: "Role Name",
       dataIndex: "roleName",
+      
     },
     {
       title: "CreatedBy",
       dataIndex: "createdBy",
+      
     },
     {
       title: "CreatedOn",
       dataIndex: "createdDate",
       render: (text: string) => moment(text).format("YYYY-MM-DD"),
+      
     },
     {
       title: "Department",
-      dataIndex: "departmentName",
+      dataIndex: "departmentId",
+      
     },
 
     {
@@ -644,23 +458,28 @@ const Configuration = () => {
     {
       title: "Issue ID",
       dataIndex: "issueId",
+      
     },
     {
       title: "Issue Name",
       dataIndex: "issueName",
+      
     },
     {
       title: "Department",
-      dataIndex: "departmentName",
+      dataIndex: "departmentId",
+      
     },
     {
       title: "CreatedBy",
       dataIndex: "createdBy",
+      
     },
     {
       title: "CreatedOn",
-      dataIndex: "createdDate",
+      dataIndex: "createDate",
       render: (text: string) => moment(text).format("YYYY-MM-DD"),
+      
     },
     {
       title: "Edit",
@@ -693,31 +512,27 @@ const Configuration = () => {
           </Button>
         </div>
         <div className="searchclass">
-          <Input
-            placeholder="Search..."
-            style={{ marginBottom: 16 }}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+        <Input
+        placeholder="Search..."
+        style={{ marginBottom: 16 }}
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
         </div>
         <div style={{ display: "Flex", gap: "10px" }}>
-          <Select
-            defaultValue="Active"
-            className="selectclass"
-            onChange={(value) => handleActiveStatusChange(value)}
-          >
+          <Select defaultValue={activeStatus} className="selectclass" onChange={(value) => handleActiveStatusChange(value)}>
             <Option value="Active">Active</Option>
             <Option value="InActive">InActive</Option>
           </Select>
-          <Button className="activeclass" onClick={handleActiveClick}>
+          <Button className="activeclass" onClick={handleActiveClick} disabled={ activeStatus === 'Active' ? true : false}>
             Active
           </Button>
-          <Button className="deactiveclass" onClick={handleDeactiveClick}>
+          <Button className="deactiveclass" onClick={handleDeactiveClick} disabled={ activeStatus === 'Active' ? false : true}>
             Deactive
           </Button>
           <ReloadOutlined
             onClick={() => {
-              refreshFunction();
+                refreshFunction()
             }}
           />
         </div>
@@ -763,7 +578,6 @@ const Configuration = () => {
                         row.key.toString()
                       );
                       setSelectedRowKeysforrole(keys);
-                      setSelectedRow(selectedRows);
                     },
                   }}
                 />
@@ -791,8 +605,6 @@ const Configuration = () => {
           ]}
         />
       </div>
-
-      {/* Department */}
       <Modal
         title={
           <div className="modalTitleStyle">
@@ -811,7 +623,6 @@ const Configuration = () => {
             type="primary"
             onClick={() => {
               form.submit();
-              console.log("Form values:", form.getFieldsValue());
             }}
             className="activeclass"
           >
@@ -827,6 +638,7 @@ const Configuration = () => {
             canEdit ? defaultValues : { departmentId: "", departmentName: "" }
           }
         >
+
           <Form.Item
             label="Department Name"
             name="departmentName"
@@ -835,149 +647,6 @@ const Configuration = () => {
             ]}
           >
             <Input />
-          </Form.Item>
-        </Form>
-      </Modal>
-
-      {/* Role */}
-      <Modal
-        title={
-          <div className="modalTitleStyle">
-            {canEditRole ? "Edit Role" : "Add Role"}
-          </div>
-        }
-        className="modalclass"
-        open={roleModalVisible}
-        onCancel={handleRoleCancel}
-        footer={[
-          <Button
-            key="cancel"
-            onClick={handleRoleCancel}
-            className="deactiveclass"
-          >
-            Cancel
-          </Button>,
-          <Button
-            key="save"
-            type="primary"
-            onClick={() => {
-              form.submit();
-              console.log("Role Form values:", form.getFieldsValue());
-            }}
-            className="activeclass"
-          >
-            Save
-          </Button>,
-        ]}
-      >
-        <Form
-          form={form}
-          name="addRole"
-          onFinish={onFinishRole}
-          initialValues={
-            canEditRole ? defaultroleValues : { roleId: "", roleName: "" }
-          }
-        >
-          <Form.Item
-            label="Role Name"
-            name="roleName"
-            rules={[{ required: true, message: "Please input the Role Name!" }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label="Assign Department"
-            name="departmentId"
-            rules={[
-              { required: true, message: "Please select the department!" },
-            ]}
-          >
-            <Select>
-              {departments.map((department) => (
-                <Option
-                  key={department.departmentId}
-                  value={department.departmentId}
-                >
-                  {department.departmentName}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Form>
-      </Modal>
-
-      {/* Issue Type */}
-      <Modal
-        title={
-          <div className="modalTitleStyle">
-            {canEditIssue ? "Edit Issue" : "Add Issue"}
-          </div>
-        }
-        className="modalclass"
-        open={issueModalVisible}
-        onCancel={handleIssueCancel}
-        footer={[
-          <Button
-            key="cancel"
-            onClick={handleIssueCancel}
-            className="deactiveclass"
-          >
-            Cancel
-          </Button>,
-          <Button
-            key="save"
-            type="primary"
-            onClick={() => {
-              form.submit();
-              console.log("Issue Form values:", form.getFieldsValue());
-            }}
-            className="activeclass"
-          >
-            Save
-          </Button>,
-        ]}
-      >
-        <Form
-          form={form}
-          name="addIssueType"
-          onFinish={onFinishIssue}
-          initialValues={
-            canEditIssue ? defaulissueValues : { Issueid: "", issueName: "" }
-          }
-        >
-          {canEditIssue && (
-            <Form.Item label="Issue id" name="Issueid">
-              <Input readOnly />
-            </Form.Item>
-          )}
-
-          <Form.Item
-            label="Issue Name"
-            name="issueName"
-            rules={[
-              { required: true, message: "Please input the Issue Name!" },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
-            label="Assign Department Name"
-            name="departmentId"
-            rules={[
-              { required: true, message: "Please select the department!" },
-            ]}
-          >
-            <Select onChange={setIssueDepartment}>
-              {departments.map((department) => (
-                <Option
-                  key={department.departmentId}
-                  value={department.departmentId}
-                >
-                  {department.departmentName}
-                </Option>
-              ))}
-            </Select>
           </Form.Item>
         </Form>
       </Modal>
