@@ -35,7 +35,7 @@ const Viewhistory: React.FC = () => {
   const [selectedAssignee, setSelectedAssignee] = useState<AssigneeInfo | null>(
     null
   );
-
+  const empID = localStorage.getItem("EmployeeId");
   const getStatusDotClass = (status: string | null | undefined) => {
     switch (status) {
       case "Initiated":
@@ -49,36 +49,9 @@ const Viewhistory: React.FC = () => {
     }
   };
 
-  //   useEffect(() => {
-
-  //     axios
-  //       .get("https://localhost:7267/api/Ticket/GetTicketDetails?id=E0003")
-  //       .then((response) => {
-  //         const ticketData = response.data;
-  //         const formattedData: DataType[] = [
-  //           {
-  //             key: ticketData.ticketId,
-  //             ticketId: ticketData.ticketId,
-  //             ticketDescription: ticketData.ticketDescription,
-  //             resolvedDate: ticketData.resolvedDate,
-  //             departmentName: ticketData.departmentName,
-  //             issueName: ticketData.issueName,
-  //             statusName: ticketData.statusName || null,
-  //             feedbackType: ticketData.feedbackType,
-  //             assignee: ticketData.assignee,
-  //             dueDate: moment(ticketData.dueDate).format("YYYY-MM-DD"),
-  //             createdDate: moment(ticketData.createdDate).format("YYYY-MM-DD"),
-  //           },
-  //         ];
-  //         setData(formattedData);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error fetching data:", error);
-  //       });
-  //   }, []);
   useEffect(() => {
     axios
-      .get("https://localhost:7267/api/Ticket/GetTicketDetails?id=E0003")
+      .get(`/api/Ticket/GetTicketDetails?id=${empID}`)
       .then((response) => {
         const ticketDataArray = response.data; // Assuming the API returns an array
         const formattedData: DataType[] = ticketDataArray.map(

@@ -4,6 +4,8 @@ import { useContext, useEffect, useState } from "react";
 import { contextAuth } from "./GlobalState";
 import { Login } from "./LoginComponent";
 import ITDepart from "../Ticketing/TicketingSystem";
+import CreateTicket from "../User/createTicket";
+import Viewhistory from "../User/ViewticketHistory";
 
 export function RoutingComponent() {
   const [role, setRole] = useContext<any>(contextAuth);
@@ -50,7 +52,7 @@ export function RoutingComponent() {
           element={
             "isAuthenticated" ? (
               <CommonLayout userRoles={role}>
-                <h1>Create ticket</h1>
+                <CreateTicket />
               </CommonLayout>
             ) : (
               <Navigate to="/" replace />
@@ -62,7 +64,7 @@ export function RoutingComponent() {
           element={
             "isAuthenticated" ? (
               <CommonLayout userRoles={role}>
-                <h1>View Ticket</h1>
+                <Viewhistory />
               </CommonLayout>
             ) : (
               <Navigate to="/" replace />
@@ -125,7 +127,7 @@ export function RoutingComponent() {
           element={
             "isAuthenticated" ? (
               <CommonLayout userRoles={role}>
-                <h1>Create ticket</h1>
+                <CreateTicket />
               </CommonLayout>
             ) : (
               <Navigate to="/" replace />
@@ -137,7 +139,7 @@ export function RoutingComponent() {
           element={
             "isAuthenticated" ? (
               <CommonLayout userRoles={role}>
-                <h1>View Ticket</h1>
+                <Viewhistory />
               </CommonLayout>
             ) : (
               <Navigate to="/" replace />
@@ -176,7 +178,7 @@ export function RoutingComponent() {
           element={
             "isAuthenticated" ? (
               <CommonLayout userRoles={role}>
-                <h1>Create ticket</h1>
+                <CreateTicket />
               </CommonLayout>
             ) : (
               <Navigate to="/" replace />
@@ -188,7 +190,7 @@ export function RoutingComponent() {
           element={
             "isAuthenticated" ? (
               <CommonLayout userRoles={role}>
-                <h1>View Ticket</h1>
+                <Viewhistory />
               </CommonLayout>
             ) : (
               <Navigate to="/" replace />
