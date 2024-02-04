@@ -3,7 +3,7 @@ import CommonLayout from "./Layout";
 import { useContext, useEffect, useState } from "react";
 import { contextAuth } from "./GlobalState";
 import { Login } from "./LoginComponent";
-import ActivationComponent from "../Admin/Employee/Employee";
+import ITDepart from "../Ticketing/TicketingSystem";
 
 export function RoutingComponent() {
   const [role, setRole] = useContext<any>(contextAuth);
@@ -101,7 +101,7 @@ export function RoutingComponent() {
           element={
             "isAuthenticated" ? (
               <CommonLayout userRoles={role}>
-                <ActivationComponent />
+                <h1>Your employees</h1>
               </CommonLayout>
             ) : (
               <Navigate to="/" replace />
@@ -148,7 +148,7 @@ export function RoutingComponent() {
       {/* IT ticketing routes */}
       <Routes>
         <Route
-          path="/ticketing/overviewIt"
+          path="/ticketing/overview"
           element={
             "isAuthenticated" ? (
               <CommonLayout userRoles={role}>
@@ -160,11 +160,11 @@ export function RoutingComponent() {
           }
         />
         <Route
-          path="/ticketing/it"
+          path="/ticketing/management"
           element={
             "isAuthenticated" ? (
               <CommonLayout userRoles={role}>
-                <h1>IT Tickets are here</h1>
+                <ITDepart />
               </CommonLayout>
             ) : (
               <Navigate to="/" replace />
@@ -172,7 +172,7 @@ export function RoutingComponent() {
           }
         />
         <Route
-          path="/ticketing/createTicketIt"
+          path="/ticketing/createTicket"
           element={
             "isAuthenticated" ? (
               <CommonLayout userRoles={role}>
@@ -184,7 +184,7 @@ export function RoutingComponent() {
           }
         />
         <Route
-          path="/ticketing/viewTicketIt"
+          path="/ticketing/viewTicket"
           element={
             "isAuthenticated" ? (
               <CommonLayout userRoles={role}>
@@ -197,7 +197,7 @@ export function RoutingComponent() {
         />
       </Routes>
       {/* Payroll ticketing routes */}
-      <Routes>
+      {/* <Routes>
         <Route
           path="/ticketing/overviewPy"
           element={
@@ -216,6 +216,7 @@ export function RoutingComponent() {
             "isAuthenticated" ? (
               <CommonLayout userRoles={role}>
                 <h1>Payroll Tickets are here</h1>
+                <ITDepart />
               </CommonLayout>
             ) : (
               <Navigate to="/" replace />
@@ -247,7 +248,7 @@ export function RoutingComponent() {
           }
         />
       </Routes>
-      {/* Facility ticketing routes */}
+      {/* Facility ticketing routes 
       <Routes>
         <Route
           path="/ticketing/overviewFc"
@@ -267,6 +268,7 @@ export function RoutingComponent() {
             "isAuthenticated" ? (
               <CommonLayout userRoles={role}>
                 <h1>Facility Tickets are here</h1>
+                <ITDepart />
               </CommonLayout>
             ) : (
               <Navigate to="/" replace />
@@ -297,7 +299,7 @@ export function RoutingComponent() {
             )
           }
         />
-      </Routes>
+      </Routes> */}
     </div>
   );
 }

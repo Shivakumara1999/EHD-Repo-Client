@@ -90,25 +90,25 @@ const CommonLayout = ({ children, userRoles }: any) => {
         {
           key: "overview",
           label: "Overview",
-          path: "/ticketing/overviewIt",
+          path: "/ticketing/overview",
           icon: <SlackCircleFilled />,
         },
         {
           key: "ticketing",
           label: "Ticketing System",
-          path: "/ticketing/it",
+          path: "/ticketing/management",
           icon: <UserOutlined />,
         },
         {
           key: "createTicket",
           label: "Create Ticket",
-          path: "/ticketing/createTicketIt",
+          path: "/ticketing/createTicket",
           icon: <FileAddOutlined />,
         },
         {
           key: "viewTicket",
           label: "Ticket History",
-          path: "/ticketing/viewTicketIt",
+          path: "/ticketing/viewTicket",
           icon: <ProfileFilled />,
         },
       ],
@@ -116,25 +116,25 @@ const CommonLayout = ({ children, userRoles }: any) => {
         {
           key: "overview",
           label: "Overview",
-          path: "/ticketing/overviewPy",
+          path: "/ticketing/overview",
           icon: <SlackCircleFilled />,
         },
         {
           key: "ticketing",
           label: "Ticketing System",
-          path: "/ticketing/payroll",
+          path: "/ticketing/management",
           icon: <UserOutlined />,
         },
         {
           key: "createTicket",
           label: "Create Ticket",
-          path: "/ticketing/createTicketPy",
+          path: "/ticketing/createTicket",
           icon: <FileAddOutlined />,
         },
         {
           key: "viewTicket",
           label: "Ticket History",
-          path: "/ticketing/viewTicketPy",
+          path: "/ticketing/viewTicket",
           icon: <ProfileFilled />,
         },
       ],
@@ -142,28 +142,80 @@ const CommonLayout = ({ children, userRoles }: any) => {
         {
           key: "overview",
           label: "Overview",
-          path: "/ticketing/overviewFc",
+          path: "/ticketing/overview",
           icon: <SlackCircleFilled />,
         },
         {
           key: "ticketing",
           label: "Ticketing System",
-          path: "/ticketing/facility",
+          path: "/ticketing/management",
           icon: <UserOutlined />,
         },
         {
           key: "createTicket",
           label: "Create Ticket",
-          path: "/ticketing/createTicketFc",
+          path: "/ticketing/createTicket",
           icon: <FileAddOutlined />,
         },
         {
           key: "viewTicket",
           label: "Ticket History",
-          path: "/ticketing/viewTicketFC",
+          path: "/ticketing/viewTicket",
           icon: <ProfileFilled />,
         },
       ],
+      // R04: [
+      //   {
+      //     key: "overview",
+      //     label: "Overview",
+      //     path: "/ticketing/overviewPy",
+      //     icon: <SlackCircleFilled />,
+      //   },
+      //   {
+      //     key: "ticketing",
+      //     label: "Ticketing System",
+      //     path: "/ticketing/payroll",
+      //     icon: <UserOutlined />,
+      //   },
+      //   {
+      //     key: "createTicket",
+      //     label: "Create Ticket",
+      //     path: "/ticketing/createTicketPy",
+      //     icon: <FileAddOutlined />,
+      //   },
+      //   {
+      //     key: "viewTicket",
+      //     label: "Ticket History",
+      //     path: "/ticketing/viewTicketPy",
+      //     icon: <ProfileFilled />,
+      //   },
+      // ],
+      // R05: [
+      //   {
+      //     key: "overview",
+      //     label: "Overview",
+      //     path: "/ticketing/overviewFc",
+      //     icon: <SlackCircleFilled />,
+      //   },
+      //   {
+      //     key: "ticketing",
+      //     label: "Ticketing System",
+      //     path: "/ticketing/facility",
+      //     icon: <UserOutlined />,
+      //   },
+      //   {
+      //     key: "createTicket",
+      //     label: "Create Ticket",
+      //     path: "/ticketing/createTicketFc",
+      //     icon: <FileAddOutlined />,
+      //   },
+      //   {
+      //     key: "viewTicket",
+      //     label: "Ticket History",
+      //     path: "/ticketing/viewTicketFC",
+      //     icon: <ProfileFilled />,
+      //   },
+      // ],
       // Add more role-based menu mappings as needed
     };
     const menuItems = roleMenuMapping[userRoles] || [];
@@ -323,16 +375,9 @@ const CommonLayout = ({ children, userRoles }: any) => {
     );
 
     return (
-      <div style={{ display: "flex", alignItems: "right", marginLeft: 400 }}>
+      <div className="dropdownIcon">
         <Dropdown overlay={userMenu} placement="bottomRight">
-          <Avatar
-            style={{
-              backgroundColor: "navy",
-              cursor: "pointer",
-              marginRight: 50,
-            }}
-            icon={<UserOutlined />}
-          />
+          <Avatar className="avatar" icon={<UserOutlined />} />
         </Dropdown>
       </div>
     );
@@ -352,15 +397,7 @@ const CommonLayout = ({ children, userRoles }: any) => {
       </Sider>
       <Layout className="content-container">
         <Content className="content-container">
-          <Header
-            className="header"
-            // style={{
-            //   background: "#fff",
-            //   padding: 0,
-            //   display: "flex",
-            //   justifyContent: "flex-end",
-            // }}
-          >
+          <Header className="header">
             <UserDetails />
           </Header>
           {children}
