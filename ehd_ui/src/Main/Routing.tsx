@@ -6,6 +6,7 @@ import { Login } from "./LoginComponent";
 import ITDepart from "../Ticketing/TicketingSystem";
 import CreateTicket from "../User/createTicket";
 import Viewhistory from "../User/ViewticketHistory";
+import EmployeeComponent from "../Admin/Employee/Employee";
 
 export function RoutingComponent() {
   const [role, setRole] = useContext<any>(contextAuth);
@@ -103,7 +104,7 @@ export function RoutingComponent() {
           element={
             "isAuthenticated" ? (
               <CommonLayout userRoles={role}>
-                <h1>Your employees</h1>
+                <EmployeeComponent />
               </CommonLayout>
             ) : (
               <Navigate to="/" replace />

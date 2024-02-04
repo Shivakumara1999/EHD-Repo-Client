@@ -19,7 +19,7 @@ interface DataType {
   isActive: boolean;
 }
 
-const ActivationComponent: React.FC = () => {
+const EmployeeComponent: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState(true);
   const [rowdata, setrowdata] = useState<boolean | null>(null);
   const [data, setData] = useState<DataType[]>([]);
@@ -276,4 +276,4 @@ const ActivationComponent: React.FC = () => {
   );
 };
 
-export default ActivationComponent;
+export default EmployeeComponent;
