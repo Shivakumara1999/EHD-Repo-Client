@@ -47,23 +47,22 @@ LoginForm.css */ .login-container {
   height: 90px;
   transition: all 0.3s;
 }
-.dropdownIcon{
+.dropdownIcon {
   display: flex;
   align-items: right;
   margin-left: 400;
- }
- .avatar{
+}
+.avatar {
   background-color: navy;
   cursor: pointer;
   margin-right: 9;
   margin-left: 2;
- }
+}
 
- .dropdowncontent{
+.dropdowncontent {
   display: flex;
-  align-items:center;
- 
- }
+  align-items: center;
+}
 .images.collapsed {
   height: 50px;
 }
@@ -104,8 +103,7 @@ LoginForm.css */ .login-container {
   font-family: Georgia, "Times New Roman", Times, serif;
 }
 .tabclass {
-  width: 80%;
-  margin-left: 10%;
+  width: 95%;
   font-family: Georgia, "Times New Roman", Times, serif;
 }
 
@@ -162,7 +160,7 @@ LoginForm.css */ .login-container {
   background-color: #ff4d4f;
   color: #ffffff;
   font-weight: bold;
-  width: 90px;
+  /* width: 90px; */
 }
 .modalclass {
   font-weight: bold;
@@ -175,7 +173,7 @@ LoginForm.css */ .login-container {
 }
 
 .searchclass {
-  margin-left: -600px;
+  margin-left: -400px;
 }
 
 /* Login Css */
@@ -397,7 +395,7 @@ LoginForm.css */ .login-container {
 }
 
 .searchclass {
-  width: 22%;
+  /* width: %; */
   display: flex;
   justify-content: space-between;
 }
@@ -655,13 +653,13 @@ popover-buttoncancel {
   margin-top: 8px;
 }
 
-/* AddEmployee*/ 
+/* AddEmployee*/
 
 .addEmployee {
   color: rgba(80, 65, 188, 1);
 }
 .addEmployeeModel .ant-modal-title {
-  color:rgb(25, 4, 161); 
+  color: rgb(25, 4, 161);
 }
 .addEmployeeModel {
   margin-left: 20%;
@@ -671,32 +669,29 @@ popover-buttoncancel {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
- 
-  margin-top:3%
+
+  margin-top: 3%;
 }
 .addEmpForm1 {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   margin-right: 45%;
- 
 }
 .addEmpForm2 {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   margin-right: 32%;
- 
- 
 }
 .addSubmit {
   background-color: rgba(80, 65, 188, 1);
   border-radius: 8px;
-  margin-left:1%;
+  margin-left: 1%;
   font-size: 15px;
   justify-content: center;
   font-weight: 600;
-  margin-top:3%
+  margin-top: 3%;
 }
 .addCancel {
   background-color: rgb(250, 67, 67);
@@ -717,4 +712,35 @@ popover-buttoncancel {
 }
 .selectgender .ant-select-dropdown-content {
   width: 220px !important;
+}
+/* Edit employee */
+.editEmployee {
+  color: rgba(80, 65, 188, 1);
+}
+.editEmpForm {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  /* margin-right: 55%; */
+}
+.editEmpForm1 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-right: 45%;
+}
+.editSubmit {
+  background-color: rgba(80, 65, 188, 1);
+  border-radius: 8px;
+  font-size: 15px;
+  justify-content: center;
+  font-weight: 600;
+}
+.editCancel {
+  background-color: rgb(250, 67, 67);
+  border-radius: 8px;
+  margin-right: 2%;
+  font-size: 15px;
+  justify-content: center;
+  font-weight: 600;
 }
