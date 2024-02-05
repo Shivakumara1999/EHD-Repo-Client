@@ -46,6 +46,7 @@ const CreateTicket: React.FC = () => {
   const [dynamicOption, setDynamicOption] = useState("");
 
   const empID = localStorage.getItem("EmployeeId");
+  const deptID = localStorage.getItem("DepartmentId")
 
   useEffect(() => {
     axios
@@ -179,7 +180,7 @@ const CreateTicket: React.FC = () => {
               <option value="Select Department" disabled>
                 Select Department
               </option>
-              {departments.map((dep) => (
+              {departments.filter((d)=>d.departmentId !== deptID).map((dep) => (
                 <option key={dep.departmentId} value={dep.departmentName}>
                   {dep.departmentName}
                 </option>
