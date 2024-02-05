@@ -48,6 +48,13 @@ interface IIssues {
   departmentName: string;
 }
 
+interface IDesignation{
+  key: React.Key;
+  designationId: string;
+  designation: string;
+  createdBy: string;
+  createdDate: Date;
+}
 
 const Configuration = () => {
   const [buttonName, setButtonName] = useState("Department");
@@ -56,18 +63,24 @@ const Configuration = () => {
   const [callModal, setCallModal] = useState("departmentmodal");
   const [roleModalVisible, setRoleModalVisible] = useState(false);
   const [issueModalVisible, setIssueModalVisible] = useState(false);
+  const [designationModalVisible, setDesignationModalVisible] = useState(false);
   const [form] = Form.useForm();
   const [selectedRowKeys, setSelectedRowKeys] = useState<String[]>([]);
   const [selectedRow, setSelectedRow] = useState<IDepartment[]>([]);
   const [canEdit, SetCanEdit] = useState(false);
   const [canEditRole, SetCanEditRole] = useState(false);
   const [canEditIssue, SetCanEditIssue] = useState(false);
+  const [canEditDesignation, SetCanEditDesignation] = useState(false);
   const [Roleid, setRoleid] = useState("");
   const [IssueDept, setIssueDept] = useState("");
+  const [DesignationDept, setDesignationDept] = useState("");
   const [selectedRowKeysforrole, setSelectedRowKeysforrole] = useState<
     String[]
   >([]);
   const [selectedRowKeysforissues, setSelectedRowKeysforissues] = useState<
+    String[]
+  >([]);
+  const [selectedRowKeysfordesignation, setSelectedRowKeysfordesignation] = useState<
     String[]
   >([]);
   const [defaultValues, setDefaultValues] = useState({
@@ -85,29 +98,35 @@ const Configuration = () => {
     Issueid: "",
     Issuetype: "",
   });
+  const [defauldesignationValues, setDefaultdesignationValues] = useState({
+    designationId: "",
+    designation: "",
+  });
 
   const [departments, setDepartments] = useState<IDepartment[]>([]);
   const [roles, setRoles] = useState<IRoles[]>([]);
   const [issues, setIssues] = useState<IIssues[]>([]);
+  const [designations, setDesignation] = useState<IDesignation[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   const refreshFunction = () => {
-    // setButtonName("Department");
-    // setSelectedTab("1");
     setIsModalVisible(false);
     setSelectedRowKeys([]);
     setSelectedRow([]);
     SetCanEdit(false);
     setSelectedRowKeysforrole([]);
     setSelectedRowKeysforissues([]);
+    setSelectedRowKeysfordesignation([]);
     setDefaultValues({ departmentId: "", departmentName: "" });
     setDepartments([]);
     setRoles([]);
     setIssues([]);
+    setDesignation([]);
     setSearchTerm("");
     fetchDataForDepartment();
     fetchDataForRoles();
     fetchDataForIssues();
+    fetchDataForDesignation();
   };
 
   const fetchDataForDepartment = async () => {
@@ -141,14 +160,29 @@ const Configuration = () => {
       console.error("Error fetching departments:", error);
     }
   };
+  const fetchDataForDesignation = async () => {
+    try {
+      const response = await axios.get(
+        "/api/Master/GetDesignationsByActive?isActive=true"
+      );
+      setDesignation(response.data);
+    } catch (error) {
+      console.error("Error fetching designation:", error);
+    }
+  };
+
   useEffect(() => {
     fetchDataForDepartment();
     fetchDataForRoles();
     fetchDataForIssues();
+    fetchDataForDesignation();
+    
   }, []);
   const departmentData: IDepartment[] = [];
   const rolesData: IRoles[] = [];
   const issuesdata: IIssues[] = [];
+  const designationData:IDesignation[] =[];
+
   for (let i = 0; i < departments.length; i++) {
     departmentData.push({
       key: i,
@@ -177,6 +211,16 @@ const Configuration = () => {
       createdBy: issues[i].createdBy,
       createdDate: issues[i].createdDate,
       departmentName: issues[i].departmentName,
+    });
+  }
+
+  for (let i = 0; i < designations.length; i++) {
+    designationData.push({
+      key: i,
+      designationId: designations[i].designationId,
+      designation: designations[i].designation,
+      createdBy: designations[i].createdBy,
+      createdDate: designations[i].createdDate,
     });
   }
   const filterData = (data: any[], columnName: string) => {
@@ -208,6 +252,14 @@ const Configuration = () => {
       description: canEditIssue
         ? "Issue updated successfully"
         : "Issue added successfully",
+    });
+  };
+  const openNotificationDesignation = () => {
+    notification.success({
+      message: "Success",
+      description: canEditDesignation
+        ? "Designation updated successfully"
+        : "Designation added successfully",
     });
   };
 
@@ -243,6 +295,7 @@ const Configuration = () => {
       fetchDataForDepartment();
       fetchDataForRoles();
       fetchDataForIssues();
+      fetchDataForDesignation();
     } catch (error) {
       // Handle error and display an error notification
       notification.error({
@@ -260,7 +313,11 @@ const Configuration = () => {
     } else if (key === "3") {
       setButtonName("Issue Type");
       setCallModal("issuemodal");
-    } else {
+    }  else if (key === "4") {
+      setButtonName("Designation");
+      setCallModal("designationmodal");
+    }
+    else {
       setButtonName("Department");
       setCallModal("departmentmodal");
     }
@@ -295,6 +352,7 @@ const Configuration = () => {
       let departmentsResponse;
       let rolesResponse;
       let issuesResponse;
+      let designationResponse;
 
       if (value === "Active") {
         departmentsResponse = await axios.get(
@@ -306,6 +364,9 @@ const Configuration = () => {
         issuesResponse = await axios.get(
           "/api/Master/GetAllIssueTypes?isActive=true"
         );
+        designationResponse = await axios.get(
+          "/api/Master/GetDesignationsByActive?isActive=true"
+        );
       } else {
         departmentsResponse = await axios.get(
           "/api/Master/GetDepartmentsByActive?isActive=false"
@@ -316,11 +377,15 @@ const Configuration = () => {
         issuesResponse = await axios.get(
           "/api/Master/GetAllIssueTypes?isActive=false"
         );
+        designationResponse = await axios.get(
+          "/api/Master/GetDesignationsByActive?isActive=false"
+        );
       }
 
       setDepartments(departmentsResponse.data);
       setRoles(rolesResponse.data);
       setIssues(issuesResponse.data);
+      setDesignation(designationResponse.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -418,6 +483,15 @@ const Configuration = () => {
       issueName: record.issueName,
     });
   };
+  const handleDesignationEdit = (record: IDesignation) => {
+    setDesignationModalVisible(true);
+    SetCanEditDesignation(true);
+    setDesignationDept(record.designationId);
+    form.setFieldsValue({
+      designationId: record.designationId,
+      designation: record.designation,
+    });
+  };
 
   const handleCancel = () => {
     setIsModalVisible(false);
@@ -440,8 +514,13 @@ const Configuration = () => {
       form.resetFields();
     } else if (callModal == "showRoleModal") {
       setRoleModalVisible(true);
-    } else {
+    } else if (callModal == "showIssueModal") {
+     
       setIssueModalVisible(true);
+      
+    }
+     else {
+      setDesignationModalVisible(true);
     }
   };
 
@@ -457,6 +536,10 @@ const Configuration = () => {
   const handleIssueCancel = () => {
     setIssueModalVisible(false);
     SetCanEditIssue(false);
+  };
+  const handleDesignationCancel = () => {
+    setDesignationModalVisible(false);
+    SetCanEditDesignation(false);
   };
 
   const onFinishRole = async (values: any) => {
@@ -491,6 +574,7 @@ const Configuration = () => {
       fetchDataForDepartment();
       fetchDataForRoles();
       fetchDataForIssues();
+      fetchDataForDesignation();
     } catch (error) {
       console.error("Error:", error);
       notification.error({
@@ -522,6 +606,7 @@ const Configuration = () => {
         fetchDataForDepartment();
         fetchDataForRoles();
         fetchDataForIssues();
+        fetchDataForDesignation();
       } catch (error) {
         console.error("Error:", error);
         notification.error({
@@ -556,6 +641,7 @@ const Configuration = () => {
         fetchDataForDepartment();
         fetchDataForRoles();
         fetchDataForIssues();
+        fetchDataForDesignation();
       } catch (error) {
         console.error("Error:", error);
         notification.error({
@@ -565,6 +651,48 @@ const Configuration = () => {
       }
     }
   };
+  const onFinishDesignation = async (values: any) => {
+    if (canEditDesignation) {
+      var data = {
+        ...values,
+        designationId: DesignationDept,
+        createdBy: "",
+        modifiedBy: "adminn",
+      };
+    } else {
+      var data = { ...values };
+    }
+    
+    setDesignationModalVisible(false);
+    try {
+      if (canEditDesignation) {
+        
+        await axios.post(`/api/Master/AddOrUpdateDesignations?id=${modifiedBy}`, data);
+        
+      } else {
+        
+        await axios.post(`/api/Master/AddOrUpdateDesignations?id=${CreatedBy}`, data);
+      }
+
+      setDesignationModalVisible(false);
+      SetCanEditDesignation(false);
+      setDefaultdesignationValues({ designationId: "", designation: "" });
+
+      
+      openNotificationDesignation();
+      fetchDataForDesignation();
+      fetchDataForDepartment();
+      fetchDataForRoles();
+      fetchDataForIssues();
+    } catch (error) {
+      // Handle error and display an error notification
+      notification.error({
+        message: "Error",
+        description: "Failed to save designations. Please try again.",
+      });
+    }
+  };
+
   const handleAddIssueClick = () => {
     setIssueModalVisible(true);
     form.resetFields(); // Reset issue form fields if needed
@@ -701,6 +829,47 @@ const Configuration = () => {
       ),
     },
   ];
+
+  const columns4: TableColumnsType<IDesignation> = [
+    {
+      title: "Designation ID",
+      dataIndex: "designationId",
+    },
+    {
+      title: "Designation",
+      dataIndex: "designation",
+    },
+    {
+      title: "CreatedBy",
+      dataIndex: "createdBy",
+    },
+    {
+      title: "CreatedOn",
+      dataIndex: "createdDate",
+      render: (text: string) => moment(text).format("YYYY-MM-DD"),
+    },
+    {
+      title: "Edit",
+      dataIndex: "edit",
+      render: (_, record) => (
+        <span>
+          <a
+            onClick={() => handleDesignationEdit(record)}
+            style={{
+              pointerEvents:
+                selectedRowKeysfordesignation.length === 1 &&
+                selectedRowKeysfordesignation.includes(record.key.toString())
+                  ? "auto"
+                  : "none",
+            }}
+          >
+            <EditOutlined />
+          </a>
+        </span>
+      ),
+    },
+  ];
+
   return (
     <>
     <div className="comonclass">
@@ -714,12 +883,12 @@ const Configuration = () => {
         <div className="searchclass">
           <Input
             placeholder="Search"
-            style={{ marginBottom: 16 }}
+            
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <div style={{ display: "Flex", gap: "10px" }}>
+        <div className="selectconfig" >
           <Select
             defaultValue="Active"
             className="selectclass"
@@ -735,13 +904,14 @@ const Configuration = () => {
             Deactivate
           </Button>
           <ReloadOutlined
+          className="refreshicon"
             onClick={() => {
               refreshFunction();
             }}
           />
         </div>
       </div>
-      <div style={{ marginTop: "15px" }}>
+      <div style={{ marginTop: "35px" }}>
         <Tabs
           className="tabclass"
           onChange={onChange}
@@ -802,6 +972,25 @@ const Configuration = () => {
                         row.key.toString()
                       );
                       setSelectedRowKeysforissues(keys);
+                    },
+                  }}
+                />
+              ),
+            },
+            {
+              label: "Designation",
+              key: "4",
+              children: (
+                <Table
+                  columns={columns4}
+                  dataSource={filterData(designationData, "designation")}
+                  rowSelection={{
+                    type: "checkbox",
+                    onChange: (_, selectedRows) => {
+                      const keys = selectedRows.map((row) =>
+                        row.key.toString()
+                      );
+                      setSelectedRowKeysfordesignation(keys);
                     },
                   }}
                 />
@@ -1001,6 +1190,54 @@ const Configuration = () => {
           </Form.Item>
         </Form>
       </Modal>
+
+      {/* Designation */}
+      <Modal
+        title={
+          <div className="modalTitleStyle">
+            {canEditDesignation ? "Edit Designation" : "Add Designation"}
+          </div>
+        }
+        className="modalclass"
+        open={designationModalVisible}
+        onCancel={handleDesignationCancel}
+        footer={[
+          <Button key="cancel" onClick={handleDesignationCancel} className="deactiveclass">
+            Cancel
+          </Button>,
+          <Button
+            key="save"
+            type="primary"
+            onClick={() => {
+              form.submit();
+              console.log("Form values:", form.getFieldsValue());
+            }}
+            className="activeclass"
+          >
+            Save
+          </Button>,
+        ]}
+      >
+        <Form
+          form={form}
+          name="addDesignation"
+          onFinish={onFinishDesignation}
+          initialValues={
+            canEditDesignation ? defauldesignationValues : { designationId: "", designation: "" }
+          }
+        >
+          <Form.Item
+            label="Designation"
+            name="designation"
+            rules={[
+              { required: true, message: "Please input the Designation!" },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+        </Form>
+      </Modal>
+
     </div>
     </>
   );

@@ -51,17 +51,19 @@ LoginForm.css */ .login-container {
   display: flex;
   align-items: right;
   margin-left: 400;
+
 }
 .avatar {
   background-color: navy;
   cursor: pointer;
-  margin-right: 9;
-  margin-left: 2;
+   margin-left: 3;
+  
 }
 
 .dropdowncontent {
   display: flex;
   align-items: center;
+  
 }
 .images.collapsed {
   height: 50px;
@@ -149,15 +151,16 @@ LoginForm.css */ .login-container {
   width: 100px;
   font-family: Georgia, "Times New Roman", Times, serif;
 }
+
 .activeclass {
-  background-color: #73d13d;
+  background-color: #1d0db2;
   color: #ffffff;
   font-weight: bold;
   width: 90px;
   font-family: Georgia, "Times New Roman", Times, serif;
 }
 .deactiveclass {
-  background-color: #ff4d4f;
+  background-color: #c33739;
   color: #ffffff;
   font-weight: bold;
   /* width: 90px; */
@@ -288,8 +291,9 @@ LoginForm.css */ .login-container {
 }
 .content-container {
   padding-left: 2%;
-  background-color: white;
+  background-color: aliceblue;
 }
+
 .header {
   background-color: white;
   padding: 0;
@@ -975,4 +979,16 @@ color: yellow;
   font-size: 15px;
   justify-content: center;
   font-weight: 600;
+}
+
+/* Configuration.tsx */
+.searchclass{
+  margin-left: -25%;
+}
+.selectconfig{
+  display: flex;
+  gap: 10px;
+}
+.ant-table-wrapper .ant-table-thead >tr>th{
+  background-color: #c3c9e5;
 }
