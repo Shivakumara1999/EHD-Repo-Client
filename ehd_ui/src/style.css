@@ -1,6 +1,4 @@
-/* LoginForm.css */ 
-
-.login-container { 
+LoginForm.css */ .login-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -49,7 +47,22 @@
   height: 90px;
   transition: all 0.3s;
 }
+.dropdownIcon {
+  display: flex;
+  align-items: right;
+  margin-left: 400;
+}
+.avatar {
+  background-color: navy;
+  cursor: pointer;
+  margin-right: 9;
+  margin-left: 2;
+}
 
+.dropdowncontent {
+  display: flex;
+  align-items: center;
+}
 .images.collapsed {
   height: 50px;
 }
@@ -275,7 +288,7 @@
   width: 110%;
 }
 .content-container {
-  /* padding-left: 2%; */
+  padding-left: 2%;
   background-color: white;
 }
 .header {
@@ -639,159 +652,94 @@ popover-buttoncancel {
   margin-top: 8px;
 }
 
+/* AddEmployee*/
 
-/* escalation count part */
+.addEmployee {
+  color: rgba(80, 65, 188, 1);
+}
+.addEmployeeModel .ant-modal-title {
+  color: rgb(25, 4, 161);
+}
+.addEmployeeModel {
+  margin-left: 20%;
+  margin-top: 3%;
+}
+.addEmpForm {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 
-.count-card{
-  width:100%;
-  padding:-10;
-  background-color:#5041BC;
+  margin-top: 3%;
 }
-.count-card .ant-card-body{
-  padding: 0;
+.addEmpForm1 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-right: 45%;
 }
-
-.count-card .ant-card-head-title{
-  color:white !important;
+.addEmpForm2 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-right: 32%;
 }
-
-.count-card-list {
-  padding:0;
-  margin:0;
-  width:100%;
-  overflow-y: scroll;
-  max-height: 16vh;
+.addSubmit {
+  background-color: rgba(80, 65, 188, 1);
+  border-radius: 8px;
+  margin-left: 1%;
+  font-size: 15px;
+  justify-content: center;
+  font-weight: 600;
+  margin-top: 3%;
 }
-
-.count-card-list::-webkit-scrollbar {
-  width: 5px;
+.addCancel {
+  background-color: rgb(250, 67, 67);
+  border-radius: 8px;
+  margin-left: 2%;
+  font-size: 15px;
+  justify-content: center;
+  font-weight: 600;
 }
-.count-card-list::-webkit-scrollbar-thumb {
-  background-color: white;  
-  margin-right: 5px;
+.selectdesignation .ant-select-selector {
+  width: 200px !important;
 }
-.count-card-list::-webkit-scrollbar-track {
-  background-color: #5041BC;  
+.selectdesignation .ant-select-dropdown-content {
+  width: 220px !important;
 }
-.count-card-listitem{
-  padding:4% 6% !important;
-  color:white; 
-  background-color:#5041BC;
-  border:0 !important; 
-  width:100% !important;
+.selectgender .ant-select-selector {
+  width: 200px !important;
 }
-.count-card-listitem:hover{
-  background-color: white !important;
-  color:#5041BC !important;
-  border-radius: 5px ;
-  margin:5px;
-  width:97% !important;
-  font-size: 20px !important;  
+.selectgender .ant-select-dropdown-content {
+  width: 220px !important;
 }
-.count-card-listitem-click{
-  background-color: white !important;
-  color:#5041BC !important;
-  border-radius: 5px !important;
-  margin:5px;
-  width:97% !important;
-  padding:4% 6% !important;
-  color:white; 
-  background-color:#5041BC;
-  border:0 !important;  
+/* Edit employee */
+.editEmployee {
+  color: rgba(80, 65, 188, 1);
 }
-
-/* escalation content part */
-
-.content-card{
-  width:98%;
-  margin:1%;
+.editEmpForm {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  /* margin-right: 55%; */
 }
-.content-card .ant-card-body {
-  padding:0.8%;
-  margin:0;
-  border-radius: 7px;
-  border: 2px solid #ebf8f9;
+.editEmpForm1 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-right: 45%;
 }
-.content-card-list{
-  overflow-y: scroll;
-  max-height: 50vh;
-  padding:-5% 0;
-  margin:1%;
-  background-color: #a7dfe3;
-  border-radius: 5px;
+.editSubmit {
+  background-color: rgba(80, 65, 188, 1);
+  border-radius: 8px;
+  font-size: 15px;
+  justify-content: center;
+  font-weight: 600;
 }
-.content-card-listitem{
-  margin:10; 
-  padding:0;
-}
-.content-card-divider-text{
-  font-size:12px;
-  color:#76cdd3; 
-  margin-left:10%;
-}
-
-.content-card-ticketticketid{
-  font-size:20px;
-  padding-left:1%;
-  padding-bottom:1%;
-  font-weight: 450;
-  color:#777777; 
-}
-.content-card-ticketissue{
-  padding-bottom:1%;
-  font-size:20px;
-  font-weight:bold;
-}
-.content-card-ticketinfo-row{
-  margin-top:-1%;
-  margin-bottom: -2%;
-  font-size:16px;
-  font-weight:normal;
-
-}
-.content-card-ticketuser{
-  color:blue;
-  cursor:pointer;
-}
-.content-card-createddate{
-  color:#5a5a5a;
-}
-.content-card-ticketdescription-row{
-  padding-right:10;
-  font-size:14px;
-  font-weight:normal;
-  margin-top:-1.5%;
-}
-
-/* escalation misc */
-
-.esc-heading-div{
-  padding-left:1%;
-  color:#5041BC;
-}
-
-.count-div{
-  padding: 0% 1%;
-}
-
-.content-card-heading-div{
-  display:flex;
-  align-items:center;
-  color:#5041BC;
-  padding-left:1%;
-  padding-top: 2%;
-}
-
-.content-card-reraise-button{
-  background-color:#5041BC;
-  color:white;
-}
-
-.modal-cancel-button{
-  background-color:#d73435;
-  color:white
-}
-.modal-reraise-button{
-  background-color:#00a854;
-  color:white;
+.editCancel {
+  background-color: rgb(250, 67, 67);
+  border-radius: 8px;
+  margin-right: 2%;
+  font-size: 15px;
+  justify-content: center;
+  font-weight: 600;
 }

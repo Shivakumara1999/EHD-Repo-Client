@@ -21,7 +21,7 @@ import {
 } from "@ant-design/icons";
 import { Header } from "antd/es/layout/layout";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 const { Sider, Content } = Layout;
 
 const CommonLayout = ({ children, userRoles }: any) => {
@@ -362,24 +362,48 @@ const CommonLayout = ({ children, userRoles }: any) => {
       </>
     );
   }
+
+  interface UserData {
+    employeeName: string;
+  }
   function UserDetails() {
+    const [userProfile, setUserProfile] = useState<UserData | null>(null);
+    useEffect(() => {
+      if (mailId) {
+        axios
+          .get(`https://localhost:7267/api/User/GetUserProfile?mail_id=${mailId}`)
+          .then((response: any) => {
+            setUserProfile(response.data);
+          })
+          .catch((error: any) => {
+            console.error(error.message);
+          });
+      }
+    }, [mailId]);
+
     const userMenu = (
       <Menu>
-        <Menu.Item key="logout" onClick={handleLogout}>
-          Logout
-        </Menu.Item>
         <Menu.Item key="changePasw" onClick={handleChangePasswordClick}>
           Change Password
         </Menu.Item>
+        <Menu.Item key="logout" onClick={handleLogout}>
+          Logout
+        </Menu.Item>
+        
       </Menu>
     );
 
     return (
-      <div className="dropdownIcon">
-        <Dropdown overlay={userMenu} placement="bottomRight">
-          <Avatar className="avatar" icon={<UserOutlined />} />
-        </Dropdown>
+      <div className="dropdownIcon" >
+      <Dropdown overlay={userMenu} placement="bottomRight">
+     <div className="dropdowncontent" >
+     <h3>{userProfile && userProfile.employeeName}</h3>
+     <Avatar className="avatar"
+         icon={<UserOutlined />}
+       />
       </div>
+   </Dropdown>
+ </div>
     );
   }
   return (

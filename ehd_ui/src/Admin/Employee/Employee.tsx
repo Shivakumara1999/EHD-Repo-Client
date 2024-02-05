@@ -2,6 +2,7 @@ import { Button, Divider, Modal, Select, Table, TableColumnsType } from "antd";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { EditFilled, ReloadOutlined } from "@ant-design/icons";
+import { EditEmployee } from "./EditEmployee";
 
 interface DataType {
   key: React.Key;
@@ -258,11 +259,15 @@ const EmployeeComponent: React.FC = () => {
       </Select>
       <Divider />
       <Modal
-        title="Basic Modal"
+        className="editEmployee"
         open={isModalOpen}
+        onCancel={() => setIsModalOpen(false)}
+        footer={[]}
+        width={1000}
         onOk={handleOk}
-        onCancel={handleCancel}
-      ></Modal>
+      >
+        <EditEmployee selectedRowKeys={selectedRowKeys} selectedRows={row} />
+      </Modal>
       <Table
         rowSelection={{
           onChange: handleRowSelectionChange,
