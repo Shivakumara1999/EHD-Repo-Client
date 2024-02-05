@@ -8,6 +8,7 @@ import CreateTicket from "../User/createTicket";
 import Viewhistory from "../User/ViewticketHistory";
 import EmployeeComponent from "../Admin/Employee/Employee";
 import Configuration from "../Admin/Configuration/configuration";
+import { Escalation } from "../Admin/Escalation/escalation";
 
 export function RoutingComponent() {
   const [role, setRole] = useContext<any>(contextAuth);
@@ -93,7 +94,7 @@ export function RoutingComponent() {
           element={
             "isAuthenticated" ? (
               <CommonLayout userRoles={role}>
-                <h1>Escalations</h1>
+                <Escalation />
               </CommonLayout>
             ) : (
               <Navigate to="/" replace />
