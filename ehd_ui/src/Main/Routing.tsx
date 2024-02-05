@@ -3,12 +3,12 @@ import CommonLayout from "./Layout";
 import { useContext, useEffect, useState } from "react";
 import { contextAuth } from "./GlobalState";
 import { Login } from "./LoginComponent";
-import ITDepart from "../Ticketing/TicketingSystem";
 import CreateTicket from "../User/createTicket";
 import Viewhistory from "../User/ViewticketHistory";
 import EmployeeComponent from "../Admin/Employee/Employee";
 import Configuration from "../Admin/Configuration/configuration";
 import { Escalation } from "../Admin/Escalation/escalation";
+import TicketingSystem from "../Ticketing/TicketingSystem";
 
 export function RoutingComponent() {
   const [role, setRole] = useContext<any>(contextAuth);
@@ -169,7 +169,7 @@ export function RoutingComponent() {
           element={
             "isAuthenticated" ? (
               <CommonLayout userRoles={role}>
-                <ITDepart />
+                <TicketingSystem />
               </CommonLayout>
             ) : (
               <Navigate to="/" replace />

@@ -1,5 +1,4 @@
-LoginForm.css */ 
-.login-container {
+LoginForm.css */ .login-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -48,7 +47,22 @@ LoginForm.css */
   height: 90px;
   transition: all 0.3s;
 }
+.dropdownIcon {
+  display: flex;
+  align-items: right;
+  margin-left: 400;
+}
+.avatar {
+  background-color: navy;
+  cursor: pointer;
+  margin-right: 9;
+  margin-left: 2;
+}
 
+.dropdowncontent {
+  display: flex;
+  align-items: center;
+}
 .images.collapsed {
   height: 50px;
 }
@@ -89,8 +103,7 @@ LoginForm.css */
   font-family: Georgia, "Times New Roman", Times, serif;
 }
 .tabclass {
-  width: 80%;
-  margin-left: 10%;
+  width: 95%;
   font-family: Georgia, "Times New Roman", Times, serif;
 }
 
@@ -147,7 +160,7 @@ LoginForm.css */
   background-color: #ff4d4f;
   color: #ffffff;
   font-weight: bold;
-  width: 90px;
+  /* width: 90px; */
 }
 .modalclass {
   font-weight: bold;
@@ -160,7 +173,7 @@ LoginForm.css */
 }
 
 .searchclass {
-  margin-left: -350px;
+  margin-left: -400px;
 }
 
 /* Login Css */
@@ -282,6 +295,8 @@ LoginForm.css */
   padding: 0;
   display: flex;
   justify-content: flex-end;
+  position:absolute;
+  right:1%;
 }
 .divider {
   background-color: #ffffff;
@@ -380,15 +395,14 @@ LoginForm.css */
 }
 
 .searchclass {
-  width: 22%;
+  /* width: %; */
   display: flex;
   justify-content: space-between;
 }
-/* ticketing */
+/* megha- ticketing */
 
 .title {
   margin: 0;
-
   font-size: 1rem;
 }
 
@@ -398,39 +412,28 @@ LoginForm.css */
 
 .card-container {
   display: flex;
-
   flex-wrap: wrap;
 }
 
 .custom-card {
   width: 170px;
-
   margin: 0px 5px;
-
   margin-bottom: 10px;
-
   transition: box-shadow 0.2s;
-
   border: 3px solid rgb(158, 156, 156);
 }
 
 .card-value {
   color: black;
-
   font-weight: bold;
-
   font-size: 25px;
-
   float: left;
 }
 
 .view-details {
   font-size: 1.9vh;
-
   color: blue;
-
   font-weight: bold;
-
   float: right;
 }
 
@@ -449,8 +452,6 @@ LoginForm.css */
 .dot4,
 .dot5,
 .dot6 {
-  /* vertical-align: middle; */
-
   margin-left: 7px;
 }
 
@@ -465,25 +466,19 @@ LoginForm.css */
 
 .div {
   display: flex;
-
   justify-content: space-between;
 }
 
 .heading {
   margin-left: 12px;
-
   color: navy;
 }
 
 .search {
   width: 35%;
-
   display: flex;
-
   margin: auto;
-
   float: right;
-
   margin-left: 39%;
 }
 
@@ -494,17 +489,11 @@ LoginForm.css */
 .dot-title-container5,
 .dot-title-container6 {
   display: inline-block;
-
   padding: 4px;
-
   border-radius: 50px;
-
   width: 75%;
-
   vertical-align: middle;
-
   padding-top: 1px;
-
   float: right;
 }
 
@@ -563,11 +552,8 @@ LoginForm.css */
 .dot5,
 .dot6 {
   display: inline-block;
-
   width: 8px;
-
   height: 8px;
-
   border-radius: 50%;
 }
 
@@ -598,35 +584,28 @@ LoginForm.css */
 .card-title5,
 .card-title6 {
   font-weight: bold;
-
   font-size: 12px;
-
   margin-left: 5px;
 }
 
 .maincard {
   margin-bottom: 16px;
-
   width: 100%;
 }
 
 .tdiv {
   display: "flex";
-
   justify-content: space-between;
-
   align-items: flex-start;
 }
 
 .tselect {
   background-color: white;
-
   color: Blue;
 }
 
 .tbutton {
   background-color: white;
-
   color: Blue;
 }
 
@@ -638,14 +617,281 @@ popover-buttoncancel {
   margin-top: 8px;
 }
 
+.left-content {
+  flex-grow: 0;
+}
 
-AddEmployee*/
+.middle-content {
+  flex-shrink: 0;
+  margin: 0 10px;
+  display: contents;
+}
+
+.right-content {
+  flex-shrink: 0;
+}
+
+.option1,
+.option2 {
+  font-weight: bold !important;
+}
+
+.option1 {
+  color: green !important;
+}
+
+.option2 {
+  color: red !important;
+}
+
+.Department {
+  width: 120;
+}
+
+.spanId{
+  color: grey;
+}
+
+.spanGet, .spanDesc{
+  font-weight: bold;
+}
+
+.spanDesc{
+color: black;
+}
+
+.divCategory{
+  height: 300px;
+  overflow-x: auto;
+  overflow-y: auto;
+  margin-top: 16px;
+}
+
+.belowCards{
+  width: 100%; 
+  padding: 16px;
+  margin-bottom: 16px; 
+}
+
+.cardDiv{
+  display: flex;
+   flex-wrap: wrap;
+}
+
+.view-details {
+  font-size: 1.9vh;
+  color: blue;
+  font-weight: bold;
+  float:right;  
+}
+
+.custom-card:hover {
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+}
+
+.div{
+  display: flex;
+  justify-content: space-between;
+}
+
+.search{
+  width:35%;
+  display: flex;
+  margin: auto;
+  float:right;
+  margin-left: 42%;
+}   
+
+.dot-title-container {
+  display: inline-block;
+  padding: 4px;
+  border-radius: 50px;
+  width: 75%;
+  vertical-align: middle;
+  padding-top: 1px; 
+  float: right; 
+} 
+
+.horizontal-card{
+  width: 95%;
+}
+
+.horizontal-card-container{
+  max-height: 300px;
+   overflow-y:scroll;
+
+}
+.dropdown{
+  text-align:center;
+  margin-right:10px;
+  width: 100%;
+}
+
+.card-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.ticket-card-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ticket-card,
+.middle-content,
+.right-content,
+.last-content {
+  flex: 1;
+  margin: 0 10px;
+  width:20%;
+}
+.ticket-card{
+  width:50%;
+}
+.left-content p{
+font-weight: bold;
+}
+
+.priority-high {
+color: red;
+}
+
+.priority-medium {
+color: green;
+}
+
+.priority-low {
+color: yellow;
+}
+
+.modal{
+  margin-top: 15%;
+}
+.ant-select-selection-item, .right-content-btn {
+  color: blue;
+  font-weight: bold !important;
+}
+
+.option1, .option2 {
+  font-weight: bold !important;
+}
+
+.option1 {
+  color: green !important;
+}
+
+.option2 {
+  color: red !important;
+}
+.Department{
+  width:120;
+}
+
+.ticket-card-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ticket-card,
+.ticket-actions,
+.ticket-priority {
+  flex: 1;
+  margin-right: 10px; 
+}
+
+.cardDiv {
+  padding: 10px;
+}
+
+.ticket-details {
+  margin-bottom: 10px;
+}
+
+.middle-content {
+  margin-bottom: 10px;
+}
+
+.right-content-btn {
+  margin-left: 10px;
+  width: 100%;
+}
+
+.priority-text {
+  font-weight: bold;
+}
+
+.high {
+  color: red;
+    background-color: rgb(235, 118, 118);
+    border-radius: 50%;
+    min-width: 164%;
+    padding: 20%;
+    text-align: center;
+}
+
+.medium {
+  color: orange;
+  background-color: rgb(241, 208, 146);
+  border-radius: 45%;
+  border-radius: 50%;
+  min-width: 164%;
+  padding: 20%;
+  text-align: center;
+}
+
+.low {
+  color: green;
+  background-color: rgb(181, 241, 181);
+  border-radius: 45%;
+  border-radius: 50%;
+  min-width: 164%;
+  padding: 20%;
+  text-align: center;
+}
+
+.light {
+  opacity: 0.5;
+}
+
+.carddetails{
+  display: flex;
+  justify-content: space-between;
+}
+.tickectinfo{
+  width: 40%;
+}
+.priority{
+  width: 100%;
+}
+
+.nametag{
+  text-decoration: underline;
+}
+
+.belowCards{
+  background-color:#f5edee;
+}
+.resolved-btn{
+  margin-top: 8px;
+}
+
+.priority-txt{
+  margin-top: -7px;
+}
+
+.dept-opt{
+  width: 40%;
+}
+
+/* AddEmployee*/
 
 .addEmployee {
   color: rgba(80, 65, 188, 1);
 }
 .addEmployeeModel .ant-modal-title {
-  color:rgb(25, 4, 161); 
+  color: rgb(25, 4, 161);
 }
 .addEmployeeModel {
   margin-left: 20%;
@@ -655,32 +901,29 @@ AddEmployee*/
   display: flex;
   flex-direction: row;
   justify-content: space-between;
- 
-  margin-top:3%
+
+  margin-top: 3%;
 }
 .addEmpForm1 {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   margin-right: 45%;
- 
 }
 .addEmpForm2 {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   margin-right: 32%;
- 
- 
 }
 .addSubmit {
   background-color: rgba(80, 65, 188, 1);
   border-radius: 8px;
-  margin-left:1%;
+  margin-left: 1%;
   font-size: 15px;
   justify-content: center;
   font-weight: 600;
-  margin-top:3%
+  margin-top: 3%;
 }
 .addCancel {
   background-color: rgb(250, 67, 67);
@@ -701,4 +944,35 @@ AddEmployee*/
 }
 .selectgender .ant-select-dropdown-content {
   width: 220px !important;
+}
+/* Edit employee */
+.editEmployee {
+  color: rgba(80, 65, 188, 1);
+}
+.editEmpForm {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  /* margin-right: 55%; */
+}
+.editEmpForm1 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-right: 45%;
+}
+.editSubmit {
+  background-color: rgba(80, 65, 188, 1);
+  border-radius: 8px;
+  font-size: 15px;
+  justify-content: center;
+  font-weight: 600;
+}
+.editCancel {
+  background-color: rgb(250, 67, 67);
+  border-radius: 8px;
+  margin-right: 2%;
+  font-size: 15px;
+  justify-content: center;
+  font-weight: 600;
 }

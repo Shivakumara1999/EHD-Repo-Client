@@ -1,17 +1,8 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import {
-  Button,
-  Card,
-  Col,
-  Dropdown,
-  Input,
-  Modal,
-  Row,
-  Select,
-  message,
-} from "antd";
+import React, { useEffect, useState } from "react";
+import { Button, Card, Col, Input, Modal, Row, Select, message } from "antd";
 import Meta from "antd/es/card/Meta";
 import Search from "antd/es/input/Search";
+import "../style.css";
 import axios from "axios";
 
 const { Option } = Select;
@@ -49,27 +40,10 @@ interface Count {
   reRaisedTicketsCount: number;
 }
 
-const ITDepart: React.FC = () => {
+const TicketingSystem: React.FC = () => {
   const [tableData, setData] = useState<Array<any>>([]);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [activeData, setActiveData] = useState<Array<any>>([]);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
-  const [rejectDescription, setRejectDescription] = useState<string>("");
-  const [highlightTextArea, setHighlightTextArea] = useState<boolean>(false);
-  const [selectedOptionOnCancel, setSelectedOptionOnCancel] = useState<
-    string | null
-  >(null);
-  const [popconfirmTitle, setPopconfirmTitle] = useState<string>("");
-  const [isRejectDescriptionValid, setIsRejectDescriptionValid] =
-    useState<boolean>(false);
-  const [department, setDepartment] = useState<string>("");
-  const [highlightDepartmentDropdown, setHighlightDepartmentDropdown] =
-    useState<boolean>(false);
-  const [resolveVisible, setResolveVisible] = useState(false);
-  const [resolveDescription, setResolveDescription] = useState("");
-  const [highlightResolveDescription, setHighlightResolveDescription] =
-    useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
   const [confirmAcceptVisible, setConfirmAcceptVisible] = useState(false);
   const [confirmRejectVisible, setConfirmRejectVisible] = useState(false);
   const [confirmIrrelevantVisible, setConfirmIrrelevantVisible] =
@@ -83,9 +57,11 @@ const ITDepart: React.FC = () => {
   const [counts, setCounts] = useState<Count>();
   const [userData, setUserData] = useState<any>();
   const [isUserInfoModalOpen, setIsUserInfoModelOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredTickets, setFilteredTickets] = useState<Array<any>>([]);
 
-  const departmentId = localStorage.getItem("DepartmentId") || "";
-  console.log("ticket"+departmentId);
+  const departmentId = localStorage.getItem("DepartmentId");
+  const employeeId = localStorage.getItem("EmployeeId");
 
   const getCategoryName = () => {
     switch (selectedCategory) {
@@ -160,6 +136,14 @@ const ITDepart: React.FC = () => {
       });
   };
 
+  useEffect(()=>{
+    getActiveData();
+    getDueData();
+    getClosedData();
+    getReraisedData();
+    getRejectedData();
+  })
+
   const renderMeta = (ticket: any) => {
     const createdDate = new Date(ticket.createdDate);
     const currentDate = new Date();
@@ -229,23 +213,24 @@ const ITDepart: React.FC = () => {
       <Meta
         title={
           <>
-            {ticket.issue}{" "}
-            <span style={{ color: "grey" }}>#{ticket.ticketId}</span>
+            {ticket.issue} <span className="spanId">#{ticket.ticketId}</span>
           </>
         }
         description={
           <>
-            <a href="#!" onClick={() => handleUserClick(ticket.employeeId)}>
-              {ticket.userName}
+            <a
+              className="nametag"
+              href="#!"
+              onClick={() => handleUserClick(ticket.employeeId)}
+            >
+              <b> {ticket.userName}</b>
             </a>{" "}
-            • <span style={{ fontWeight: "bold" }}>Created </span>:{" "}
-            <span style={{ fontWeight: "bold" }}>{formattedCreatedDate}</span> •{" "}
-            <span style={{ fontWeight: "bold" }}>Due in</span>:{" "}
-            <span style={{ fontWeight: "bold" }}>{formattedDueDate}</span>
+            • <span className="spanGet">Created </span>:{" "}
+            <span className="spanGet">{formattedCreatedDate}</span> •{" "}
+            <span className="spanGet">Due in</span>:{" "}
+            <span className="spanGet">{formattedDueDate}</span>
             <p>
-              <span style={{ color: "black", fontWeight: "bold" }}>
-                {ticket.ticketDescription}
-              </span>
+              <span className="spanDesc">{ticket.ticketDescription}</span>
             </p>
           </>
         }
@@ -255,7 +240,7 @@ const ITDepart: React.FC = () => {
 
   const UpdateStatus = (
     ticketId: string,
-    assigneeId: string,
+    employeeId: string,
     reason: string,
     status: string
   ) => {
@@ -277,7 +262,7 @@ const ITDepart: React.FC = () => {
     const data = {
       ticketId: selectedTicketId,
       statusId: statusId,
-      assigneeId: assigneeId,
+      assigneeId: employeeId,
       reason: reason,
     };
     axios({
@@ -298,8 +283,9 @@ const ITDepart: React.FC = () => {
 
   const handleAccept = () => {
     setConfirmAcceptVisible(false);
-    let assigneeId = "E0002"; // ONCE LOGIN DONE, CAPTURE THE VALUE FROM TOKEN, NOW IT IS STATIC VALUE
-    UpdateStatus(selectedTicketId, assigneeId, "", "Accept");
+    if (employeeId) {
+      UpdateStatus(selectedTicketId, employeeId, "", "Accept");
+    }
     if (!selectedTicketId) {
       message.error("No ticket or action selected");
       return;
@@ -312,13 +298,19 @@ const ITDepart: React.FC = () => {
   };
 
   const handleReject = () => {
-    let assigneeId = "E0002"; // ONCE LOGIN DONE, CAPTURE THE VALUE FROM TOKEN, NOW IT IS STATIC VALUE
-    UpdateStatus(selectedTicketId, assigneeId, rejectReason, "Reject");
-    setConfirmRejectVisible(false);
+    if (employeeId) {
+      UpdateStatus(selectedTicketId, employeeId, rejectReason, "Reject");
+    }
+
     if (!selectedTicketId) {
       message.error("No ticket or action selected");
       return;
     }
+    if (!rejectReason.trim()) {
+      message.error("Please enter a reason for rejection");
+      return;
+    }
+    setConfirmRejectVisible(false);
   };
 
   const handleResolved = () => {
@@ -326,8 +318,9 @@ const ITDepart: React.FC = () => {
   };
 
   const handleResolvedOk = () => {
-    let assigneeId = "E0002"; // ONCE LOGIN DONE, CAPTURE THE VALUE FROM TOKEN, NOW IT IS STATIC VALUE
-    UpdateStatus(selectedTicketId, assigneeId, resolvedDetails, "Resolved");
+    if (employeeId) {
+      UpdateStatus(selectedTicketId, employeeId, resolvedDetails, "Resolved");
+    }
     setConfirmResolvedVisible(false);
     if (!selectedTicketId) {
       message.error("No ticket or action selected");
@@ -359,29 +352,35 @@ const ITDepart: React.FC = () => {
     getData();
   }, []);
 
-  const handleIrrelevant = (department: string) => {
-    setDeparmentid(department);
-  };
+  // const handleIrrelevant = (dept: string) => {
+    
+  // };
 
-  const updateDepartment = (ticketId: string, departmentId: any) => {
-    const data = {
-      ticketId: selectedTicketId,
-      departmentId: Deparmentid,
-    };
-    axios({
-      method: "put",
-      // headers: {
-      //     'Authorization': `Bearer ${authToken}`
-      // },
-      url: `/api/Ticket/UpdateTicketDepartment`,
-      data: data,
-    })
-      .then((response: any) => {
-        setData(response.data);
+  const updateDepartment = (ticketId: string, deptId: any) => {
+    if (deptId === "") {
+      message.error("Please select a department.");
+    } else {
+      const data = {
+        ticketId: selectedTicketId,
+        departmentId: deptId,
+        employeeId: employeeId,
+      };
+      axios({
+        method: "put",
+        // headers: {
+        //     'Authorization': `Bearer ${authToken}`
+        // },
+        url: `/api/Ticket/UpdateTicketDepartment`,
+        data: data,
       })
-      .catch((error: any) => {
-        message.error(error.message);
-      });
+        .then((response: any) => {
+          setData(response.data);
+          setConfirmIrrelevantVisible(false);
+        })
+        .catch((error: any) => {
+          message.error(error.message);
+        });
+    }
   };
 
   const GetAllTicketsCount = () => {
@@ -390,7 +389,6 @@ const ITDepart: React.FC = () => {
       .then((response: any) => {
         console.log(response.data);
         setCounts(response.data);
-        message.success("Tickets Fetched Successfully");
       })
       .catch((error) => {
         message.error(error.message);
@@ -402,11 +400,77 @@ const ITDepart: React.FC = () => {
     GetAllTicketsCount();
   }, []);
 
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const query = event.target.value;
+    setSearchQuery(query);
+  };
+
+  useEffect(() => {
+    // const filteredResults = tableData.filter((ticket) => {
+    //   return (
+    //     ticket.ticketId.includes(searchQuery) ||
+    //     (ticket.userName &&
+    //       ticket.userName.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    //     ticket.priority.toLowerCase() === searchQuery.toLowerCase()
+    //   );
+    // });
+    // setFilteredTickets(filteredResults);
+
+    setFilteredTickets(filteredData);
+    
+  }, [searchQuery]);
+
+  
+
+  const filteredData = activeData.filter((ticket: any) => {
+    const searchQueryLower = searchQuery.toLowerCase();
+    return (
+      ticket.ticketId.toLowerCase().includes(searchQueryLower) ||
+      ticket.userName.toLowerCase().includes(searchQueryLower) ||
+      ticket.ticketDescription.toLowerCase().includes(searchQueryLower) ||
+      ticket.priority.toLowerCase().includes(searchQueryLower) ||
+      ticket.issue.toLowerCase().includes(searchQueryLower)
+      // ticket.createdDate.includes(searchQueryLower)||
+      // ticket.ticketDate.includes(searchQueryLower)
+    );
+  });
+  
+
+  const getPriorityClass = (priority: any) => {
+    switch (priority.toLowerCase()) {
+      case "high":
+        return "high";
+      case "medium":
+        return "medium";
+      case "low":
+        return "low";
+      default:
+        return "";
+    }
+  };
+
+  const getPriorityDotClass = (priority: any) => {
+    switch (priority.toLowerCase()) {
+      case "high":
+        return "high-dot";
+      case "medium":
+        return "medium-dot";
+      case "low":
+        return "low-dot";
+      default:
+        return "";
+    }
+  };
+
   return (
     <>
       <div className="div">
         <h1 className="heading">Ticketing System</h1>
-        <Search placeholder="Search here" className="search" />
+        <Search
+          placeholder="Search here"
+          className="search"
+          onChange={handleSearchChange}
+        />
       </div>
       <div className="card-container">
         {/* Card 1: Total */}
@@ -565,23 +629,13 @@ const ITDepart: React.FC = () => {
 
       <h2>{getCategoryName()}</h2>
       {selectedCategory && (
-        <div
-          style={{
-            height: "300px",
-            overflowX: "auto",
-            overflowY: "auto",
-            marginTop: "16px",
-          }}
-        >
+        <div className="divCategory">
           {activeData.map((ticket: any, index: number) => (
-            <Card
-              key={index}
-              style={{ width: "100%", padding: "16px", marginBottom: "16px" }}
-            >
-              <div style={{ display: "flex", flexWrap: "wrap" }}>
-                <div className="ticket-card">{renderMeta(ticket)}</div>
+            <Card className="belowCards" key={index}>
+              <div className="carddetails">
+                <div className="tickectinfo">{renderMeta(ticket)}</div>
 
-                <div className="middle-content">
+                <div className="selectcss">
                   <Select
                     onSelect={() => {
                       handleTicketSelection(ticket.ticketId);
@@ -606,6 +660,10 @@ const ITDepart: React.FC = () => {
                           break;
                       }
                     }}
+                    disabled={
+                      selectedCategory === "Closed" ||
+                      selectedCategory === "Rejected"
+                    }
                   >
                     <Option className="option1" value="1">
                       Accept
@@ -618,7 +676,7 @@ const ITDepart: React.FC = () => {
                     </Option>
                   </Select>
                 </div>
-                <div className="right-content">
+                <div className="resolved-btn">
                   <Button
                     className="right-content-btn"
                     onClick={() => {
@@ -626,11 +684,33 @@ const ITDepart: React.FC = () => {
                       handleResolved();
                     }}
                     value="3"
+                    disabled={
+                      selectedCategory === "Closed" ||
+                      selectedCategory === "Rejected"
+                    }
                   >
                     Resolved?
                   </Button>
                 </div>
-                <p>{ticket.priority}</p>
+                <div className="priority-txt">
+                  <b>
+                    {" "}
+                    <div className="priority">
+                      <p
+                        className={`priority-text ${getPriorityClass(
+                          ticket.priority
+                        )}`}
+                      >
+                        <span
+                          className={`dot ${getPriorityDotClass(
+                            ticket.priority
+                          )}`}
+                        />
+                        {ticket.priority}
+                      </p>
+                    </div>
+                  </b>
+                </div>
                 <Modal
                   className="modal"
                   title="Are you sure you want to accept the ticket?"
@@ -658,23 +738,28 @@ const ITDepart: React.FC = () => {
                 <Modal
                   className="modal"
                   title="Select Department"
-                  visible={confirmIrrelevantVisible}
+                  open={confirmIrrelevantVisible}
                   onOk={() => {
-                    updateDepartment(ticket, departmentId);
-                    setConfirmIrrelevantVisible(false);
+                    updateDepartment(ticket, Deparmentid);
+                    
                   }}
                   onCancel={() => setConfirmIrrelevantVisible(false)}
                 >
-                  <Select defaultValue="Department" onChange={handleIrrelevant}>
-                    {/* // */}
+                  <Select
+                     defaultValue="Department"
+                    onChange={(value) => setDeparmentid(value)}
+                    className="dept-opt"
+                  >
                     {departments
                       .filter(
                         (department) => department.departmentId !== departmentId
                       )
                       .map((department, index) => (
-                        <Option key={index} value={department.departmentId}>
-                          {department.departmentName}
-                        </Option>
+                       
+                          <Option key={index} value={department.departmentId}>
+                            {department.departmentName}
+                          </Option>
+                      
                       ))}
                   </Select>
                 </Modal>
@@ -727,7 +812,7 @@ const ITDepart: React.FC = () => {
             </div>
             <div>{userData !== undefined && userData.officialMailId}</div>
             <div>{userData !== undefined && userData.contactNumber}</div>
-            <div>{userData !== undefined && userData.Location}</div>
+            <div>{userData !== undefined && userData.location}</div>
           </Col>
         </Row>
       </Modal>
@@ -735,4 +820,6 @@ const ITDepart: React.FC = () => {
   );
 };
 
-export default ITDepart;
+export default TicketingSystem;
+
+
