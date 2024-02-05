@@ -636,3 +636,67 @@ popover-button {
 popover-buttoncancel {
   margin-top: 8px;
 }
+
+AddEmployee*/
+
+.addEmployee {
+  color: rgba(80, 65, 188, 1);
+}
+.addEmployeeModel .ant-modal-title {
+  color:rgb(25, 4, 161); 
+}
+.addEmployeeModel {
+  margin-left: 20%;
+  margin-top: 3%;
+}
+.addEmpForm {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+ 
+  margin-top:3%
+}
+.addEmpForm1 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-right: 45%;
+ 
+}
+.addEmpForm2 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-right: 32%;
+ 
+ 
+}
+.addSubmit {
+  background-color: rgba(80, 65, 188, 1);
+  border-radius: 8px;
+  margin-left:1%;
+  font-size: 15px;
+  justify-content: center;
+  font-weight: 600;
+  margin-top:3%
+}
+.addCancel {
+  background-color: rgb(250, 67, 67);
+  border-radius: 8px;
+  margin-left: 2%;
+  font-size: 15px;
+  justify-content: center;
+  font-weight: 600;
+}
+.selectdesignation .ant-select-selector {
+  width: 200px !important;
+}
+.selectdesignation .ant-select-dropdown-content {
+  width: 220px !important;
+}
+.selectgender .ant-select-selector {
+  width: 200px !important;
+}
+.selectgender .ant-select-dropdown-content {
+  width: 220px !important;
+}
