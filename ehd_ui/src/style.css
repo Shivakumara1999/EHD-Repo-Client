@@ -103,8 +103,7 @@ LoginForm.css */ .login-container {
   font-family: Georgia, "Times New Roman", Times, serif;
 }
 .tabclass {
-  width: 80%;
-  margin-left: 10%;
+  width: 95%;
   font-family: Georgia, "Times New Roman", Times, serif;
 }
 
@@ -161,7 +160,7 @@ LoginForm.css */ .login-container {
   background-color: #ff4d4f;
   color: #ffffff;
   font-weight: bold;
-  width: 90px;
+  /* width: 90px; */
 }
 .modalclass {
   font-weight: bold;
@@ -174,7 +173,7 @@ LoginForm.css */ .login-container {
 }
 
 .searchclass {
-  margin-left: -600px;
+  margin-left: -400px;
 }
 
 /* Login Css */
@@ -394,7 +393,7 @@ LoginForm.css */ .login-container {
 }
 
 .searchclass {
-  width: 22%;
+  /* width: %; */
   display: flex;
   justify-content: space-between;
 }
