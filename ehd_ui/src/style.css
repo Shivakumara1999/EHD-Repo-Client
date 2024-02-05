@@ -297,6 +297,8 @@ LoginForm.css */ .login-container {
   padding: 0;
   display: flex;
   justify-content: flex-end;
+  position:absolute;
+  right:1%;
 }
 .divider {
   background-color: #ffffff;
