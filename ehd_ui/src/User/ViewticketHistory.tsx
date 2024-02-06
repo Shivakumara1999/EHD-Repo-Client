@@ -281,17 +281,18 @@ const Viewhistory: React.FC = () => {
 
   return (
     <div>
-      <h1 className="head">TICKET HISTORY</h1>
+      <h2 className="head">Ticket History</h2>
       <div className="searchs">
         <div>
-          <Input
+          <Input 
             placeholder="Search..."
-            style={{ marginBottom: 16 }}
+            style={{ marginBottom: 16,marginLeft:"13%",width:"100%" }}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
+        </div><div>
+        <Button style={{marginLeft:"80%"}} icon={<RedoOutlined />} onClick={handleRefresh} />
         </div>
-        <Button icon={<RedoOutlined />} onClick={handleRefresh} />
       </div>
       <Table
         columns={columns}

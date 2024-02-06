@@ -43,7 +43,8 @@ export function RoutingComponent() {
           element={
             "isAuthenticated" ? (
               <CommonLayout userRoles={role}>
-                <h1>Overview</h1>
+                <h2 style={{color:"rgb(79 64 185)",marginLeft:"2%"}}>Overview</h2>
+                
               </CommonLayout>
             ) : (
               <Navigate to="/" replace />
@@ -82,7 +83,7 @@ export function RoutingComponent() {
           element={
             "isAuthenticated" ? (
               <CommonLayout userRoles={role}>
-                <h1>Hey admin</h1>
+                <h2 style={{color:"rgb(79 64 185)",marginLeft:"2%"}}>Hi Admin</h2>
               </CommonLayout>
             ) : (
               <Navigate to="/" replace />
@@ -157,7 +158,7 @@ export function RoutingComponent() {
           element={
             "isAuthenticated" ? (
               <CommonLayout userRoles={role}>
-                <h1>Hi IT</h1>
+               <h2 style={{color:"rgb(79 64 185)",marginLeft:"2%"}}>Overview</h2>
               </CommonLayout>
             ) : (
               <Navigate to="/" replace />

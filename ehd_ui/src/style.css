@@ -1,4 +1,5 @@
-LoginForm.css */ .login-container {
+LoginForm.css */ 
+.login-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -25,34 +26,12 @@ LoginForm.css */ .login-container {
   height: auto;
 }
 
-.ant-layout .ant-layout-sider {
-  background-color: #003eb3;
-  float: left;
-  width: 20%;
-}
-.ant-layout-content {
-  float: right;
-}
-.ant-layout .ant-layout-sider-trigger {
-  background-color: #4d84eb;
-}
-.container {
-  height: 64;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 16;
-}
+
 .images {
   height: 90px;
   transition: all 0.3s;
 }
-.dropdownIcon {
-  display: flex;
-  align-items: right;
-  margin-left: 400;
 
-}
 .avatar {
   background-color: navy;
   cursor: pointer;
@@ -60,25 +39,12 @@ LoginForm.css */ .login-container {
   
 }
 
-.dropdowncontent {
-  display: flex;
-  align-items: center;
-  
-}
 .images.collapsed {
   height: 50px;
 }
 .line {
   width: 80%;
 }
-.menus {
-  background-color: #003eb3;
-  font-size: 1rem;
-  text-align: left;
-  padding-top: 12px;
-  color: white;
-}
-
 .tooltip-content {
   display: flex;
   align-items: center;
@@ -103,6 +69,8 @@ LoginForm.css */ .login-container {
   background-color: rgba(80, 65, 188, 1);
   width: 140px;
   font-family: Georgia, "Times New Roman", Times, serif;
+  margin-top:18%;
+  margin-left: 10%;
 }
 .tabclass {
   width: 95%;
@@ -125,8 +93,9 @@ LoginForm.css */ .login-container {
 .ant-tabs-card > .ant-tabs-nav .ant-tabs-tab:hover {
   color: #000;
 }
-.ant-tabs-card.ant-tabs-top > .ant-tabs-nav .ant-tabs-tab {
-  border-radius: 0;
+.ant-tabs-card > .ant-tabs-nav {
+  border-radius: 0% !important;
+  margin-left: 2% !important;
 }
 
 .ant-tabs-card > .ant-tabs-nav .ant-tabs-tab {
@@ -134,49 +103,71 @@ LoginForm.css */ .login-container {
   font-weight: bold;
   width: 120px;
   text-align: center;
+  
 }
 .ant-tabs-card > .ant-tabs-nav .ant-tabs-tab-active {
   background: rgba(80, 65, 188, 1);
   color: #ffffff;
   font-weight: bold;
+  
+  
 }
 .ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
   color: #ffffff;
+  
 }
-.ant-tabs-card.ant-tabs-top > .ant-tabs-nav .ant-tabs-tab + .ant-tabs-tab {
-  margin-left: -3px;
-}
+
 .selectclass {
   margin-left: -15%;
   width: 100px;
   font-family: Georgia, "Times New Roman", Times, serif;
+  margin-top:8%;
 }
 
 .activeclass {
-  background-color: #1d0db2;
+  background-color: #0dbe16;
   color: #ffffff;
   font-weight: bold;
   width: 90px;
   font-family: Georgia, "Times New Roman", Times, serif;
+  margin-top:8%;
+
 }
 .deactiveclass {
-  background-color: #c33739;
+  background-color: #f03f42;
   color: #ffffff;
   font-weight: bold;
+  margin-top:8%;
   /* width: 90px; */
 }
 .modalclass {
   font-weight: bold;
+
 }
 .modalTitleStyle {
   font-size: large;
   font-weight: bolder;
   color: rgba(80, 65, 188, 1);
   font-family: Georgia, "Times New Roman", Times, serif;
+ 
 }
-
+.ant-table{
+  margin-left: 2% !important;
+}
 .searchclass {
   margin-left: -400px;
+  margin-top:2.7%;
+ 
+}
+
+.head{
+  color:rgb(79 64 185);
+  margin-left:2%;
+  margin-top:3%;
+}
+.cardcreate{
+   width:30% ;
+   margin-top:4%;
 }
 
 /* Login Css */
@@ -263,6 +254,7 @@ LoginForm.css */ .login-container {
   background-color: rgba(80, 65, 188, 1);
   align-items: center;
   border-radius: 10px;
+  height: 60% !important;
 }
 .menu-container {
   background: rgba(80, 65, 188, 1);
@@ -270,13 +262,16 @@ LoginForm.css */ .login-container {
   color: white;
   font-weight: 500;
   margin-left: 10px;
+  height: 60% !important;
 }
 .ant-layout-sider-children {
   background-color: rgba(80, 65, 188, 1);
   border-radius: 10px;
   align-items: center;
   float: left;
-  width: 100% !important;
+  width: 18% !important;
+  height: 98% !important;
+  position: fixed;
 }
 .ant-menu-item:hover {
   background-color: white !important;
@@ -292,15 +287,18 @@ LoginForm.css */ .login-container {
 .content-container {
   padding-left: 1%;
   background-color: aliceblue;
+
+ 
 }
 
 .header {
-  background-color: white;
+  background-color: aliceblue;
   padding: 0;
   display: flex;
   justify-content: flex-end;
-  position:absolute;
+  position:fixed;
   right:1%;
+
 }
 .divider {
   background-color: #ffffff;
@@ -910,6 +908,10 @@ color: yellow;
 
 .addEmployee {
   color: rgba(80, 65, 188, 1);
+ 
+}
+.addbtn{
+  margin-left: 15%;
 }
 .addEmployeeModel .ant-modal-title {
   color: rgb(25, 4, 161);
@@ -1008,6 +1010,10 @@ color: yellow;
 }
 .ant-table-wrapper .ant-table-thead >tr>th{
   background-color: #c3c9e5;
+  
+}
+.refreshicon{
+  margin-top:8%;
 }
 
 
@@ -1176,6 +1182,8 @@ color: yellow;
 
 .selectdrop {
   width: 100%;
+  margin-left: 40px;
+  align-items: center;
 }
 
 .btns {
@@ -1196,6 +1204,7 @@ color: yellow;
 
 .ant-table-body::-webkit-scrollbar-thumb {
   background-color: #adc6ff;
+
 }
 
 .ant-table-body::-webkit-scrollbar-track {
@@ -1220,15 +1229,20 @@ color: yellow;
 }
 
 .searchfeild {
-  width: 80%;
+  width: 100%;
+  margin-left: -25%;
 }
 
 .activatebtn {
   display: flex;
   width: 45%;
   justify-content: space-around;
+  margin-right: 8%;
 }
-
+.deactive{
+  margin-left: 2% !important;
+}
 .refreshbtn {
   margin-top: 3%;
+  margin-left:1% !important;
 }
