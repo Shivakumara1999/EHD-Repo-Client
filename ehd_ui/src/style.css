@@ -480,6 +480,7 @@ LoginForm.css */ .login-container {
   display: flex;
   justify-content: space-between;
   margin-top: 50px;
+  width: 98.5%;
 }
 
 .heading {
@@ -782,10 +783,12 @@ color: yellow;
 .modal{
   margin-top: 15%;
 }
+
 .ant-select-selection-item {
   color: blue;
   font-weight: bold !important;
 }
+
 
 .right-content-btn {
   color: blue;

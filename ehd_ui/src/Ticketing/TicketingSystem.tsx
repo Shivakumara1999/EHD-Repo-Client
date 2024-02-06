@@ -63,6 +63,7 @@ const TicketingSystem: React.FC = () => {
   const [closedData, setClosedData] = useState<Array<any>>([]);
   const [reraisedData, setReraisedData] = useState<Array<any>>([]);
   const [rejectedData, setRejectedData] = useState<Array<any>>([]);
+  const [value, setValue] = useState(false);
   // const [dropdownDisabled, setDropdownDisabled] = useState(false);
   // const [buttonDisabled, setButtonDisabled] = useState(false);
   // const [cardDisabledState, setCardDisabledState] = useState<{
@@ -176,13 +177,7 @@ const TicketingSystem: React.FC = () => {
       });
   };
 
-  // useEffect(() => {
-  //   getActiveData();
-  //   getDueData();
-  //   getClosedData();
-  //   getReraisedData();
-  //   getRejectedData();
-  // }, []);
+
 
   // useEffect(() => {
   //   getActiveData();
@@ -335,7 +330,8 @@ const TicketingSystem: React.FC = () => {
       data: data,
     })
       .then((response: any) => {
-        setData(response.data);
+        setValue(true)
+        //setData(response.data);
       })
       .catch((error: any) => {
         message.error(error.message);
@@ -416,6 +412,16 @@ const TicketingSystem: React.FC = () => {
     getData();
   }, []);
 
+  useEffect(() => {
+    GetAllTicketsCount();
+    getActiveData();
+    getDueData();
+    getClosedData();
+    getReraisedData();
+    getRejectedData();
+    setValue(false)
+  }, [value===true]);
+
   // const handleIrrelevant = (dept: string) => {
 
   // };
@@ -459,10 +465,6 @@ const TicketingSystem: React.FC = () => {
         console.log("Error While Fetching Tickets");
       });
   };
-
-  useEffect(() => {
-    GetAllTicketsCount();
-  }, []);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
@@ -712,8 +714,7 @@ const TicketingSystem: React.FC = () => {
                     onSelect={() => {
                       handleTicketSelection(ticket.ticketId);
                     }}
-                    className="dropdown"
-                    defaultValue={ticket.statusId == null? "Acknowledge" : ticket.statusId == 1 ? "Accepted" : ticket.statusId == 2 ? "Rejected" : ""}
+                    value={ticket.statusId == null ? "Acknowledge" : ticket.statusId == 1 ? "Accepted" : ticket.statusId == 2 ? "Rejected" : "Accepted"}
                     onChange={(value) => {
                       switch (value) {
                         case "1": // Accept
