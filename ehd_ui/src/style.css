@@ -290,7 +290,7 @@ LoginForm.css */ .login-container {
   width: 110%;
 }
 .content-container {
-  padding-left: 2%;
+  padding-left: 1%;
   background-color: aliceblue;
 }
 
@@ -991,4 +991,164 @@ color: yellow;
 }
 .ant-table-wrapper .ant-table-thead >tr>th{
   background-color: #c3c9e5;
+}
+
+
+/* escalation count part */
+
+.count-card{
+  width:100%;
+  padding:-10;
+  background-color:#5041BC;
+}
+.count-card .ant-card-body{
+  padding: 0;
+}
+
+.count-card .ant-card-head-title{
+  color:white !important;
+}
+
+.count-card-list {
+  padding:0;
+  margin:0;
+  width:100%;
+  overflow-y: scroll;
+  max-height: 16vh;
+}
+
+.count-card-list::-webkit-scrollbar {
+  width: 5px;
+}
+.count-card-list::-webkit-scrollbar-thumb {
+  background-color: white;  
+  margin-right: 5px;
+}
+.count-card-list::-webkit-scrollbar-track {
+  background-color: #5041BC;  
+}
+.count-card-listitem{
+  padding:4% 6% !important;
+  color:white; 
+  background-color:#5041BC;
+  border:0 !important; 
+  width:100% !important;
+}
+.count-card-listitem:hover{
+  background-color: white !important;
+  color:#5041BC !important;
+  border-radius: 5px ;
+  margin:5px;
+  width:97% !important;
+  font-size: 20px !important;  
+}
+.count-card-listitem-click{
+  background-color: white !important;
+  color:#5041BC !important;
+  border-radius: 5px !important;
+  margin:5px;
+  width:97% !important;
+  padding:4% 6% !important;
+  color:white; 
+  background-color:#5041BC;
+  border:0 !important;  
+}
+
+/* escalation content part */
+
+.content-card{
+  width:98%;
+  margin:1%;
+}
+.content-card .ant-card-body {
+  padding:0.8%;
+   
+  background-color:#f5fbff;
+  margin:0;
+  border-radius: 7px;
+  border: 2px solid #98d4ff;
+}
+.content-card-list{
+  overflow-y: scroll;
+  max-height: 50vh;
+  padding:-5% 0;
+}
+.content-card-listitem{
+  margin:10; 
+  padding:0;
+}
+.content-card-divider{
+
+}
+.content-card-divider-text{
+  font-size:12px;
+  color:#76cdd3; 
+  margin-left:10%;
+  /* margin-bottom:-20%; */
+}
+
+.content-card-ticketticketid{
+  font-size:20px;
+  padding-left:1%;
+  padding-bottom:1%;
+  font-weight: 450;
+  color:#777777; 
+}
+.content-card-ticketissue{
+  padding-bottom:1%;
+  font-size:20px;
+  font-weight:bold;
+}
+.content-card-ticketinfo-row{
+  margin-top:-1%;
+  margin-bottom: -2%;
+  font-size:16px;
+  font-weight:normal;
+
+}
+.content-card-ticketuser{
+  color:blue;
+  cursor:pointer;
+}
+.content-card-createddate{
+  color:#5a5a5a;
+}
+.content-card-ticketdescription-row{
+  padding-right:10;
+  font-size:14px;
+  font-weight:normal;
+  margin-top:-1.5%;
+}
+
+/* escalation misc */
+
+.esc-heading-div{
+  padding-left:1%;
+  color:#5041BC;
+}
+
+.count-div{
+  padding: 0% 1%;
+}
+
+.content-card-heading-div{
+  display:flex;
+  align-items:center;
+  color:#5041BC;
+  padding-left:1%;
+  padding-top: 2%;
+}
+
+.content-card-reraise-button{
+  background-color:#5041BC;
+  color:white;
+}
+
+.modal-cancel-button{
+  background-color:#d73435;
+  color:white
+}
+.modal-reraise-button{
+  background-color:#00a854;
+  color:white;
 }
