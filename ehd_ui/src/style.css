@@ -1166,3 +1166,69 @@ color: yellow;
   background-color:#00a854;
   color:white;
 }
+
+
+/* Admin/Employee */
+.btn {
+  display: flex;
+  justify-content: space-between;
+}
+
+.selectdrop {
+  width: 100%;
+}
+
+.btns {
+  width: 40%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.ant-table-body {
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.ant-table-body::-webkit-scrollbar {
+  width: 5px;
+  height: 6px;
+}
+
+.ant-table-body::-webkit-scrollbar-thumb {
+  background-color: #adc6ff;
+}
+
+.ant-table-body::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
+.ant-table-body {
+  height: 50vh;
+}
+
+.btnss {
+  background-color: #73d13d;
+  color: white;
+}
+
+.selectRoles .ant-select-selector {
+  width: 120px !important;
+}
+
+.selectRoles .ant-select-dropdown-content {
+  width: 100px !important;
+}
+
+.searchfeild {
+  width: 80%;
+}
+
+.activatebtn {
+  display: flex;
+  width: 45%;
+  justify-content: space-around;
+}
+
+.refreshbtn {
+  margin-top: 3%;
+}

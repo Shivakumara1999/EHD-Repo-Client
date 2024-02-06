@@ -25,7 +25,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 const { Sider, Content } = Layout;
 
+interface UserData {
+  employeeName: string;
+}
+ 
 const CommonLayout = ({ children, userRoles }: any) => {
+
+  
   const getMenuItems = () => {
     const roleMenuMapping: any = {
       R01: [
@@ -91,25 +97,25 @@ const CommonLayout = ({ children, userRoles }: any) => {
         {
           key: "overview",
           label: "Overview",
-          path: "/ticketing/overview",
+          path: "/ticketing/overviewIt",
           icon: <SlackCircleFilled />,
         },
         {
           key: "ticketing",
           label: "Ticketing System",
-          path: "/ticketing/management",
+          path: "/ticketing/it",
           icon: <UserOutlined />,
         },
         {
           key: "createTicket",
           label: "Create Ticket",
-          path: "/ticketing/createTicket",
+          path: "/ticketing/createTicketIt",
           icon: <FileAddOutlined />,
         },
         {
           key: "viewTicket",
           label: "Ticket History",
-          path: "/ticketing/viewTicket",
+          path: "/ticketing/viewTicketIt",
           icon: <ProfileFilled />,
         },
       ],
@@ -117,25 +123,25 @@ const CommonLayout = ({ children, userRoles }: any) => {
         {
           key: "overview",
           label: "Overview",
-          path: "/ticketing/overview",
+          path: "/ticketing/overviewPy",
           icon: <SlackCircleFilled />,
         },
         {
           key: "ticketing",
           label: "Ticketing System",
-          path: "/ticketing/management",
+          path: "/ticketing/payroll",
           icon: <UserOutlined />,
         },
         {
           key: "createTicket",
           label: "Create Ticket",
-          path: "/ticketing/createTicket",
+          path: "/ticketing/createTicketPy",
           icon: <FileAddOutlined />,
         },
         {
           key: "viewTicket",
           label: "Ticket History",
-          path: "/ticketing/viewTicket",
+          path: "/ticketing/viewTicketPy",
           icon: <ProfileFilled />,
         },
       ],
@@ -143,80 +149,28 @@ const CommonLayout = ({ children, userRoles }: any) => {
         {
           key: "overview",
           label: "Overview",
-          path: "/ticketing/overview",
+          path: "/ticketing/overviewFc",
           icon: <SlackCircleFilled />,
         },
         {
           key: "ticketing",
           label: "Ticketing System",
-          path: "/ticketing/management",
+          path: "/ticketing/facility",
           icon: <UserOutlined />,
         },
         {
           key: "createTicket",
           label: "Create Ticket",
-          path: "/ticketing/createTicket",
+          path: "/ticketing/createTicketFc",
           icon: <FileAddOutlined />,
         },
         {
           key: "viewTicket",
           label: "Ticket History",
-          path: "/ticketing/viewTicket",
+          path: "/ticketing/viewTicketFC",
           icon: <ProfileFilled />,
         },
       ],
-      // R04: [
-      //   {
-      //     key: "overview",
-      //     label: "Overview",
-      //     path: "/ticketing/overviewPy",
-      //     icon: <SlackCircleFilled />,
-      //   },
-      //   {
-      //     key: "ticketing",
-      //     label: "Ticketing System",
-      //     path: "/ticketing/payroll",
-      //     icon: <UserOutlined />,
-      //   },
-      //   {
-      //     key: "createTicket",
-      //     label: "Create Ticket",
-      //     path: "/ticketing/createTicketPy",
-      //     icon: <FileAddOutlined />,
-      //   },
-      //   {
-      //     key: "viewTicket",
-      //     label: "Ticket History",
-      //     path: "/ticketing/viewTicketPy",
-      //     icon: <ProfileFilled />,
-      //   },
-      // ],
-      // R05: [
-      //   {
-      //     key: "overview",
-      //     label: "Overview",
-      //     path: "/ticketing/overviewFc",
-      //     icon: <SlackCircleFilled />,
-      //   },
-      //   {
-      //     key: "ticketing",
-      //     label: "Ticketing System",
-      //     path: "/ticketing/facility",
-      //     icon: <UserOutlined />,
-      //   },
-      //   {
-      //     key: "createTicket",
-      //     label: "Create Ticket",
-      //     path: "/ticketing/createTicketFc",
-      //     icon: <FileAddOutlined />,
-      //   },
-      //   {
-      //     key: "viewTicket",
-      //     label: "Ticket History",
-      //     path: "/ticketing/viewTicketFC",
-      //     icon: <ProfileFilled />,
-      //   },
-      // ],
       // Add more role-based menu mappings as needed
     };
     const menuItems = roleMenuMapping[userRoles] || [];
@@ -237,7 +191,20 @@ const CommonLayout = ({ children, userRoles }: any) => {
     localStorage.clear();
     sessionStorage.clear();
   }
-
+  const [userProfile, setUserProfile] = useState<UserData | null>(null);
+  useEffect(() => {
+    if (mailId) {
+      axios
+        .get(`https://localhost:7267/api/User/GetUserProfile?mail_id=${mailId}`)
+        .then((response: any) => {
+          setUserProfile(response.data);
+        })
+        .catch((error: any) => {
+          console.error(error.message);
+        });
+    }
+  }, [mailId]);
+ 
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
   const handleChangePasswordClick = () => {
     setShowChangePasswordModal(true);
@@ -363,48 +330,37 @@ const CommonLayout = ({ children, userRoles }: any) => {
       </>
     );
   }
-
-  interface UserData {
-    employeeName: string;
-  }
   function UserDetails() {
-    const [userProfile, setUserProfile] = useState<UserData | null>(null);
-    useEffect(() => {
-      if (mailId) {
-        axios
-          .get(`https://localhost:7267/api/User/GetUserProfile?mail_id=${mailId}`)
-          .then((response: any) => {
-            setUserProfile(response.data);
-          })
-          .catch((error: any) => {
-            console.error(error.message);
-          });
-      }
-    }, [mailId]);
-
     const userMenu = (
       <Menu>
-        <Menu.Item key="changePasw" onClick={handleChangePasswordClick}>
-          Change Password
+         <Menu.Item key="changePasw" onClick={handleChangePasswordClick}>
+         Change Password
         </Menu.Item>
         <Menu.Item key="logout" onClick={handleLogout}>
-          Logout
+        Logout
         </Menu.Item>
-        
+       
       </Menu>
     );
 
     return (
-      <div className="dropdownIcon" >
+      <div style={{ display: "flex", alignItems: "right", marginLeft: 400 }}>
       <Dropdown overlay={userMenu} placement="bottomRight">
-     <div className="dropdowncontent" >
-     <h3>{userProfile && userProfile.employeeName}</h3>
-     <Avatar className="avatar"
-         icon={<UserOutlined />}
-       />
-      </div>
-   </Dropdown>
- </div>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+        <h3>{userProfile && userProfile.employeeName}</h3>
+          <Avatar
+            style={{
+              backgroundColor: "navy",
+              cursor: "pointer",
+              marginRight: 9, // Adjust the margin as needed
+              marginLeft:2,
+            }}
+            icon={<UserOutlined />}
+          />
+          
+        </div>
+      </Dropdown>
+    </div>
     );
   }
   return (
@@ -422,7 +378,15 @@ const CommonLayout = ({ children, userRoles }: any) => {
       </Sider>
       <Layout className="content-container">
         <Content className="content-container">
-          <Header className="header">
+          <Header
+            className="header"
+            // style={{
+            //   background: "#fff",
+            //   padding: 0,
+            //   display: "flex",
+            //   justifyContent: "flex-end",
+            // }}
+          >
             <UserDetails />
           </Header>
           {children}

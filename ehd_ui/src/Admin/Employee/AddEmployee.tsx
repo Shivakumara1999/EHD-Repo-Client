@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { Button, DatePicker, Form, Input, message, Modal, Select } from "antd";
 import axios from "axios";
-
+import dayjs from "dayjs";
 
 const AddEmployee = () => {
   const [form] = Form.useForm();
   const [jDate, setIsJdate] = useState();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const loginEmp = localStorage.getItem("EmployeeId");
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -15,7 +14,7 @@ const AddEmployee = () => {
     const AddValues = {
       alternateMailId: values.alternateMailId,
       contactNumber: values.contactNumber,
-      createdBy: loginEmp,
+      createdBy: "Admin",
       designationId: values.designationId,
       employeeId: values.employeeId,
       firstName: values.firstName,
@@ -37,7 +36,7 @@ const AddEmployee = () => {
       .then((r: any) => {
         message.success("Your record have been added successfully");
         setIsModalOpen(false);
-        form.resetFields();
+        form.resetFields(); 
       })
       .catch((error: any) => {
         message.error(error.response.data);
@@ -157,32 +156,35 @@ const AddEmployee = () => {
             </Form.Item>
           </div>
           <div className="addEmpForm2">
-            <Form.Item
-              label="Designation"
-              name="designationId" // Match the property name with the one in AddValues
-              rules={[
-                { required: true, message: "Please input your Designation!" },
-              ]}
-              valuePropName="value"
-            >
-              <Select
-                className="selectdesignation"
-                onChange={(value) => {
-                  form.setFields([
-                    { name: "designation", value: parseInt(value) },
-                  ]);
-                }}
-              >
-                {designations.map((designationtitle) => (
-                  <Select.Option
-                    key={designationtitle.designationId.toString()}
-                    value={designationtitle.designationId.toString()}
-                  >
-                    {designationtitle.designation}
-                  </Select.Option>
-                ))}
-              </Select>
-            </Form.Item>
+          <Form.Item
+  label="Designation"
+  name="designationId"  // Match the property name with the one in AddValues
+  rules={[
+    { required: true, message: "Please input your Designation!" },
+  ]}
+  valuePropName="value"
+>
+<Select
+  className="selectdesignation"
+  onChange={(value) => {
+    form.setFields([
+      { name: 'designationId', value: parseInt(value) },
+    ]);
+  }}
+>
+  {designations.map((designationtitle) => (
+    <Select.Option
+      key={designationtitle.designationId.toString()}
+      value={designationtitle.designationId.toString()}
+    >
+      {designationtitle.designation}
+    </Select.Option>
+  ))}
+</Select>
+
+</Form.Item>
+
+
 
             <Form.Item
               label="Gender"
@@ -205,13 +207,13 @@ const AddEmployee = () => {
               Submit
             </Button>
             <Button
-              className="addCancel"
-              type="primary"
-              onClick={() => {
-                setIsModalOpen(false);
-                form.resetFields();
-              }}
-            >
+                className="addCancel"
+                type="primary"
+                onClick={() => {
+                    setIsModalOpen(false);  
+                    form.resetFields();     
+                }}
+                >
               cancel
             </Button>
           </Form.Item>

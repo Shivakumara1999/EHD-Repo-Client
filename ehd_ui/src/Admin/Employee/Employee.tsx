@@ -1,8 +1,16 @@
-import { Button, Divider, Modal, Select, Table, TableColumnsType } from "antd";
+import {
+  Button,
+  Divider,
+  Input,
+  Modal,
+  Select,
+  Table,
+  TableColumnsType,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { EditFilled, ReloadOutlined } from "@ant-design/icons";
-import { EditEmployee } from "./EditEmployee";
+import AddEmployee from "./AddEmployee";
 
 interface DataType {
   key: React.Key;
@@ -20,16 +28,31 @@ interface DataType {
   isActive: boolean;
 }
 
+interface RolesData {
+  roleId: string;
+  roleName: string;
+}
+
 const EmployeeComponent: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState(true);
   const [rowdata, setrowdata] = useState<boolean | null>(null);
-  const [data, setData] = useState<DataType[]>([]);
+  const [data, setData] = useState<Array<any>>([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [row, setrow] = useState<React.Key[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false); //edit
+  const [selectedRole, setSelectedRole] = useState<string>("");
+  const [selectedRecord, setSelectedRecord] = useState<DataType | null>(null);
+  const [isRoleAssignmentVisible, setIsRoleAssignmentVisible] = useState(false); //roles
+  const [roles, setRoles] = useState<RolesData[]>([]);
+  const [isActivateButtonDisabled, setIsActivateButtonDisabled] =
+    useState(true);
+  const [isDeactiveButtonDisabled, setIsDeactiveButtonDisabled] =
+    useState(true);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const { Option } = Select;
 
   const showModal = () => {
-    setIsModalOpen(true);
+    setIsRoleAssignmentVisible(true);
   };
 
   const handleOk = () => {
@@ -39,6 +62,9 @@ const EmployeeComponent: React.FC = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+  const handleCancelModels = () => {
+    setIsRoleAssignmentVisible(false);
+  };
 
   const refreshFunction = () => {
     setSelectedOption(true);
@@ -47,6 +73,7 @@ const EmployeeComponent: React.FC = () => {
     setSelectedRowKeys([]);
     setrow([]);
     setIsModalOpen(false);
+    setSearchTerm("");
     fetchData();
   };
 
@@ -54,14 +81,43 @@ const EmployeeComponent: React.FC = () => {
     fetchData();
   }, [selectedOption]);
 
+  useEffect(() => {
+    const fetchRoles = async () => {
+      const response = await axios.get("/api/Master/GetAllRoleNames");
+      setRoles(response.data);
+    };
+    fetchRoles();
+  }, []);
+
+  useEffect(() => {
+    confirmRoleAssignment();
+    fetchData();
+  }, []);
+
+  const filterData = data.filter((f) => {
+    const lowerCaseValues = {
+      firstName: f.firstName.toLowerCase(),
+      lastName: f.lastName.toLowerCase(),
+      officialMailId: f.officialMailId.toLowerCase(),
+      alternateMailId: f.alternateMailId.toLowerCase(),
+      contactNumber: f.contactNumber.toLowerCase(),
+      location: f.location.toLowerCase(),
+      joiningDate: f.joiningDate.toLowerCase(),
+      salary: f.salary.toString().toLowerCase(),
+      roleName: f.roleName.toLowerCase(),
+    };
+
+    return Object.values(lowerCaseValues).some((value) =>
+      value.includes(searchTerm.toLowerCase())
+    );
+  });
+
   const fetchData = async () => {
     try {
-      const response = await axios.get("/api/User/GetAllEmployeesIsActive", {
-        params: { isActive: selectedOption },
-      });
-
+      const response = await axios.get(
+        `/api/User/GetAllEmployeesIsActive?status=${selectedOption}`
+      );
       console.log("Response data:", response.data);
-
       if (Array.isArray(response.data)) {
         const filteredData = response.data.filter(
           (record: DataType) => record.isActive === selectedOption
@@ -75,32 +131,41 @@ const EmployeeComponent: React.FC = () => {
     }
   };
 
-  const Activeuser = async () => {
+  const ActivateandDeactivate = async (value: boolean) => {
     try {
-      const response = await axios.put(
-        "/api/User/UpdateEmployeeIsActive?Is_Active=true",
-        {
-          id: selectedRowKeys,
-        }
-      );
-      setData(response.data);
+      await axios.put(`/api/User/UpdateEmployeeIsActive?Is_Active=${value}`, {
+        id: selectedRowKeys,
+      });
       fetchData();
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-  const Inactiveuser = async () => {
-    try {
-      const response = await axios.put(
-        "/api/User/UpdateEmployeeIsActive?Is_Active=false",
-        {
-          id: selectedRowKeys,
-        }
-      );
-      setData(response.data);
-      fetchData();
-    } catch (error) {
-      console.error("Error fetching data:", error);
+
+  const handleOptionChange = (value: boolean) => {
+    setrowdata(value);
+    setSelectedOption(value);
+    setSelectedRowKeys([]);
+    setrow([]);
+  };
+
+  const handleAssignRole = async (value: string, record: DataType) => {
+    setSelectedRole(value);
+    setSelectedRecord(record);
+    setIsRoleAssignmentVisible(true);
+  };
+
+  const confirmRoleAssignment = async () => {
+    setIsRoleAssignmentVisible(false);
+    if (selectedRecord && selectedRole) {
+      try {
+        const response = await axios.put(
+          `/api/User/UpdateEmployeeRole?employeeId=${selectedRecord.employeeId}`,
+          { roleId: selectedRole }
+        );
+      } catch (error) {
+        console.error("Error assigning role:", error);
+      }
     }
   };
 
@@ -109,98 +174,85 @@ const EmployeeComponent: React.FC = () => {
     setrow(selectedRowKeys);
   };
 
-  const handleOptionChange = (value: boolean) => {
-    if (value == false) {
-      setrowdata(true);
-    } else {
-      setrowdata(false);
-    }
-    setSelectedOption(value);
-    setSelectedRowKeys([]); // Clear selected rows when option changes
-    setrow([]);
-  };
-
-  const handleActivateDeactivate = (isActive: boolean) => {
-    // return selectedRowKeys.some((e:any)=>{
-    //   return e.status ==false;
-    // })
-  };
-
   const columns: TableColumnsType<DataType> = [
     {
       title: "Employee ID",
       key: "employeeId",
       dataIndex: "employeeId",
+      width: 120,
+      fixed: "left",
     },
     {
       title: "First Name",
       dataIndex: "firstName",
+      width: 160,
+      fixed: "left",
     },
     {
       title: "Last Name",
       dataIndex: "lastName",
+      width: 150,
     },
     {
       title: "Official Mail ID",
       dataIndex: "officialMailId",
+      width: 150,
     },
     {
       title: "Alternate Mail ID",
       dataIndex: "alternateMailId",
+      width: 150,
     },
     {
       title: "Contact Number",
       dataIndex: "contactNumber",
+      width: 150,
     },
     {
       title: "Gender",
       dataIndex: "gender",
+      width: 150,
     },
     {
       title: "Location",
       dataIndex: "location",
+      width: 150,
     },
     {
       title: "Salary",
       dataIndex: "salary",
+      width: 150,
     },
     {
       title: "Joining Date",
       dataIndex: "joiningDate",
+      width: 150,
     },
     {
       title: "Role",
-      dataIndex: "designation",
+      dataIndex: "roleName",
+      width: 150,
     },
     {
       title: "Status",
       dataIndex: "isActive",
-      render: (isActive: boolean) => (isActive ? "true" : "false"),
+      render: (isActive: boolean) => (isActive ? "Active" : "Inactive"),
+      width: 150,
     },
     {
       title: "Edit",
       key: "actions",
+      width: 150,
       render: (text: any, record: any) => {
         return (
-          <div
-            style={{
-              visibility:
-                selectedRowKeys.length === 1 &&
-                record.employee_Id === selectedRowKeys[0]
-                  ? "hidden"
-                  : "visible",
-              display: "flex",
-            }}
-          >
+          <div>
             <Button
-              style={{
-                background:
-                  "-webkit-linear-gradient(45deg, rgba(9, 0, 159, 0.3), rgba(0, 255, 149, 0.3) 95%)",
-                color: "black",
-                fontWeight: "bold",
-              }}
               type="primary"
               onClick={showModal}
+              disabled={
+                selectedRowKeys.length !== 1 ||
+                record.employeeId !== selectedRowKeys[0]
+              }
             >
               <EditFilled />
             </Button>
@@ -209,64 +261,115 @@ const EmployeeComponent: React.FC = () => {
       },
       align: "center",
     },
+    {
+      title: "Roles",
+      dataIndex: "role",
+      width: 150,
+      render: (record: RolesData, data: DataType) => (
+        <div>
+          <div>
+            <div>
+              <Select
+                defaultValue="Assign Role"
+                className="selectRoles"
+                onChange={(value) => handleAssignRole(value, data)}
+                onSelect={showModal}
+                disabled={
+                  selectedRowKeys.length !== 1 ||
+                  data.employeeId !== selectedRowKeys[0]
+                }
+              >
+                {roles.map((roletitle) => (
+                  <Select.Option
+                    key={roletitle.roleId}
+                    value={roletitle.roleId}
+                  >
+                    {roletitle.roleName}
+                  </Select.Option>
+                ))}
+              </Select>
+            </div>
+          </div>
+        </div>
+      ),
+    },
   ];
 
   return (
     <div>
-      <Button>Add Employee</Button>
-      <ReloadOutlined
-        onClick={() => {
-          refreshFunction();
-        }}
-      />
-      <div style={{ display: "flex", float: "right" }}>
-        <Button
-          type="primary"
-          disabled={selectedOption == true ? true : false}
-          onClick={Activeuser}
-        >
-          Activate
-        </Button>
-        <Button
-          type="primary"
-          disabled={selectedOption == true ? false : true}
-          onClick={Inactiveuser}
-        >
-          Deactivate
-        </Button>
+      <h1>Employees</h1>
+      <div className="btn">
+        <div>
+          <AddEmployee />
+        </div>
+        <div>
+          <div className="searchfeild">
+            <Input
+              placeholder="Search..."
+              style={{ marginBottom: 16 }}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+        </div>
+        <div className="btns">
+          <div>
+            <Select
+              className="selectdrop"
+              value={selectedOption}
+              onChange={(value: boolean) => handleOptionChange(value)}
+            >
+              <Select.Option value={true}>Active</Select.Option>
+              <Select.Option value={false}>Inactive</Select.Option>
+            </Select>
+          </div>
+          <div className="activatebtn">
+            <Button
+              className="btnss"
+              type="primary"
+              disabled={
+                !selectedRowKeys.length ||
+                (selectedOption === true && isActivateButtonDisabled)
+              }
+              onClick={() => ActivateandDeactivate(true)}
+            >
+              Activate
+            </Button>
+            <Button
+              type="primary"
+              danger
+              disabled={
+                !selectedRowKeys.length ||
+                (selectedOption === false && isDeactiveButtonDisabled)
+              }
+              onClick={() => ActivateandDeactivate(false)}
+            >
+              Deactivate
+            </Button>
+            <div className="refreshbtn">
+              <ReloadOutlined
+                onClick={() => {
+                  refreshFunction();
+                }}
+              />
+            </div>
+          </div>
+        </div>
       </div>
-      <Select
-        value={selectedOption}
-        onChange={(value: boolean) => handleOptionChange(value)}
-        style={{
-          width: 110,
-          borderRadius: 3,
-          padding: 3,
-          background:
-            "-webkit-linear-gradient(45deg, rgba(9, 0, 159, 0.9), rgba(0, 255, 149, 0.5) 105%)",
-          color: "black",
-          fontWeight: "bold",
-        }}
-        dropdownStyle={{
-          background:
-            "-webkit-linear-gradient(45deg, rgba(9, 0, 159, 0.3), rgba(0, 255, 149, 0.3) 95%)",
-          color: "black",
-          fontWeight: "bold",
-        }}
-      >
-        <Select.Option value={true}>Active</Select.Option>
-        <Select.Option value={false}>Inactive</Select.Option>
-      </Select>
       <Divider />
       <Modal
-        className="editEmployee"
+        title="Basic Modal"
         open={isModalOpen}
-        onCancel={() => setIsModalOpen(false)}
-        footer={[]}
-        width={1000}
         onOk={handleOk}
+        onCancel={handleCancel}
+      ></Modal>
+      <Modal
+        title="Roles"
+        open={isRoleAssignmentVisible}
+        onOk={confirmRoleAssignment}
+        onCancel={handleCancelModels}
       >
-        <EditEmployee selectedRowKeys={selectedRowKeys} selectedRows={row} />
+        Are you sure to assign this role?
       </Modal>
       <Table
         rowSelection={{
@@ -275,7 +378,8 @@ const EmployeeComponent: React.FC = () => {
         }}
         rowKey={(record: any) => record.employeeId}
         columns={columns}
-        dataSource={data}
+        dataSource={filterData}
+        scroll={{ x: 1500, y: 600 }}
       />
     </div>
   );
