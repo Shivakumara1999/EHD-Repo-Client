@@ -20,6 +20,8 @@ export function Escalation() {
     // const [isResolvedCountDataLoading, setIsResolvedCountDataLoading] = useState(false)
     // const [isReRaisedCountDataLoading, setIsReRaisedCountDataLoading] = useState(false)
 
+    const empId = localStorage.getItem("EmployeeId");
+
     const [confirmForm] = Form.useForm();
 
     const confirmModalClose = () =>{
@@ -54,9 +56,16 @@ export function Escalation() {
     }
 
     const getUnresolvedTicketsData = (departmentId: string, departmentName: string) => {
-        setIsCardSelect(`Unresolved ${departmentId}`);
-        setSelectedDepartmentId(departmentId);
-        setSelectedDepartmentName(departmentName);
+
+        if (departmentId !== selectedDepartmentId){
+            localStorage.setItem('isCardSelect',`Unresolved ${departmentId}`);
+            localStorage.setItem('selectedDepartmentId',departmentId);
+            localStorage.setItem('selectedDepartmentName',departmentName);
+        
+            setIsCardSelect(`Unresolved ${departmentId}`);
+            setSelectedDepartmentId(departmentId);
+            setSelectedDepartmentName(departmentName);
+         }
         axios({
             method: 'get',
             url: `/api/Ticket/GetUnresolvedTicketsByDepartmentId?departmentId=${departmentId}`
@@ -70,9 +79,17 @@ export function Escalation() {
     }
 
     const getReRaisedTicketsData = (departmentId: string, departmentName: string) => {
-        setIsCardSelect(`Re-Raised ${departmentId}`);
-        setSelectedDepartmentId(departmentId);
-        setSelectedDepartmentName(departmentName);
+
+        if (departmentId !== selectedDepartmentId){
+            localStorage.setItem('isCardSelect',`Re-Raised ${departmentId}`);
+            localStorage.setItem('selectedDepartmentId',departmentId);
+            localStorage.setItem('selectedDepartmentName',departmentName);
+        
+            setIsCardSelect(`Re-Raised ${departmentId}`);
+            setSelectedDepartmentId(departmentId);
+            setSelectedDepartmentName(departmentName);
+        
+        }
         axios({
             method: 'get',
             url: `/api/Ticket/GetRepeatedlyReRaisedTicketsByDepartmentId?departmentId=${departmentId}`
@@ -89,7 +106,7 @@ export function Escalation() {
     const reRaiseTickets = (ticket:any) => {
         const data = {
             ticketId: ticket.ticketId,
-            modifiedBy: "E0001",
+            modifiedBy: empId,
             reRaiseReason: reRaiseReason
           }
         axios({
@@ -131,18 +148,31 @@ export function Escalation() {
     };
 
     useEffect(() => {
+
         getUnresolvedCounts()
         getReRaisedCounts()
-    },[]);
 
-    // useEffect(()=>{
-    //     // if(isCardSelect.split(" ")[0] === "Unresolved"){
-    //         getUnresolvedTicketsData(selectedDepartmentId,selectedDepartmentName)
-    //     // }
-    //     // else{
-    //         getReRaisedTicketsData(selectedDepartmentId,selectedDepartmentName)
-    //     // }    
-    // },[showReRaiseNotification])
+        if(localStorage.getItem("selectedDepartmentId") !== null){
+
+            const cardSelect:any = localStorage.getItem("isCardSelect")
+            const deptId:any = localStorage.getItem("selectedDepartmentId")
+            const deptName:any = localStorage.getItem("selectedDepartmentName")
+            setIsCardSelect(cardSelect)
+            setSelectedDepartmentId(deptId)
+            setSelectedDepartmentName(deptName)
+            console.log(deptId +"" + deptName)
+
+            if(cardSelect === "Unresolved "+deptId){
+                getUnresolvedTicketsData(deptId,deptName)
+            }
+            else{
+                getReRaisedTicketsData(deptId,deptName)
+            }
+        }
+
+    },[isConfirmModalOpen===false]);
+
+   
 
     return (
         <>
@@ -276,7 +306,7 @@ export function Escalation() {
                                     
                                     <span style={{display:"flex", alignItems:"center", justifyContent:"space-around"}}>
                                     <Form.Item>
-                                        <Button style={{}} className="modal-cancel-button" onClick={()=>{confirmForm.resetFields()}}>Cancel</Button>
+                                        <Button style={{}} className="modal-cancel-button" onClick={()=>{setIsConfirmModelOpen(false)}}>Cancel</Button>
                                     </Form.Item>
                                     <Form.Item>
                                         <Button style={{}} className="modal-reraise-button" htmlType="submit"  onClick={()=>{reRaiseTickets(ticket)}}>Re-raise</Button>
@@ -309,7 +339,7 @@ export function Escalation() {
                                     <div>{userData!== undefined && userData.firstName  + ' ' + userData.lastName}</div>
                                     <div>{userData!== undefined && userData.officialMailId}</div>
                                     <div>{userData!== undefined && userData.contactNumber}</div>
-                                    <div>{userData!== undefined && userData.Location}</div>
+                                    <div>{userData!== undefined && userData.location}</div>
                                     </Col>
                                 </Row>
             </Modal>        
