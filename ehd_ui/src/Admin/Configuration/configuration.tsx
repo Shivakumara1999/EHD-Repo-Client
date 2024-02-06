@@ -67,6 +67,8 @@ const Configuration = () => {
   const [form] = Form.useForm();
   const [selectedRowKeys, setSelectedRowKeys] = useState<String[]>([]);
   const [selectedRow, setSelectedRow] = useState<IDepartment[]>([]);
+  const [selectedRole, SelectedRole] = useState<IRoles[]>([]);
+  const [selectedIssue, SelectedIssue] = useState<IIssues[]>([]);
   const [canEdit, SetCanEdit] = useState(false);
   const [canEditRole, SetCanEditRole] = useState(false);
   const [canEditIssue, SetCanEditIssue] = useState(false);
@@ -88,7 +90,7 @@ const Configuration = () => {
     departmentName: "",
   });
   const CreatedBy = localStorage.getItem("CreatedBy");
-  const modifiedBy = localStorage.getItem("CreatedBy");
+  const modifiedBy = localStorage.getItem("modifiedBy");
   const [defaultroleValues, setDefaultroleValues] = useState({
     roleId: "",
     roleName: "",
@@ -111,12 +113,16 @@ const Configuration = () => {
 
   const refreshFunction = () => {
     setIsModalVisible(false);
-    setSelectedRowKeys([]);
+    // setSelectedRowKeys([]);
     setSelectedRow([]);
+    SelectedRole([]);
+    SelectedIssue([]);
     SetCanEdit(false);
     setSelectedRowKeysforrole([]);
     setSelectedRowKeysforissues([]);
     setSelectedRowKeysfordesignation([]);
+    // setSelectedRowKeysforrole([]);
+    // setSelectedRowKeysforissues([]);
     setDefaultValues({ departmentId: "", departmentName: "" });
     setDepartments([]);
     setRoles([]);
@@ -323,30 +329,6 @@ const Configuration = () => {
     }
   };
 
-  // const handleActiveStatusChange = async(value: string)=>{
-  //   if(value === 'Active'){
-  //   try {
-  //       const response = await axios.get(
-  //         "/api/Master/GetDepartmentsByActive?isActive=true"
-  //       );
-  //       setDepartments(response.data);
-  //       console.log(response.data, "dataaa");
-  //     } catch (error) {
-  //       console.error("Error fetching departments:", error);
-  //     }
-  //   }else{
-  //       try {
-  //           const response = await axios.get(
-  //             "/api/Master/GetDepartmentsByActive?isActive=false"
-  //           );
-  //           setDepartments(response.data);
-  //           console.log(response.data, "dataaa");
-  //         } catch (error) {
-  //           console.error("Error fetching departments:", error);
-  //         }
-  //   }
-  // }
-
   const handleActiveStatusChange = async (value: string) => {
     try {
       let departmentsResponse;
@@ -382,79 +364,108 @@ const Configuration = () => {
         );
       }
 
+      let isActive = value === 'Active';
+      const departmentsResponse = await axios.get(
+        `/api/Master/GetDepartmentsByActive?isActive=${isActive}`
+      );
       setDepartments(departmentsResponse.data);
+  
+      const rolesResponse = await axios.get(
+        `/api/Master/GetAllRoles?isActive=${isActive}`
+      );
       setRoles(rolesResponse.data);
+  
+      // Fetch Issues data
+      const issuesResponse = await axios.get(
+        `/api/Master/GetAllIssueTypes?isActive=${isActive}`
+      );
       setIssues(issuesResponse.data);
       setDesignation(designationResponse.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+  
+
 
   const handleActiveClick = async () => {
-    // Extract departmentIds from selected rows
-    const selectedDepartmentIds = selectedRow.map((row) => row.departmentId);
-
-    // Create the object with the desired format
-    const requestData = { id: selectedDepartmentIds };
-
     try {
-      // Update Department IsActive status
-      const departmentResponse = await axios.put(
-        "/api/Master/EditDepartmentIsActive?Is_Active=true",
-        requestData
-      );
-
-      // You can also trigger a reload or perform other actions if needed
-      // For example:
-      // fetchDataForDepartment();
-      // fetchDataForRoles();
-      // fetchDataForIssues();
-
+      let apiEndpoint = "";
+      let payload = {};
+  
+      if (selectedTab === "1") {
+        apiEndpoint = "/api/Master/EditDepartmentIsActive";
+        payload = { id: selectedRow.map((row) => row.departmentId), Is_Active: true };
+      } else if (selectedTab === "2") {
+        apiEndpoint = "/api/Master/EditRolesIsActive";
+        payload = { id: selectedRole.map((row) => row.roleId), Is_Active: true };
+      } else if (selectedTab === "3") {
+        apiEndpoint = "/api/Master/EditIssueIsActive";
+        payload = { id: selectedIssue.map((row) => row.issueId), Is_Active: true };
+      }
+  
+      // Make the API call for activation
+      await axios.put(apiEndpoint, payload);
+  
+      // Refresh data after activation
+      fetchDataForDepartment();
+      fetchDataForRoles();
+      fetchDataForIssues();
+  
       // Notify success
       notification.success({
         message: "Success",
-        description: "Department status updated successfully",
+        description: "Items activated successfully",
       });
     } catch (error) {
-      // Handle the error as needed
-      console.error(error);
-
-      // Notify error
+      console.error("Error activating items:", error);
       notification.error({
         message: "Error",
-        description: "Failed to update status. Please try again.",
+        description: "Failed to activate items. Please try again.",
       });
     }
   };
-
   
-
   const handleDeactiveClick = async () => {
-    const selectedDepartmentIds = selectedRow.map((row) => row.departmentId);
-
-    // Create the object with the desired format
-    const requestData = { id: selectedDepartmentIds };
-
     try {
-      // Make the API call
-      const response = await axios.put(
-        "/api/Master/EditDepartmentIsActive?Is_Active=false",
-        requestData
-      );
+      let apiEndpoint = "";
+      let payload = {};
+  
+      if (selectedTab === "1") {
+        apiEndpoint = "/api/Master/EditDepartmentIsActive";
+        payload = { id: selectedRow.map((row) => row.departmentId), Is_Active: false };
+      } else if (selectedTab === "2") {
+        apiEndpoint = "/api/Master/EditRolesIsActive";
+        payload = { id: selectedRole.map((row) => row.roleId), Is_Active: false };
+      } else if (selectedTab === "3") {
+        apiEndpoint = "/api/Master/EditIssueIsActive";
+        payload = { id: selectedIssue.map((row) => row.issueId), Is_Active: false };
+      }
+  
+      // Make the API call for deactivation
+      await axios.put(apiEndpoint, payload);
+  
+      // Refresh data after deactivation
+      fetchDataForDepartment();
+      fetchDataForRoles();
+      fetchDataForIssues();
+  
+      // Notify success
       notification.success({
         message: "Success",
-        description: "Department status updated succesfully",
+        description: "Items deactivated successfully",
       });
     } catch (error) {
-      // Handle the error as needed
+      console.error("Error deactivating items:", error);
       notification.error({
         message: "Error",
-        description: "Failed to update department status. Please try again.",
+        description: "Failed to deactivate items. Please try again.",
       });
     }
   };
+  
 
+  
   const handleEdit = (record: IDepartment) => {
     setIsModalVisible(true);
     SetCanEdit(true);
@@ -471,6 +482,7 @@ const Configuration = () => {
       roleId: record.roleId,
       roleName: record.roleName,
       departmentId: record.departmentId,
+      
     });
   };
 
@@ -516,11 +528,14 @@ const Configuration = () => {
       setRoleModalVisible(true);
     } else if (callModal == "showIssueModal") {
      
+      form.resetFields();
+    } else {
       setIssueModalVisible(true);
       
     }
      else {
       setDesignationModalVisible(true);
+      form.resetFields();
     }
   };
 
@@ -546,9 +561,8 @@ const Configuration = () => {
     if (canEditRole) {
       var data = {
         ...values,
+        departmentId: selectedRow[0].departmentId,
         roleId: Roleid,
-        createdBy: "",
-        modifiedBy: "adminn",
       };
     } else {
       var data = { ...values};
@@ -583,10 +597,10 @@ const Configuration = () => {
       });
     }
   };
-
+const loginEmp=localStorage.getItem("EmployeeId");
   const onFinishIssue = async (values: any) => {
     if (canEditIssue) {
-      var data = { ...values, departmentId: IssueDept, employeeId: "E001" };
+      var data = { ...values, departmentId: IssueDept, employeeId: "E0001" };
       var dataArray1 = {
         departmentId: data.departmentId, // replace with the actual value for departmentId
         issueId: data.Issueid,
@@ -629,9 +643,9 @@ const Configuration = () => {
       setIssueModalVisible(false);
       try {
         if (canEditIssue) {
-          await axios.post("/api/Master/AddIssueTypes", dataArray);
+          await axios.post(`/api/Master/AddIssueTypes?id=${modifiedBy}`, dataArray);
         } else {
-          await axios.post("/api/Master/AddIssueTypes", dataArray);
+          await axios.post(`/api/Master/AddIssueTypes?id=${CreatedBy}`, dataArray);
         }
 
         setIssueModalVisible(false);
@@ -952,7 +966,7 @@ const Configuration = () => {
                         row.key.toString()
                       );
                       setSelectedRowKeysforrole(keys);
-                      setSelectedRow(selectedRows);
+                      SelectedRole(selectedRows);
                     },
                   }}
                 />
@@ -972,6 +986,8 @@ const Configuration = () => {
                         row.key.toString()
                       );
                       setSelectedRowKeysforissues(keys);
+                      SelectedIssue(selectedRows);
+
                     },
                   }}
                 />
@@ -1100,7 +1116,7 @@ const Configuration = () => {
               { required: true, message: "Please select the department!" },
             ]}
           >
-            <Select>
+            <Select onChange={setIssueDepartment}>
               {departments.map((department) => (
                 <Option
                   key={department.departmentId}
