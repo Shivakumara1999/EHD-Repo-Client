@@ -1070,11 +1070,10 @@ color: yellow;
 }
 .content-card .ant-card-body {
   padding:0.8%;
-   
   background-color:#f5fbff;
-  margin:0;
+  margin:-1.1% 0;
   border-radius: 7px;
-  border: 2px solid #98d4ff;
+  border: 2px solid #d6edfd;
 }
 .content-card-list{
   overflow-y: scroll;
@@ -1085,9 +1084,7 @@ color: yellow;
   margin:10; 
   padding:0;
 }
-.content-card-divider{
 
-}
 .content-card-divider-text{
   font-size:12px;
   color:#76cdd3; 
@@ -1096,7 +1093,7 @@ color: yellow;
 }
 
 .content-card-ticketticketid{
-  font-size:20px;
+  font-size:18px;
   padding-left:1%;
   padding-bottom:1%;
   font-weight: 450;
@@ -1104,8 +1101,8 @@ color: yellow;
 }
 .content-card-ticketissue{
   padding-bottom:1%;
-  font-size:20px;
-  font-weight:bold;
+  font-size:18px;
+  font-weight:600;
 }
 .content-card-ticketinfo-row{
   margin-top:-1%;
