@@ -59,6 +59,46 @@ const TicketingSystem: React.FC = () => {
   const [isUserInfoModalOpen, setIsUserInfoModelOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredTickets, setFilteredTickets] = useState<Array<any>>([]);
+  const [dueData, setDueData] = useState<Array<any>>([]);
+  const [closedData, setClosedData] = useState<Array<any>>([]);
+  const [reraisedData, setReraisedData] = useState<Array<any>>([]);
+  const [rejectedData, setRejectedData] = useState<Array<any>>([]);
+  // const [dropdownDisabled, setDropdownDisabled] = useState(false);
+  // const [buttonDisabled, setButtonDisabled] = useState(false);
+  // const [cardDisabledState, setCardDisabledState] = useState<{
+  //   [key: string]: { dropdown: boolean; button: boolean };
+  // }>({});
+
+  // const handleDropdownChange = (
+  //   value: string,
+  //   ticketId: string,
+  //   employeeId: string
+  // ) => {
+  //   setCardDisabledState((prevState) => ({
+  //     ...prevState,
+  //     [ticketId]: { dropdown: true, button: true },
+  //   }));
+
+  //   switch (value) {
+  //     case "1": // Accept
+  //       setConfirmAcceptVisible(true);
+  //       UpdateStatus(ticketId, employeeId, "", "Accept");
+  //       break;
+  //     case "2": // Reject
+  //       setConfirmRejectVisible(true);
+  //       UpdateStatus(ticketId, employeeId, rejectReason, "Reject");
+  //       break;
+  //     case "3": // Irrelevant
+  //       setConfirmResolvedVisible(true);
+  //       handleResolved();
+  //       break;
+  //     case "4": // Irrelevant
+  //       setConfirmIrrelevantVisible(true);
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // };
 
   const departmentId = localStorage.getItem("DepartmentId");
   const employeeId = localStorage.getItem("EmployeeId");
@@ -99,7 +139,7 @@ const TicketingSystem: React.FC = () => {
     axios
       .get(`/api/Ticket/GetAllOverDueTickets?departmentId=${departmentId}`)
       .then((response) => {
-        setActiveData(response.data);
+        setDueData(response.data);
       })
       .catch((error) => {
         message.error("Failed to fetch data");
@@ -109,7 +149,7 @@ const TicketingSystem: React.FC = () => {
     axios
       .get(`/api/Ticket/GetAllClosedTickets?departmentId=${departmentId}`)
       .then((response) => {
-        setActiveData(response.data);
+        setClosedData(response.data);
       })
       .catch((error) => {
         message.error("Failed to fetch data");
@@ -119,7 +159,7 @@ const TicketingSystem: React.FC = () => {
     axios
       .get(`/api/Ticket/GetAllReRaisedTickets?departmentId=${departmentId}`)
       .then((response) => {
-        setActiveData(response.data);
+        setReraisedData(response.data);
       })
       .catch((error) => {
         message.error("Failed to fetch data");
@@ -129,20 +169,40 @@ const TicketingSystem: React.FC = () => {
     axios
       .get(`/api/Ticket/GetAllRejectedTickets?departmentId=${departmentId}`)
       .then((response) => {
-        setActiveData(response.data);
+        setRejectedData(response.data);
       })
       .catch((error) => {
         message.error("Failed to fetch data");
       });
   };
 
-  useEffect(()=>{
-    getActiveData();
-    getDueData();
-    getClosedData();
-    getReraisedData();
-    getRejectedData();
-  })
+  // useEffect(() => {
+  //   getActiveData();
+  //   getDueData();
+  //   getClosedData();
+  //   getReraisedData();
+  //   getRejectedData();
+  // }, []);
+
+  // useEffect(() => {
+  //   getActiveData();
+  // }, [selectedCategory]);
+
+  // useEffect(() => {
+  //   getDueData();
+  // }, [selectedCategory]);
+
+  // useEffect(() => {
+  //   getClosedData();
+  // }, [selectedCategory]);
+
+  // useEffect(() => {
+  //   getReraisedData();
+  // }, [selectedCategory]);
+
+  // useEffect(() => {
+  //   getRejectedData();
+  // }, [selectedCategory]);
 
   const renderMeta = (ticket: any) => {
     const createdDate = new Date(ticket.createdDate);
@@ -213,7 +273,8 @@ const TicketingSystem: React.FC = () => {
       <Meta
         title={
           <>
-            {ticket.issue} <span className="spanId">#{ticket.ticketId}</span>
+            {ticket.issue} <br></br>
+            <span className="spanId">#{ticket.ticketId}</span>
           </>
         }
         description={
@@ -282,7 +343,6 @@ const TicketingSystem: React.FC = () => {
   };
 
   const handleAccept = () => {
-    setConfirmAcceptVisible(false);
     if (employeeId) {
       UpdateStatus(selectedTicketId, employeeId, "", "Accept");
     }
@@ -290,6 +350,8 @@ const TicketingSystem: React.FC = () => {
       message.error("No ticket or action selected");
       return;
     }
+    getActiveData();
+    setConfirmAcceptVisible(false);
   };
 
   const handleTicketSelection = (ticketId: any) => {
@@ -310,6 +372,7 @@ const TicketingSystem: React.FC = () => {
       message.error("Please enter a reason for rejection");
       return;
     }
+    getRejectedData();
     setConfirmRejectVisible(false);
   };
 
@@ -326,6 +389,7 @@ const TicketingSystem: React.FC = () => {
       message.error("No ticket or action selected");
       return;
     }
+    getClosedData();
   };
 
   const handleResolvedCancel = () => {
@@ -353,7 +417,7 @@ const TicketingSystem: React.FC = () => {
   }, []);
 
   // const handleIrrelevant = (dept: string) => {
-    
+
   // };
 
   const updateDepartment = (ticketId: string, deptId: any) => {
@@ -406,35 +470,23 @@ const TicketingSystem: React.FC = () => {
   };
 
   useEffect(() => {
-    // const filteredResults = tableData.filter((ticket) => {
-    //   return (
-    //     ticket.ticketId.includes(searchQuery) ||
-    //     (ticket.userName &&
-    //       ticket.userName.toLowerCase().includes(searchQuery.toLowerCase())) ||
-    //     ticket.priority.toLowerCase() === searchQuery.toLowerCase()
-    //   );
-    // });
-    // setFilteredTickets(filteredResults);
-
     setFilteredTickets(filteredData);
-    
-  }, [searchQuery]);
-
-  
+  }, [searchQuery, tableData]);
 
   const filteredData = activeData.filter((ticket: any) => {
     const searchQueryLower = searchQuery.toLowerCase();
     return (
-      ticket.ticketId.toLowerCase().includes(searchQueryLower) ||
-      ticket.userName.toLowerCase().includes(searchQueryLower) ||
-      ticket.ticketDescription.toLowerCase().includes(searchQueryLower) ||
-      ticket.priority.toLowerCase().includes(searchQueryLower) ||
-      ticket.issue.toLowerCase().includes(searchQueryLower)
-      // ticket.createdDate.includes(searchQueryLower)||
-      // ticket.ticketDate.includes(searchQueryLower)
+      (ticket.ticketId &&
+        ticket.ticketId.toLowerCase().includes(searchQueryLower)) ||
+      (ticket.userName &&
+        ticket.userName.toLowerCase().includes(searchQueryLower)) ||
+      (ticket.ticketDescription &&
+        ticket.ticketDescription.toLowerCase().includes(searchQueryLower)) ||
+      (ticket.priority &&
+        ticket.priority.toLowerCase().includes(searchQueryLower)) ||
+      (ticket.issue && ticket.issue.toLowerCase().includes(searchQueryLower))
     );
   });
-  
 
   const getPriorityClass = (priority: any) => {
     switch (priority.toLowerCase()) {
@@ -462,6 +514,22 @@ const TicketingSystem: React.FC = () => {
     }
   };
 
+  const getTicketsForSelectedCategory = () => {
+    switch (selectedCategory) {
+      case "Active":
+        return activeData;
+      case "Due":
+        return dueData;
+      case "Closed":
+        return closedData;
+      case "Reraised":
+        return reraisedData;
+      case "Rejected":
+        return rejectedData;
+      default:
+        return [];
+    }
+  };
   return (
     <>
       <div className="div">
@@ -630,7 +698,11 @@ const TicketingSystem: React.FC = () => {
       <h2>{getCategoryName()}</h2>
       {selectedCategory && (
         <div className="divCategory">
-          {activeData.map((ticket: any, index: number) => (
+          {(filteredTickets.length
+            ? filteredTickets
+            : getTicketsForSelectedCategory()
+          ).map((ticket: any, index: number) => (
+            // {activeData.map((ticket: any, index: number) => (
             <Card className="belowCards" key={index}>
               <div className="carddetails">
                 <div className="tickectinfo">{renderMeta(ticket)}</div>
@@ -641,7 +713,7 @@ const TicketingSystem: React.FC = () => {
                       handleTicketSelection(ticket.ticketId);
                     }}
                     className="dropdown"
-                    defaultValue="Acknowledge"
+                    defaultValue={ticket.statusId == null? "Acknowledge" : ticket.statusId == 1 ? "Accepted" : ticket.statusId == 2 ? "Rejected" : ""}
                     onChange={(value) => {
                       switch (value) {
                         case "1": // Accept
@@ -662,7 +734,8 @@ const TicketingSystem: React.FC = () => {
                     }}
                     disabled={
                       selectedCategory === "Closed" ||
-                      selectedCategory === "Rejected"
+                      selectedCategory === "Rejected"||
+                      ticket.statusId === 1
                     }
                   >
                     <Option className="option1" value="1">
@@ -686,7 +759,7 @@ const TicketingSystem: React.FC = () => {
                     value="3"
                     disabled={
                       selectedCategory === "Closed" ||
-                      selectedCategory === "Rejected"
+                      selectedCategory === "Rejected" 
                     }
                   >
                     Resolved?
@@ -741,12 +814,11 @@ const TicketingSystem: React.FC = () => {
                   open={confirmIrrelevantVisible}
                   onOk={() => {
                     updateDepartment(ticket, Deparmentid);
-                    
                   }}
                   onCancel={() => setConfirmIrrelevantVisible(false)}
                 >
                   <Select
-                     defaultValue="Department"
+                    defaultValue="Department"
                     onChange={(value) => setDeparmentid(value)}
                     className="dept-opt"
                   >
@@ -755,11 +827,9 @@ const TicketingSystem: React.FC = () => {
                         (department) => department.departmentId !== departmentId
                       )
                       .map((department, index) => (
-                       
-                          <Option key={index} value={department.departmentId}>
-                            {department.departmentName}
-                          </Option>
-                      
+                        <Option key={index} value={department.departmentId}>
+                          {department.departmentName}
+                        </Option>
                       ))}
                   </Select>
                 </Modal>
@@ -821,5 +891,3 @@ const TicketingSystem: React.FC = () => {
 };
 
 export default TicketingSystem;
-
-
