@@ -59,6 +59,10 @@ const TicketingSystem: React.FC = () => {
   const [isUserInfoModalOpen, setIsUserInfoModelOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredTickets, setFilteredTickets] = useState<Array<any>>([]);
+  const [dueData, setDueData] = useState<Array<any>>([]);
+  const [closedData, setClosedData] = useState<Array<any>>([]);
+  const [reraisedData, setReraisedData] = useState<Array<any>>([]);
+  const [rejectedData, setRejectedData] = useState<Array<any>>([]);
   // const [dropdownDisabled, setDropdownDisabled] = useState(false);
   // const [buttonDisabled, setButtonDisabled] = useState(false);
   // const [cardDisabledState, setCardDisabledState] = useState<{
@@ -135,7 +139,7 @@ const TicketingSystem: React.FC = () => {
     axios
       .get(`/api/Ticket/GetAllOverDueTickets?departmentId=${departmentId}`)
       .then((response) => {
-        setActiveData(response.data);
+        setDueData(response.data);
       })
       .catch((error) => {
         message.error("Failed to fetch data");
@@ -145,7 +149,7 @@ const TicketingSystem: React.FC = () => {
     axios
       .get(`/api/Ticket/GetAllClosedTickets?departmentId=${departmentId}`)
       .then((response) => {
-        setActiveData(response.data);
+        setClosedData(response.data);
       })
       .catch((error) => {
         message.error("Failed to fetch data");
@@ -155,7 +159,7 @@ const TicketingSystem: React.FC = () => {
     axios
       .get(`/api/Ticket/GetAllReRaisedTickets?departmentId=${departmentId}`)
       .then((response) => {
-        setActiveData(response.data);
+        setReraisedData(response.data);
       })
       .catch((error) => {
         message.error("Failed to fetch data");
@@ -165,7 +169,7 @@ const TicketingSystem: React.FC = () => {
     axios
       .get(`/api/Ticket/GetAllRejectedTickets?departmentId=${departmentId}`)
       .then((response) => {
-        setActiveData(response.data);
+        setRejectedData(response.data);
       })
       .catch((error) => {
         message.error("Failed to fetch data");
@@ -180,25 +184,25 @@ const TicketingSystem: React.FC = () => {
   //   getRejectedData();
   // }, []);
 
-  useEffect(() => {
-    getActiveData();
-  }, [selectedCategory]);
- 
-  useEffect(() => {
-    getDueData();
-  }, [selectedCategory]);
- 
-  useEffect(() => {
-    getClosedData();
-  }, [selectedCategory]);
- 
-  useEffect(() => {
-    getReraisedData();
-  }, [selectedCategory]);
- 
-  useEffect(() => {
-    getRejectedData();
-  }, [selectedCategory]);
+  // useEffect(() => {
+  //   getActiveData();
+  // }, [selectedCategory]);
+
+  // useEffect(() => {
+  //   getDueData();
+  // }, [selectedCategory]);
+
+  // useEffect(() => {
+  //   getClosedData();
+  // }, [selectedCategory]);
+
+  // useEffect(() => {
+  //   getReraisedData();
+  // }, [selectedCategory]);
+
+  // useEffect(() => {
+  //   getRejectedData();
+  // }, [selectedCategory]);
 
   const renderMeta = (ticket: any) => {
     const createdDate = new Date(ticket.createdDate);
@@ -510,6 +514,22 @@ const TicketingSystem: React.FC = () => {
     }
   };
 
+  const getTicketsForSelectedCategory = () => {
+    switch (selectedCategory) {
+      case "Active":
+        return activeData;
+      case "Due":
+        return dueData;
+      case "Closed":
+        return closedData;
+      case "Reraised":
+        return reraisedData;
+      case "Rejected":
+        return rejectedData;
+      default:
+        return [];
+    }
+  };
   return (
     <>
       <div className="div">
@@ -678,157 +698,157 @@ const TicketingSystem: React.FC = () => {
       <h2>{getCategoryName()}</h2>
       {selectedCategory && (
         <div className="divCategory">
-          {(filteredTickets.length ? filteredTickets : activeData).map(
-            (ticket: any, index: number) => (
-              // {activeData.map((ticket: any, index: number) => (
-              <Card className="belowCards" key={index}>
-                <div className="carddetails">
-                  <div className="tickectinfo">{renderMeta(ticket)}</div>
+          {(filteredTickets.length
+            ? filteredTickets
+            : getTicketsForSelectedCategory()
+          ).map((ticket: any, index: number) => (
+            // {activeData.map((ticket: any, index: number) => (
+            <Card className="belowCards" key={index}>
+              <div className="carddetails">
+                <div className="tickectinfo">{renderMeta(ticket)}</div>
 
-                  <div className="selectcss">
-                    <Select
-                      onSelect={() => {
-                        handleTicketSelection(ticket.ticketId);
-                      }}
-                      className="dropdown"
-                      defaultValue="Acknowledge"
-                      onChange={(value) => {
-                        switch (value) {
-                          case "1": // Accept
-                            setConfirmAcceptVisible(true);
-                            break;
-                          case "2": // Reject
-                            setConfirmRejectVisible(true);
-                            break;
-                          case "3": // Irrelevant
-                            setConfirmResolvedVisible(true);
-                            break;
-                          case "4": // Irrelevant
-                            setConfirmIrrelevantVisible(true);
-                            break;
-                          default:
-                            break;
-                        }
-                      }}
-                      disabled={
-                        selectedCategory === "Closed" ||
-                        selectedCategory === "Rejected"
+                <div className="selectcss">
+                  <Select
+                    onSelect={() => {
+                      handleTicketSelection(ticket.ticketId);
+                    }}
+                    className="dropdown"
+                    defaultValue="Acknowledge"
+                    onChange={(value) => {
+                      switch (value) {
+                        case "1": // Accept
+                          setConfirmAcceptVisible(true);
+                          break;
+                        case "2": // Reject
+                          setConfirmRejectVisible(true);
+                          break;
+                        case "3": // Irrelevant
+                          setConfirmResolvedVisible(true);
+                          break;
+                        case "4": // Irrelevant
+                          setConfirmIrrelevantVisible(true);
+                          break;
+                        default:
+                          break;
                       }
-                    >
-                      <Option className="option1" value="1">
-                        Accept
-                      </Option>
-                      <Option className="option2" value="2">
-                        Reject
-                      </Option>
-                      <Option className="option3" value="4">
-                        Irrelevant
-                      </Option>
-                    </Select>
-                  </div>
-                  <div className="resolved-btn">
-                    <Button
-                      className="right-content-btn"
-                      onClick={() => {
-                        handleTicketSelection(ticket.ticketId);
-                        handleResolved();
-                      }}
-                      value="3"
-                      disabled={
-                        selectedCategory === "Closed" ||
-                        selectedCategory === "Rejected"
-                      }
-                    >
-                      Resolved?
-                    </Button>
-                  </div>
-                  <div className="priority-txt">
-                    <b>
-                      {" "}
-                      <div className="priority">
-                        <p
-                          className={`priority-text ${getPriorityClass(
+                    }}
+                    disabled={
+                      selectedCategory === "Closed" ||
+                      selectedCategory === "Rejected"
+                    }
+                  >
+                    <Option className="option1" value="1">
+                      Accept
+                    </Option>
+                    <Option className="option2" value="2">
+                      Reject
+                    </Option>
+                    <Option className="option3" value="4">
+                      Irrelevant
+                    </Option>
+                  </Select>
+                </div>
+                <div className="resolved-btn">
+                  <Button
+                    className="right-content-btn"
+                    onClick={() => {
+                      handleTicketSelection(ticket.ticketId);
+                      handleResolved();
+                    }}
+                    value="3"
+                    disabled={
+                      selectedCategory === "Closed" ||
+                      selectedCategory === "Rejected"
+                    }
+                  >
+                    Resolved?
+                  </Button>
+                </div>
+                <div className="priority-txt">
+                  <b>
+                    {" "}
+                    <div className="priority">
+                      <p
+                        className={`priority-text ${getPriorityClass(
+                          ticket.priority
+                        )}`}
+                      >
+                        <span
+                          className={`dot ${getPriorityDotClass(
                             ticket.priority
                           )}`}
-                        >
-                          <span
-                            className={`dot ${getPriorityDotClass(
-                              ticket.priority
-                            )}`}
-                          />
-                          {ticket.priority}
-                        </p>
-                      </div>
-                    </b>
-                  </div>
-                  <Modal
-                    className="modal"
-                    title="Are you sure you want to accept the ticket?"
-                    visible={confirmAcceptVisible}
-                    onOk={handleAccept}
-                    onCancel={() => setConfirmAcceptVisible(false)}
-                  >
-                    <p>Press OK to accept the ticket.</p>
-                  </Modal>
-
-                  <Modal
-                    className="modal"
-                    title="Reason for Rejection"
-                    visible={confirmRejectVisible}
-                    onOk={handleReject}
-                    onCancel={() => setConfirmRejectVisible(false)}
-                  >
-                    <Input.TextArea
-                      placeholder="Enter reason for rejection"
-                      value={rejectReason}
-                      onChange={(e) => setRejectReason(e.target.value)}
-                    />
-                  </Modal>
-
-                  <Modal
-                    className="modal"
-                    title="Select Department"
-                    open={confirmIrrelevantVisible}
-                    onOk={() => {
-                      updateDepartment(ticket, Deparmentid);
-                    }}
-                    onCancel={() => setConfirmIrrelevantVisible(false)}
-                  >
-                    <Select
-                      defaultValue="Department"
-                      onChange={(value) => setDeparmentid(value)}
-                      className="dept-opt"
-                    >
-                      {departments
-                        .filter(
-                          (department) =>
-                            department.departmentId !== departmentId
-                        )
-                        .map((department, index) => (
-                          <Option key={index} value={department.departmentId}>
-                            {department.departmentName}
-                          </Option>
-                        ))}
-                    </Select>
-                  </Modal>
-
-                  <Modal
-                    className="modal"
-                    title="Is the issue resolved?"
-                    visible={confirmResolvedVisible}
-                    onOk={handleResolvedOk}
-                    onCancel={handleResolvedCancel}
-                  >
-                    <p>Further details if any?</p>
-                    <Input.TextArea
-                      value={resolvedDetails}
-                      onChange={(e) => setResolvedDetails(e.target.value)}
-                    />
-                  </Modal>
+                        />
+                        {ticket.priority}
+                      </p>
+                    </div>
+                  </b>
                 </div>
-              </Card>
-            )
-          )}
+                <Modal
+                  className="modal"
+                  title="Are you sure you want to accept the ticket?"
+                  visible={confirmAcceptVisible}
+                  onOk={handleAccept}
+                  onCancel={() => setConfirmAcceptVisible(false)}
+                >
+                  <p>Press OK to accept the ticket.</p>
+                </Modal>
+
+                <Modal
+                  className="modal"
+                  title="Reason for Rejection"
+                  visible={confirmRejectVisible}
+                  onOk={handleReject}
+                  onCancel={() => setConfirmRejectVisible(false)}
+                >
+                  <Input.TextArea
+                    placeholder="Enter reason for rejection"
+                    value={rejectReason}
+                    onChange={(e) => setRejectReason(e.target.value)}
+                  />
+                </Modal>
+
+                <Modal
+                  className="modal"
+                  title="Select Department"
+                  open={confirmIrrelevantVisible}
+                  onOk={() => {
+                    updateDepartment(ticket, Deparmentid);
+                  }}
+                  onCancel={() => setConfirmIrrelevantVisible(false)}
+                >
+                  <Select
+                    defaultValue="Department"
+                    onChange={(value) => setDeparmentid(value)}
+                    className="dept-opt"
+                  >
+                    {departments
+                      .filter(
+                        (department) => department.departmentId !== departmentId
+                      )
+                      .map((department, index) => (
+                        <Option key={index} value={department.departmentId}>
+                          {department.departmentName}
+                        </Option>
+                      ))}
+                  </Select>
+                </Modal>
+
+                <Modal
+                  className="modal"
+                  title="Is the issue resolved?"
+                  visible={confirmResolvedVisible}
+                  onOk={handleResolvedOk}
+                  onCancel={handleResolvedCancel}
+                >
+                  <p>Further details if any?</p>
+                  <Input.TextArea
+                    value={resolvedDetails}
+                    onChange={(e) => setResolvedDetails(e.target.value)}
+                  />
+                </Modal>
+              </div>
+            </Card>
+          ))}
         </div>
       )}
 
