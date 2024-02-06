@@ -1,4 +1,4 @@
-import { Button, Card } from "antd";
+import { Button, Card, notification } from "antd";
 import React, { useState, useEffect } from "react";
 import TextArea from "antd/es/input/TextArea";
 import axios, { AxiosResponse } from "axios";
@@ -46,7 +46,6 @@ const CreateTicket: React.FC = () => {
   const [dynamicOption, setDynamicOption] = useState("");
 
   const empID = localStorage.getItem("EmployeeId");
-  const deptID = localStorage.getItem("DepartmentId")
 
   useEffect(() => {
     axios
@@ -105,7 +104,7 @@ const CreateTicket: React.FC = () => {
     // Check if all required fields are selected
     if (
       department === "Select Department" ||
-      issueType === "Select Issue Type" ||
+      (issueType !== "Other" && issueType === "Select Issue Type") ||
       priorityType === "Select Priority Type" ||
       (descriptionRequired && ticketDescription === "")
     ) {
@@ -113,17 +112,22 @@ const CreateTicket: React.FC = () => {
       return;
     }
 
-    const selectedIssue = issueTypes.find(
-      (issue) => issue.issueName === issueType
-    );
-    if (!selectedIssue) {
-      console.error("Selected issue not found");
-      return;
+    let selectedIssueId: string | null = null;
+
+    if (issueType !== "Other") {
+      const selectedIssue = issueTypes.find(
+        (issue) => issue.issueName === issueType
+      );
+      if (!selectedIssue) {
+        console.error("Selected issue not found");
+        return;
+      }
+      selectedIssueId = selectedIssue.issueid;
     }
 
     const payload = {
       departmentId: selectedDepartmentId,
-      issueId: selectedIssue.issueid,
+      issueId: selectedIssueId,
       priorityId: priorityTypes.find(
         (priority) => priority.priorityName === priorityType
       )?.priorityId,
@@ -137,14 +141,24 @@ const CreateTicket: React.FC = () => {
       .then((response) => {
         console.log("Ticket created successfully:", response.data);
         handleClear();
-        // Additional logic or feedback can be added here
+
+        // Show success notification
+        notification.success({
+          message: "Ticket Submitted Successfully",
+          description:
+            "Your ticket has been submitted successfully and will get resolved soon.",
+        });
+
+        // Auto-dismiss notification after 3 seconds
+        setTimeout(() => {
+          notification.destroy();
+        }, 3000);
       })
       .catch((error) => {
         console.error("Error creating ticket:", error);
         // Handle error or show user-friendly message
       });
   };
-
   const handleIssueTypeChange = (selectedIssueType: string) => {
     if (selectedIssueType === "Other") {
       setDynamicOption("Your Dynamic Option");
@@ -164,7 +178,7 @@ const CreateTicket: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="ticket_form">
       <div>
         <h1 className="head">CREATE TICKET</h1>
       </div>
@@ -180,7 +194,7 @@ const CreateTicket: React.FC = () => {
               <option value="Select Department" disabled>
                 Select Department
               </option>
-              {departments.filter((d)=>d.departmentId !== deptID).map((dep) => (
+              {departments.map((dep) => (
                 <option key={dep.departmentId} value={dep.departmentName}>
                   {dep.departmentName}
                 </option>
