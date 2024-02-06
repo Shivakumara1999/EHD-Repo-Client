@@ -645,7 +645,7 @@ popover-buttoncancel {
 }
 
 .option1,
-.option2 {
+.option2, .option3 {
   font-weight: bold !important;
 }
 
@@ -653,7 +653,7 @@ popover-buttoncancel {
   color: green !important;
 }
 
-.option2 {
+.option2, .option3 {
   color: red !important;
 }
 
@@ -782,7 +782,12 @@ color: yellow;
 .modal{
   margin-top: 15%;
 }
-.ant-select-selection-item, .right-content-btn {
+.ant-select-selection-item {
+  color: blue;
+  font-weight: bold !important;
+}
+
+.right-content-btn {
   color: blue;
   font-weight: bold !important;
 }

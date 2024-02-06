@@ -713,7 +713,7 @@ const TicketingSystem: React.FC = () => {
                       handleTicketSelection(ticket.ticketId);
                     }}
                     className="dropdown"
-                    defaultValue="Acknowledge"
+                    defaultValue={ticket.statusId == null? "Acknowledge" : ticket.statusId == 1 ? "Accepted" : ticket.statusId == 2 ? "Rejected" : ""}
                     onChange={(value) => {
                       switch (value) {
                         case "1": // Accept
@@ -734,7 +734,8 @@ const TicketingSystem: React.FC = () => {
                     }}
                     disabled={
                       selectedCategory === "Closed" ||
-                      selectedCategory === "Rejected"
+                      selectedCategory === "Rejected"||
+                      ticket.statusId === 1
                     }
                   >
                     <Option className="option1" value="1">
@@ -758,7 +759,7 @@ const TicketingSystem: React.FC = () => {
                     value="3"
                     disabled={
                       selectedCategory === "Closed" ||
-                      selectedCategory === "Rejected"
+                      selectedCategory === "Rejected" 
                     }
                   >
                     Resolved?
