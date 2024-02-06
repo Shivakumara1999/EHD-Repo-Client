@@ -376,7 +376,15 @@ LoginForm.css */ .login-container {
   display: inline-block;
   border-radius: 100%;
 }
-
+ .gray-dot {
+  animation: blink-animation 1s infinite;
+  background-color: gray;
+  border-radius: 50%;
+  display: inline-block;
+  height: 10px;
+  width: 10px;
+  margin-right: 5px; /* Adjust as needed */
+}
 .green-dot {
   border: 1px solid green;
   background-color: green;
@@ -398,8 +406,8 @@ LoginForm.css */ .login-container {
   }
 }
 
-.searchclass {
-  /* width: %; */
+.searchs {
+  width: 22%;
   display: flex;
   justify-content: space-between;
 }

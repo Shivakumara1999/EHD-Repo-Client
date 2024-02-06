@@ -3,7 +3,7 @@ import { Button, Input, Modal, Table } from "antd";
 import axios from "axios";
 import type { TableColumnsType } from "antd";
 import moment from "moment";
-import { RedoOutlined } from "@ant-design/icons";
+import { RedoOutlined, RollbackOutlined } from "@ant-design/icons";
 
 interface DataType {
   key: React.Key;
@@ -12,7 +12,7 @@ interface DataType {
   resolvedDate: string | null;
   departmentName: string;
   issueName: string;
-  statusName: string | null;
+  statusName: string;
   feedbackType: string | null;
   assignee: string | null;
   dueDate: string;
@@ -45,7 +45,7 @@ const Viewhistory: React.FC = () => {
       case "Resolved":
         return "blink_me yellow-dot";
       default:
-        return "";
+        return "blink_me gray-dot";
     }
   };
 
@@ -65,11 +65,16 @@ const Viewhistory: React.FC = () => {
             statusName: ticketData.statusName || null,
             feedbackType: ticketData.feedbackType,
             assignee: ticketData.assignee,
+            assigneeId: ticketData.assigneeId,
+
             dueDate: moment(ticketData.dueDate).format("YYYY-MM-DD"),
             createdDate: moment(ticketData.createdDate).format("YYYY-MM-DD"),
           })
         );
         setData(formattedData);
+        const assigneeIds = ticketDataArray.map(
+          (ticketData: any) => ticketData.assigneeId
+        );
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -96,11 +101,30 @@ const Viewhistory: React.FC = () => {
       )
     );
   };
+  const showAssigneeModal = (assigneeId: string | null) => {
+    // Fetch employee information when modal is opened
+    if (assigneeId) {
+      axios
+        .get(`/api/User/GetUserByEmployeeId?employeeId=${assigneeId}`)
+        .then((response) => {
+          const employeeInfo = response.data;
 
-  const showAssigneeModal = (assigneeInfo: AssigneeInfo | null) => {
-    setSelectedAssignee(assigneeInfo);
-    setAssigneeModalVisible(true);
+          // Update the modal content with the retrieved employee information
+          setSelectedAssignee((prevAssignee) => ({
+            ...prevAssignee,
+            firstName: employeeInfo.firstName,
+            officialMailId: employeeInfo.officialMailId,
+            contactNumber: employeeInfo.contactNumber,
+          }));
+        })
+        .catch((error) => {
+          console.error("Error fetching employee information:", error);
+        });
+
+      setAssigneeModalVisible(true);
+    }
   };
+
   const columns: TableColumnsType<DataType> = [
     {
       title: (
@@ -133,6 +157,7 @@ const Viewhistory: React.FC = () => {
       key: "issueName",
       width: 150,
     },
+
     {
       title: (
         <span style={{ color: "navy", fontWeight: "bold" }}>Description</span>
@@ -156,8 +181,8 @@ const Viewhistory: React.FC = () => {
       dataIndex: "assignee",
       key: "assignee",
       width: 150,
-      render: (row: any) => {
-        console.log(row, "assigneeInfo");
+      render: (assignee: any, record:any) => {
+        console.log(assignee, "assigneeInfo");
         return (
           <span
             style={{
@@ -165,13 +190,40 @@ const Viewhistory: React.FC = () => {
               textDecoration: "underline",
               color: "blue",
             }}
-            onClick={() => showAssigneeModal(row)}
+            onClick={() => showAssigneeModal(record.assigneeId)}
           >
-            {row || "N/A"}
+            {assignee || "Not Yet Assigned"}
           </span>
         );
       },
     },
+
+    {
+      title: <span style={{ color: "navy", fontWeight: "bold" }}>Status</span>,
+      dataIndex: "statusName",
+      key: "statusName",
+      width: 150,
+      filters: [
+        { text: "Resolved", value: "Resolved" },
+        { text: "Rejected", value: "Rejected" },
+        { text: "Initiated", value: "Initiated" },
+        { text: "Pending", value: "Pending" },
+      ],
+      onFilter: (value, record) => record.statusName === value,
+      render: (text, record) => (
+        <div>
+          {record.statusName ? (
+            <>
+              <span className={getStatusDotClass(record.statusName)} />
+              {text}
+            </>
+          ) : (
+            "Pending"
+          )}
+        </div>
+      ),
+    },
+
     {
       title: (
         <span style={{ color: "navy", fontWeight: "bold" }}>Created On</span>
@@ -207,6 +259,15 @@ const Viewhistory: React.FC = () => {
       dataIndex: "reraiseticket",
       key: "reraiseticket",
       width: 150,
+      render: (text: string, record: DataType) => (
+        <Button
+          type="link"
+          icon={<RollbackOutlined />}
+          // onClick={() => handleReRaiseTicket(record)}
+        >
+          Re-raise
+        </Button>
+      ),
     },
     {
       title: (
@@ -221,7 +282,7 @@ const Viewhistory: React.FC = () => {
   return (
     <div>
       <h1 className="head">TICKET HISTORY</h1>
-      <div className="searchclass">
+      <div className="searchs">
         <div>
           <Input
             placeholder="Search..."
