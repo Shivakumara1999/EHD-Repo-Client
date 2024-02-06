@@ -19,6 +19,7 @@ import {
   SlackCircleFilled,
   UserOutlined,
 } from "@ant-design/icons";
+import {AiOutlineRise} from "react-icons/ai";
 import { Header } from "antd/es/layout/layout";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -38,7 +39,7 @@ const CommonLayout = ({ children, userRoles }: any) => {
           key: "escalations",
           label: "Escalations",
           path: "/admin/escalations",
-          icon: <SettingFilled />,
+          icon: <AiOutlineRise />,
         },
         {
           key: "employees",
