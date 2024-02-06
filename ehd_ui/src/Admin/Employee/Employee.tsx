@@ -2,7 +2,7 @@ import { Button, Divider, Modal, Select, Table, TableColumnsType } from "antd";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { EditFilled, ReloadOutlined } from "@ant-design/icons";
-import { EditEmployee } from "./EditEmployee";
+import AddEmployee from "./AddEmployee";
 
 interface DataType {
   key: React.Key;
@@ -213,7 +213,7 @@ const EmployeeComponent: React.FC = () => {
 
   return (
     <div>
-      <Button>Add Employee</Button>
+      <AddEmployee/>
       <ReloadOutlined
         onClick={() => {
           refreshFunction();
@@ -259,15 +259,11 @@ const EmployeeComponent: React.FC = () => {
       </Select>
       <Divider />
       <Modal
-        className="editEmployee"
+        title="Basic Modal"
         open={isModalOpen}
-        onCancel={() => setIsModalOpen(false)}
-        footer={[]}
-        width={1000}
         onOk={handleOk}
-      >
-        <EditEmployee selectedRowKeys={selectedRowKeys} selectedRows={row} />
-      </Modal>
+        onCancel={handleCancel}
+      ></Modal>
       <Table
         rowSelection={{
           onChange: handleRowSelectionChange,
