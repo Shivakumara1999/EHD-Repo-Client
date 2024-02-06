@@ -376,33 +376,29 @@ LoginForm.css */ .login-container {
   display: inline-block;
   border-radius: 100%;
 }
- .gray-dot {
-  animation: blink-animation 1s infinite;
-  background-color: gray;
-  border-radius: 50%;
-  display: inline-block;
-  height: 10px;
-  width: 10px;
-  margin-right: 5px; /* Adjust as needed */
-}
+ /*  */
 .green-dot {
   border: 1px solid green;
   background-color: green;
 }
+.gray-dot{
+  border:#5a5a5a;
+  background-color: #5a5a5a;
+}
 
 .red-dot {
-  border: 1px solid red;
-  background-color: red;
+  border: 1px solid rgb(195, 0, 0);
+  background-color: rgb(244, 1, 1);
 }
 
 .yellow-dot {
-  border: 1px solid yellow;
+  border: 1px solid #ffff00;
   background-color: yellow;
 }
 
 @keyframes blinker {
   50% {
-    opacity: 0.6;
+    opacity: 0.3;
   }
 }
 
@@ -410,6 +406,12 @@ LoginForm.css */ .login-container {
   width: 22%;
   display: flex;
   justify-content: space-between;
+}
+
+
+.AssigneinfoModl{
+  font-size: medium;
+ 
 }
 /* megha- ticketing */
 
@@ -1168,6 +1170,7 @@ color: yellow;
 }
 
 
+
 /* Admin/Employee */
 .btn {
   display: flex;
@@ -1231,4 +1234,10 @@ color: yellow;
 
 .refreshbtn {
   margin-top: 3%;
+}
+.status_pending{
+  text-wrap: nowrap;
+  margin-top: -66% !important;
+  margin-left: 100% !important;
+
 }
