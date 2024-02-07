@@ -118,7 +118,82 @@ const CommonLayout = ({ children, userRoles }: any) => {
           path: "/ticketing/viewTicket",
           icon: <ProfileFilled />,
         },
-      ],
+      ],  R04: [
+        {
+          key: "overview",
+          label: "Overview",
+          path: "/ticketing/overview",
+          icon: <SlackCircleFilled />,
+        },
+        {
+          key: "ticketing",
+          label: "Ticketing System",
+          path: "/ticketing/management",
+          icon: <UserOutlined />,
+        },
+        {
+          key: "createTicket",
+          label: "Create Ticket",
+          path: "/ticketing/createTicket",
+          icon: <FileAddOutlined />,
+        },
+        {
+          key: "viewTicket",
+          label: "Ticket History",
+          path: "/ticketing/viewTicket",
+          icon: <ProfileFilled />,
+        },
+      ],  R05: [
+        {
+          key: "overview",
+          label: "Overview",
+          path: "/ticketing/overview",
+          icon: <SlackCircleFilled />,
+        },
+        {
+          key: "ticketing",
+          label: "Ticketing System",
+          path: "/ticketing/management",
+          icon: <UserOutlined />,
+        },
+        {
+          key: "createTicket",
+          label: "Create Ticket",
+          path: "/ticketing/createTicket",
+          icon: <FileAddOutlined />,
+        },
+        {
+          key: "viewTicket",
+          label: "Ticket History",
+          path: "/ticketing/viewTicket",
+          icon: <ProfileFilled />,
+        },
+      ],  R06: [
+        {
+          key: "overview",
+          label: "Overview",
+          path: "/ticketing/overview",
+          icon: <SlackCircleFilled />,
+        },
+        {
+          key: "ticketing",
+          label: "Ticketing System",
+          path: "/ticketing/management",
+          icon: <UserOutlined />,
+        },
+        {
+          key: "createTicket",
+          label: "Create Ticket",
+          path: "/ticketing/createTicket",
+          icon: <FileAddOutlined />,
+        },
+        {
+          key: "viewTicket",
+          label: "Ticket History",
+          path: "/ticketing/viewTicket",
+          icon: <ProfileFilled />,
+        },
+      ]
       // R03: [
       //   {
       //     key: "overview",
