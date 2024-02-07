@@ -663,6 +663,7 @@ popover-buttoncancel {
 
 .Department {
   width: 120;
+  color: blue !important;
 }
 
 .spanId{
@@ -787,6 +788,11 @@ color: yellow;
   margin-top: 15%;
 }
 
+.dept-opt .ant-select-selection-item {
+  color: blue;
+  font-weight: bold !important;
+}
+
 .Acknowledge .ant-select-selection-item {
   color: blue;
   font-weight: bold !important;
@@ -807,7 +813,11 @@ color: yellow;
   font-weight: bold !important;
 }
 
-
+.notify{
+  font-weight: bold;
+  font-size: 18px;
+  color: #1677ff;
+}
 .option1, .option2 {
   font-weight: bold !important;
 }
@@ -818,6 +828,13 @@ color: yellow;
 
 .option2 {
   color: red !important;
+}
+
+.nodata{
+  font-weight: bold;
+  color: rgb(110, 108, 108);
+  text-align: center;
+  font-size: 20px;
 }
 .Department{
   width:120;
