@@ -46,6 +46,7 @@ interface IIssues {
   createdBy: string;
   createdDate: Date;
   departmentName: string;
+  departmentId:string;
 }
 
 interface IDesignation{
@@ -92,8 +93,8 @@ const Configuration = () => {
     departmentId: "",
     departmentName: "",
   });
-  const CreatedBy = localStorage.getItem("CreatedBy");
-  const modifiedBy = localStorage.getItem("CreatedBy");
+  const CreatedBy = localStorage.getItem("EmployeeId");
+  const modifiedBy = localStorage.getItem("EmployeeId");
   const [defaultroleValues, setDefaultroleValues] = useState({
     roleId: "",
     roleName: "",
@@ -218,6 +219,7 @@ const Configuration = () => {
       createdBy: issues[i].createdBy,
       createdDate: issues[i].createdDate,
       departmentName: issues[i].departmentName,
+      departmentId: issues[i].departmentId,
     });
   }
 
@@ -276,21 +278,21 @@ const Configuration = () => {
         ...values,
         departmentId: selectedRow[0].departmentId,
         createdBy: "",
-        modifiedBy: "adminn",
+        modifiedBy: modifiedBy,
       };
     } else {
-      var data = { ...values };
+      var data = { ...values,createdBy:CreatedBy};
     }
     // Add logic to save department data
     setIsModalVisible(false);
     try {
       if (canEdit) {
         // Update Department API call
-        await axios.post(`/api/Master/AddOrUpdateDepartment?id=${modifiedBy}`, data);
+        await axios.post(`/api/Master/AddOrUpdateDepartment`, data);
         
       } else {
         // Add Department API call
-        await axios.post(`/api/Master/AddOrUpdateDepartment?id=${CreatedBy}`, data);
+        await axios.post(`/api/Master/AddOrUpdateDepartment`, data);
       }
 
       setIsModalVisible(false);
@@ -490,6 +492,7 @@ const Configuration = () => {
     });
   };
   const handleRoleEdit = (record: IRoles) => {
+    console.log(record,"recorddd")
     setRoleModalVisible(true);
     SetCanEditRole(true);
     setRoleid(record.roleId);
@@ -501,10 +504,11 @@ const Configuration = () => {
   };
 
   const handleIssueEdit = (record: IIssues) => {
+    console.log(record,"recorddd")
     setIssueModalVisible(true);
     SetCanEditIssue(true);
     form.setFieldsValue({
-      departmentId: record.departmentName,
+      departmentId: record.departmentId,
       Issueid: record.issueId,
       issueName: record.issueName,
     });
@@ -535,13 +539,14 @@ const Configuration = () => {
     }
   };
   const callmodal11 = () => {
+    console.log(callModal,"callmodal")
     if (callModal == "departmentmodal") {
       setIsModalVisible(true);
       form.resetFields();
     } else if (callModal == "showRoleModal") {
       setRoleModalVisible(true);
       form.resetFields();
-    } else if (callModal == "showIssueModal") {
+    } else if (callModal == "issuemodal") {
       setIssueModalVisible(true);
       form.resetFields();
     }
@@ -570,21 +575,25 @@ const Configuration = () => {
   };
 
   const onFinishRole = async (values: any) => {
+    console.log(values,"valueee")
     if (canEditRole) {
       var data = {
         ...values,
-        roleId: Roleid,
+        roleId:selectedRole[0].roleId,
+        CreatedBy: "",
+        modifiedBy:modifiedBy
       };
     } else {
-      var data = { ...values};
+      var data = { ...values,CreatedBy:CreatedBy};
     }
+    console.log(data,"valueeeeee")
     setRoleModalVisible(false);
     try {
       if (canEditRole) {
-        await axios.post(`/api/Master/AddorUpdateRoles?id=${modifiedBy}`, data);
+        await axios.post(`/api/Master/AddorUpdateRoles`, data);
         
       } else {
-        await axios.post(`/api/Master/AddorUpdateRoles?id=${CreatedBy}`, data);
+        await axios.post(`/api/Master/AddorUpdateRoles`, data);
       }
 
       setRoleModalVisible(false);
@@ -610,18 +619,16 @@ const Configuration = () => {
   };
 
   const onFinishIssue = async (values: any) => {
+    console.log(selectedIssue[0],"valuess")
     if (canEditIssue) {
-      var data = { ...values, departmentId: IssueDept, employeeId: "E001" };
-      var dataArray1 = {
-        departmentId: data.departmentId,
-        issueId: data.Issueid,
-        issueName: data.issueName,
-        employeeId: data.employeeId,
+      var data = { ...values,
+        CreatedBy: "",
+        modifiedBy:modifiedBy
       };
+      console.log(data,"dataaaa")
       try {
         await axios.put(
-          `/api/Master/UpdateIssueTypes/UpdateIssueType?id=${modifiedBy}`,
-          dataArray1
+          `/api/Master/UpdateIssueTypes`, data
         );
 
         setIssueModalVisible(false);
@@ -640,11 +647,12 @@ const Configuration = () => {
         });
       }
     } else {
-      var data = { ...values, issueId: 0, employeeId: "E001" };
+      var data = { ...values };
 
       var dataArray = [
-        {
-          departmentId: data.departmentId, // replace with the actual value for departmentId
+        { 
+          CreatedBy: CreatedBy,
+          departmentId: data.departmentId, 
           issueId: data.issueId,
           issueName: data.issueName,
           employeeId: data.employeeId,
@@ -654,9 +662,9 @@ const Configuration = () => {
       setIssueModalVisible(false);
       try {
         if (canEditIssue) {
-          await axios.post(`/api/Master/AddIssueTypes?id=${modifiedBy}`, dataArray);
+          await axios.post(`/api/Master/AddIssueTypes`, dataArray);
         } else {
-          await axios.post(`/api/Master/AddIssueTypes?id=${CreatedBy}`, dataArray);
+          await axios.post(`/api/Master/AddIssueTypes`, dataArray);
         }
 
         setIssueModalVisible(false);
@@ -682,22 +690,22 @@ const Configuration = () => {
     if (canEditDesignation) {
       var data = {
         ...values,
-        designationId: DesignationDept,
-        createdBy: "",
-        modifiedBy: "adminn",
+        designationId:selectedDesignation[0].designationId,
+        CreatedBy: "",
+        modifiedBy:modifiedBy
       };
     } else {
-      var data = { ...values };
+      var data = { ...values,CreatedBy:CreatedBy};
     }
     
     setDesignationModalVisible(false);
     try {
       if (canEditDesignation) {
-        await axios.post(`/api/Master/AddOrUpdateDesignations?id=${modifiedBy}`, data);
+        await axios.post(`/api/Master/AddOrUpdateDesignations`, data);
         
       } else {
         
-        await axios.post(`/api/Master/AddOrUpdateDesignations?id=${CreatedBy}`, data);
+        await axios.post(`/api/Master/AddOrUpdateDesignations`, data);
       }
 
       setDesignationModalVisible(false);
