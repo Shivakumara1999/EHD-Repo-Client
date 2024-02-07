@@ -57,9 +57,11 @@ interface IDesignation{
 }
 
 const Configuration = () => {
-  const [buttonName, setButtonName] = useState("Department");
+  const [buttonName, setButtonName] = useState("department");
   const [selectedTab, setSelectedTab] = useState("1");
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [Active, setActive] = useState(true);
+  const [isselect, setisselect] = useState(false);
   const [callModal, setCallModal] = useState("departmentmodal");
   const [roleModalVisible, setRoleModalVisible] = useState(false);
   const [issueModalVisible, setIssueModalVisible] = useState(false);
@@ -67,6 +69,9 @@ const Configuration = () => {
   const [form] = Form.useForm();
   const [selectedRowKeys, setSelectedRowKeys] = useState<String[]>([]);
   const [selectedRow, setSelectedRow] = useState<IDepartment[]>([]);
+  const [selectedRole, setSelectedRole] = useState<IRoles[]>([]);
+  const [selectedIssue, setSelectedIssue] = useState<IIssues[]>([]);
+  const [selectedDesignation, setSelectedDesignation] = useState<IDesignation[]>([]);
   const [canEdit, SetCanEdit] = useState(false);
   const [canEditRole, SetCanEditRole] = useState(false);
   const [canEditIssue, SetCanEditIssue] = useState(false);
@@ -113,6 +118,8 @@ const Configuration = () => {
     setIsModalVisible(false);
     setSelectedRowKeys([]);
     setSelectedRow([]);
+    setSelectedRole([]);
+    setSelectedIssue([]);
     SetCanEdit(false);
     setSelectedRowKeysforrole([]);
     setSelectedRowKeysforissues([]);
@@ -306,6 +313,14 @@ const Configuration = () => {
   };
 
   const onChange = (key: string) => {
+    setSelectedRowKeys([]);
+  setSelectedRowKeysforrole([]);
+  setSelectedRowKeysforissues([]);
+  setSelectedRowKeysfordesignation([]);
+  setSelectedRow([]);
+  setSelectedRole([]);
+  setSelectedIssue([]);
+  setSelectedDesignation([]);
     setSelectedTab(key);
     if (key === "2") {
       setButtonName("Role");
@@ -353,107 +368,118 @@ const Configuration = () => {
       let rolesResponse;
       let issuesResponse;
       let designationResponse;
-
-      if (value === "Active") {
-        departmentsResponse = await axios.get(
-          "/api/Master/GetDepartmentsByActive?isActive=true"
-        );
-        rolesResponse = await axios.get(
-          "/api/Master/GetAllRoles?isActive=true"
-        );
-        issuesResponse = await axios.get(
-          "/api/Master/GetAllIssueTypes?isActive=true"
-        );
-        designationResponse = await axios.get(
-          "/api/Master/GetDesignationsByActive?isActive=true"
-        );
-      } else {
-        departmentsResponse = await axios.get(
-          "/api/Master/GetDepartmentsByActive?isActive=false"
-        );
-        rolesResponse = await axios.get(
-          "/api/Master/GetAllRoles?isActive=false"
-        );
-        issuesResponse = await axios.get(
-          "/api/Master/GetAllIssueTypes?isActive=false"
-        );
-        designationResponse = await axios.get(
-          "/api/Master/GetDesignationsByActive?isActive=false"
-        );
-      }
-
+  
+      const isActive = value === "Active";
+  setActive(isActive);
+      departmentsResponse = await axios.get(
+        `/api/Master/GetDepartmentsByActive?isActive=${isActive}`
+      );
       setDepartments(departmentsResponse.data);
+      rolesResponse = await axios.get(
+        `/api/Master/GetAllRoles?isActive=${isActive}`
+      );
       setRoles(rolesResponse.data);
+
+      issuesResponse = await axios.get(
+        `/api/Master/GetAllIssueTypes?isActive=${isActive}`
+      );
       setIssues(issuesResponse.data);
+
+      designationResponse = await axios.get(
+        `/api/Master/GetDesignationsByActive?isActive=${isActive}`
+      );
       setDesignation(designationResponse.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+  
 
   const handleActiveClick = async () => {
-    // Extract departmentIds from selected rows
-    const selectedDepartmentIds = selectedRow.map((row) => row.departmentId);
-
-    // Create the object with the desired format
-    const requestData = { id: selectedDepartmentIds };
-
     try {
-      // Update Department IsActive status
-      const departmentResponse = await axios.put(
-        "/api/Master/EditDepartmentIsActive?Is_Active=true",
-        requestData
-      );
-
-      // You can also trigger a reload or perform other actions if needed
-      // For example:
-      // fetchDataForDepartment();
-      // fetchDataForRoles();
-      // fetchDataForIssues();
-
+      let apiEndpoint = "";
+      let payload = {};
+  
+      if (selectedTab === "1") {
+        apiEndpoint = "/api/Master/EditDepartmentIsActive";
+        payload = { id: selectedRow.map((row) => row.departmentId), Is_Active: true };
+      } else if (selectedTab === "2") {
+        apiEndpoint = "/api/Master/EditRolesIsActive";
+        payload = { id: selectedRole.map((row) => row.roleId), Is_Active: true };
+      } else if (selectedTab === "3") {
+        apiEndpoint = "/api/Master/EditIssueIsActive";
+        payload = { id: selectedIssue.map((row) => row.issueId), Is_Active: true };
+      }else if (selectedTab === "4") {
+        apiEndpoint = "/api/Master/EditDesignationsIsActive";
+        payload = { id: selectedDesignation.map((row) => row.designationId), Is_Active: true };
+      }
+      
+  
+      // Make the API call for activation
+      await axios.put(apiEndpoint, payload);
+  
+      // Refresh data after activation
+      fetchDataForDepartment();
+      fetchDataForRoles();
+      fetchDataForIssues();
+      fetchDataForDesignation();
+  
       // Notify success
       notification.success({
         message: "Success",
-        description: "Department status updated successfully",
+        description: "Items activated successfully",
       });
     } catch (error) {
-      // Handle the error as needed
-      console.error(error);
-
-      // Notify error
+      console.error("Error activating items:", error);
       notification.error({
         message: "Error",
-        description: "Failed to update status. Please try again.",
+        description: "Failed to activate items. Please try again.",
       });
     }
   };
-
   
-
   const handleDeactiveClick = async () => {
-    const selectedDepartmentIds = selectedRow.map((row) => row.departmentId);
-
-    // Create the object with the desired format
-    const requestData = { id: selectedDepartmentIds };
-
     try {
-      // Make the API call
-      const response = await axios.put(
-        "/api/Master/EditDepartmentIsActive?Is_Active=false",
-        requestData
-      );
+      let apiEndpoint = "";
+      let payload = {};
+  
+      if (selectedTab === "1") {
+        apiEndpoint = "/api/Master/EditDepartmentIsActive";
+        payload = { id: selectedRow.map((row) => row.departmentId), Is_Active: false };
+      } else if (selectedTab === "2") {
+        apiEndpoint = "/api/Master/EditRolesIsActive";
+        payload = { id: selectedRole.map((row) => row.roleId), Is_Active: false };
+      } else if (selectedTab === "3") {
+        apiEndpoint = "/api/Master/EditIssueIsActive";
+        payload = { id: selectedIssue.map((row) => row.issueId), Is_Active: false };
+      }else if (selectedTab === "4") {
+        apiEndpoint = "/api/Master/EditDesignationsIsActive";
+        payload = { id: selectedDesignation.map((row) => row.designationId), Is_Active: false };
+      }
+  
+      // Make the API call for deactivation
+      await axios.put(apiEndpoint, payload);
+  
+      // Refresh data after deactivation
+      fetchDataForDepartment();
+      fetchDataForRoles();
+      fetchDataForIssues();
+      fetchDataForDesignation();
+  
+      // Notify success
       notification.success({
         message: "Success",
-        description: "Department status updated succesfully",
+        description: "Items deactivated successfully",
       });
     } catch (error) {
-      // Handle the error as needed
+      console.error("Error deactivating items:", error);
       notification.error({
         message: "Error",
-        description: "Failed to update department status. Please try again.",
+        description: "Failed to deactivate items. Please try again.",
       });
     }
   };
+ 
 
   const handleEdit = (record: IDepartment) => {
     setIsModalVisible(true);
@@ -514,13 +540,14 @@ const Configuration = () => {
       form.resetFields();
     } else if (callModal == "showRoleModal") {
       setRoleModalVisible(true);
+      form.resetFields();
     } else if (callModal == "showIssueModal") {
-     
       setIssueModalVisible(true);
-      
+      form.resetFields();
     }
      else {
       setDesignationModalVisible(true);
+      form.resetFields();
     }
   };
 
@@ -547,8 +574,6 @@ const Configuration = () => {
       var data = {
         ...values,
         roleId: Roleid,
-        createdBy: "",
-        modifiedBy: "adminn",
       };
     } else {
       var data = { ...values};
@@ -588,19 +613,19 @@ const Configuration = () => {
     if (canEditIssue) {
       var data = { ...values, departmentId: IssueDept, employeeId: "E001" };
       var dataArray1 = {
-        departmentId: data.departmentId, // replace with the actual value for departmentId
+        departmentId: data.departmentId,
         issueId: data.Issueid,
         issueName: data.issueName,
         employeeId: data.employeeId,
       };
       try {
         await axios.put(
-          "/api/Master/UpdateIssueTypes/UpdateIssueType",
+          `/api/Master/UpdateIssueTypes/UpdateIssueType?id=${modifiedBy}`,
           dataArray1
         );
 
         setIssueModalVisible(false);
-        SetCanEditIssue(false);
+        SetCanEditIssue(true);
         setDefaultissueValues({ Issueid: "", Issuetype: "" });
         openNotificationIssue();
         fetchDataForDepartment();
@@ -629,9 +654,9 @@ const Configuration = () => {
       setIssueModalVisible(false);
       try {
         if (canEditIssue) {
-          await axios.post("/api/Master/AddIssueTypes", dataArray);
+          await axios.post(`/api/Master/AddIssueTypes?id=${modifiedBy}`, dataArray);
         } else {
-          await axios.post("/api/Master/AddIssueTypes", dataArray);
+          await axios.post(`/api/Master/AddIssueTypes?id=${CreatedBy}`, dataArray);
         }
 
         setIssueModalVisible(false);
@@ -651,6 +676,8 @@ const Configuration = () => {
       }
     }
   };
+
+
   const onFinishDesignation = async (values: any) => {
     if (canEditDesignation) {
       var data = {
@@ -666,7 +693,6 @@ const Configuration = () => {
     setDesignationModalVisible(false);
     try {
       if (canEditDesignation) {
-        
         await axios.post(`/api/Master/AddOrUpdateDesignations?id=${modifiedBy}`, data);
         
       } else {
@@ -677,8 +703,6 @@ const Configuration = () => {
       setDesignationModalVisible(false);
       SetCanEditDesignation(false);
       setDefaultdesignationValues({ designationId: "", designation: "" });
-
-      
       openNotificationDesignation();
       fetchDataForDesignation();
       fetchDataForDepartment();
@@ -699,6 +723,10 @@ const Configuration = () => {
   };
   const setIssueDepartment = (value: any) => {
     setIssueDept(value);
+  };
+
+  const setRoleDepartment = (value: any) => {
+    setRoleid(value);
   };
 
   const columns1: TableColumnsType<IDepartment> = [
@@ -760,7 +788,7 @@ const Configuration = () => {
       render: (text: string) => moment(text).format("YYYY-MM-DD"),
     },
     {
-      title: "Department",
+      title: "Department Name",
       dataIndex: "departmentName",
     },
 
@@ -892,15 +920,20 @@ const Configuration = () => {
           <Select
             defaultValue="Active"
             className="selectclass"
-            onChange={(value) => handleActiveStatusChange(value)}
+            onChange={(value:any) => handleActiveStatusChange(value)}
+          
           >
-            <Option value="Active">Active</Option>
+            <Option value="Active" >Active</Option>
             <Option value="InActive">InActive</Option>
           </Select>
-          <Button className="activeclass" onClick={handleActiveClick}>
+          <Button className="activeclass"   disabled={
+               Active ? true : !isselect
+            } onClick={handleActiveClick}>
             Activate
           </Button>
-          <Button className="deactiveclass" onClick={handleDeactiveClick}>
+          <Button className="deactiveclass"   disabled={
+             Active ? !isselect : true
+            } onClick={handleDeactiveClick}>
             Deactivate
           </Button>
           
@@ -927,6 +960,10 @@ const Configuration = () => {
                       const keys = selectedRows.map((row) =>
                         row.key.toString()
                       );
+                      if(selectedRows.length!=0){
+                        console.log("its true",isselect,Active==true ?true:false)
+                        setisselect(true)
+                      }else{setisselect(false)}
                       setSelectedRowKeys(keys);
                       setSelectedRow(selectedRows);
                     },
@@ -947,8 +984,12 @@ const Configuration = () => {
                       const keys = selectedRows.map((row) =>
                         row.key.toString()
                       );
+                      if(selectedRows.length!=0){
+                        console.log("its true",isselect,Active==true ?true:false)
+                        setisselect(true)
+                      }else{setisselect(false)}
                       setSelectedRowKeysforrole(keys);
-                      setSelectedRow(selectedRows);
+                      setSelectedRole(selectedRows);
                     },
                   }}
                 />
@@ -967,7 +1008,13 @@ const Configuration = () => {
                       const keys = selectedRows.map((row) =>
                         row.key.toString()
                       );
+                      if(selectedRows.length!=0){
+                        console.log("its true",isselect,Active==true ?true:false)
+                        setisselect(true)
+                      }else{setisselect(false)}
                       setSelectedRowKeysforissues(keys);
+                      setSelectedIssue(selectedRows);
+
                     },
                   }}
                 />
@@ -986,7 +1033,13 @@ const Configuration = () => {
                       const keys = selectedRows.map((row) =>
                         row.key.toString()
                       );
+                      if(selectedRows.length!=0){
+                        console.log("its true",isselect,Active==true ?true:false)
+                        setisselect(true)
+                      }else{setisselect(false)}
                       setSelectedRowKeysfordesignation(keys);
+                      setSelectedDesignation(selectedRows);
+
                     },
                   }}
                 />
@@ -1096,7 +1149,7 @@ const Configuration = () => {
               { required: true, message: "Please select the department!" },
             ]}
           >
-            <Select>
+             <Select onChange={setRoleDepartment}>
               {departments.map((department) => (
                 <Option
                   key={department.departmentId}
