@@ -9,7 +9,7 @@ import {
 } from "antd";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { EditFilled, ReloadOutlined } from "@ant-design/icons";
+import { EditFilled, RedoOutlined, ReloadOutlined } from "@ant-design/icons";
 import AddEmployee from "./AddEmployee";
 
 interface DataType {
@@ -297,7 +297,7 @@ const EmployeeComponent: React.FC = () => {
 
   return (
     <div>
-      <h1>Employees</h1>
+      <h2 style={{color:"rgb(79 64 185)",marginLeft:"2%"}}>Employees</h2>
       <div className="btn">
         <div>
           <AddEmployee />
@@ -347,11 +347,8 @@ const EmployeeComponent: React.FC = () => {
               Deactivate
             </Button>
             <div className="refreshbtn">
-              <ReloadOutlined
-                onClick={() => {
-                  refreshFunction();
-                }}
-              />
+              
+          <Button style={{marginTop:"-15%",marginLeft:"8%"}} icon={<RedoOutlined />} onClick={refreshFunction} />
             </div>
           </div>
         </div>

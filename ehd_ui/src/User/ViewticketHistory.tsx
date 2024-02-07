@@ -412,7 +412,7 @@
 
     return (
       <div>
-        <h1 className="head">TICKET HISTORY</h1>
+        <h2  className="head" >Ticket History</h2>
         <div className="searchs">
           <div>
             <Input

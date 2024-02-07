@@ -153,14 +153,14 @@ LoginForm.css */ .login-container {
 }
 
 .activeclass {
-  background-color: #1d0db2;
+  background-color: #08b708;
   color: #ffffff;
   font-weight: bold;
   width: 90px;
   font-family: Georgia, "Times New Roman", Times, serif;
 }
 .deactiveclass {
-  background-color: #c33739;
+  background-color: #df2427;
   color: #ffffff;
   font-weight: bold;
   /* width: 90px; */
@@ -301,6 +301,7 @@ LoginForm.css */ .login-container {
   justify-content: flex-end;
   position:absolute;
   right:1%;
+  background-color: aliceblue;
 }
 .divider {
   background-color: #ffffff;
@@ -1185,6 +1186,7 @@ color: yellow;
   width: 40%;
   display: flex;
   justify-content: space-between;
+  margin-right: 3%;
 }
 
 .ant-table-body {
@@ -1240,4 +1242,30 @@ color: yellow;
   margin-top: -66% !important;
   margin-left: 100% !important;
 
+}
+.activatebtn {
+  display: flex;
+  width: 45%;
+  justify-content: space-around;
+  margin-right: 8%;
+}
+.deactive{
+  margin-left: 2% !important;
+}
+.searchfeild {
+  width: 80%;
+  width: 100%;
+  margin-left: -25%;
+}
+
+
+
+.head{
+  color:rgb(79 64 185);
+  margin-left:2%;
+  margin-top:3%;
+}
+.cardcreate{
+   width:30% ;
+   margin-top:4%;
 }
