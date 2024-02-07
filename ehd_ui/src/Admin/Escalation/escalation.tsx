@@ -17,6 +17,7 @@ export function Escalation() {
     const [isCardSelect, setIsCardSelect] = useState("")
     const [selectedDepartmentId, setSelectedDepartmentId] = useState("")
     const [selectedDepartmentName, setSelectedDepartmentName] = useState("")
+    const [selectedTicketId, setSelectedTicketId] = useState("")
     // const [isResolvedCountDataLoading, setIsResolvedCountDataLoading] = useState(false)
     // const [isReRaisedCountDataLoading, setIsReRaisedCountDataLoading] = useState(false)
 
@@ -103,9 +104,9 @@ export function Escalation() {
         })
     }
 
-    const reRaiseTickets = (ticket:any) => {
+    const reRaiseTickets = (ticketId:any) => {
         const data = {
-            ticketId: ticket.ticketId,
+            ticketId: ticketId,
             modifiedBy: empId,
             reRaiseReason: reRaiseReason
           }
@@ -136,6 +137,11 @@ export function Escalation() {
         .catch((error:any) => {
             message.error(error.message);
         })
+    }
+
+    const handleReRaise = (ticketId:any) => {
+        setIsConfirmModelOpen(true);
+        setSelectedTicketId(ticketId);
     }
 
     const showReRaiseNotification = () => {
@@ -246,7 +252,6 @@ export function Escalation() {
                     className="content-card-list"
                     renderItem={(ticket:any)=>{
                         return(
-                            <>
                             <List.Item style={{}} className="content-card-listitem">
                                 <Card className="content-card" >
                                     <Row>
@@ -277,7 +282,7 @@ export function Escalation() {
                                         </Col>
                                         <Col span={3}>
                                             <br></br>
-                                            <Button onClick={()=>{setIsConfirmModelOpen(true)}} className="content-card-reraise-button" style={{}}>Re-raise</Button>
+                                            <Button onClick={()=>{handleReRaise(ticket.ticketId)}} className="content-card-reraise-button" style={{}}>Re-raise</Button>
                                         </Col>
                                         <Col span={3}>
                                             <br></br>
@@ -293,9 +298,15 @@ export function Escalation() {
                                     </Row>
                                     
                                 </Card>
-                            </List.Item> 
-                            <Modal open={isConfirmModalOpen} onCancel={confirmModalClose} title="Are you sure to re-raise this ticket?" footer={null}>
-                            <br></br>
+                            </List.Item>                              
+                        )                       
+                    }}
+                    >
+                </List>               
+            </div>
+
+            <Modal open={isConfirmModalOpen} onCancel={confirmModalClose} title="Are you sure to re-raise this ticket?" footer={null}>
+                                <br></br>
                                 <Form  
                                 layout='vertical' 
                                 form={confirmForm}>       
@@ -309,17 +320,11 @@ export function Escalation() {
                                         <Button style={{}} className="modal-cancel-button" onClick={()=>{setIsConfirmModelOpen(false)}}>Cancel</Button>
                                     </Form.Item>
                                     <Form.Item>
-                                        <Button style={{}} className="modal-reraise-button" htmlType="submit"  onClick={()=>{reRaiseTickets(ticket)}}>Re-raise</Button>
+                                        <Button style={{}} className="modal-reraise-button" htmlType="submit"  onClick={()=>{reRaiseTickets(selectedTicketId)}}>Re-raise</Button>
                                     </Form.Item>
                                     </span>
                                 </Form>
                             </Modal>
-                            </>    
-                        )                       
-                    }}
-                    >
-                </List>               
-            </div>
 
             <Modal open={isUserInfoModalOpen} onCancel={()=>{setIsUserInfoModelOpen(false)}} title="User Informations" footer={null}>
                                 <Row>
