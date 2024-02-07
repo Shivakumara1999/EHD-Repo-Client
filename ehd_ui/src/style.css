@@ -435,7 +435,7 @@ LoginForm.css */ .login-container {
   margin: 0px 5px;
   margin-bottom: 10px;
   transition: box-shadow 0.2s;
-  border: 3px solid rgb(158, 156, 156);
+  border: 2px solid rgb(158, 156, 156);
 }
 
 .card-value {
@@ -787,16 +787,26 @@ color: yellow;
   margin-top: 15%;
 }
 
-.ant-select-selection-item {
+.Acknowledge .ant-select-selection-item {
   color: blue;
   font-weight: bold !important;
 }
 
+.Accepted .ant-select-selection-item{
+  color: green !important; 
+  font-weight: bold !important;
+}
+
+.Rejected .ant-select-selection-item{
+  color: red !important; 
+  font-weight: bold !important;
+}
 
 .right-content-btn {
   color: blue;
   font-weight: bold !important;
 }
+
 
 .option1, .option2 {
   font-weight: bold !important;
@@ -840,6 +850,7 @@ color: yellow;
 .right-content-btn {
   margin-left: 10px;
   width: 100%;
+  color: blue !important;
 }
 
 .priority-text {
@@ -898,11 +909,12 @@ color: yellow;
   background-color:#f5edee;
 }
 .resolved-btn{
-  margin-top: 8px;
+  margin-top: 0px;
+  color: blue !important;
 }
 
 .priority-txt{
-  margin-top: -7px;
+  margin-top: -12px;
 }
 
 .dept-opt{

@@ -718,6 +718,7 @@ const TicketingSystem: React.FC = () => {
                     onSelect={() => {
                       handleTicketSelection(ticket.ticketId);
                     }}
+                    className={ticket.statusId === null ? "Acknowledge" : ticket.statusId == 1 ? "Accepted" : ticket.statusId === 2 ? "Rejected" : "Accepted"}
                     value={ticket.statusId == null ? "Acknowledge" : ticket.statusId == 1 ? "Accepted" : ticket.statusId == 2 ? "Rejected" : "Accepted"}
                     onChange={(value) => {
                       switch (value) {
