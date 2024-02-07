@@ -336,6 +336,7 @@ const EmployeeComponent: React.FC = () => {
               Activate
             </Button>
             <Button
+            className="deactive"
               type="primary"
               danger
               disabled={

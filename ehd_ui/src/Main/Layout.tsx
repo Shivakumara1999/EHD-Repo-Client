@@ -97,80 +97,106 @@ const CommonLayout = ({ children, userRoles }: any) => {
         {
           key: "overview",
           label: "Overview",
-          path: "/ticketing/overviewIt",
+          path: "/ticketing/overview",
           icon: <SlackCircleFilled />,
         },
         {
           key: "ticketing",
           label: "Ticketing System",
-          path: "/ticketing/it",
+          path: "/ticketing/management",
           icon: <UserOutlined />,
         },
         {
           key: "createTicket",
           label: "Create Ticket",
-          path: "/ticketing/createTicketIt",
+          path: "/ticketing/createTicket",
           icon: <FileAddOutlined />,
         },
         {
           key: "viewTicket",
           label: "Ticket History",
-          path: "/ticketing/viewTicketIt",
+          path: "/ticketing/viewTicket",
           icon: <ProfileFilled />,
         },
       ],
-      R04: [
-        {
-          key: "overview",
-          label: "Overview",
-          path: "/ticketing/overviewPy",
-          icon: <SlackCircleFilled />,
-        },
-        {
-          key: "ticketing",
-          label: "Ticketing System",
-          path: "/ticketing/payroll",
-          icon: <UserOutlined />,
-        },
-        {
-          key: "createTicket",
-          label: "Create Ticket",
-          path: "/ticketing/createTicketPy",
-          icon: <FileAddOutlined />,
-        },
-        {
-          key: "viewTicket",
-          label: "Ticket History",
-          path: "/ticketing/viewTicketPy",
-          icon: <ProfileFilled />,
-        },
-      ],
-      R05: [
-        {
-          key: "overview",
-          label: "Overview",
-          path: "/ticketing/overviewFc",
-          icon: <SlackCircleFilled />,
-        },
-        {
-          key: "ticketing",
-          label: "Ticketing System",
-          path: "/ticketing/facility",
-          icon: <UserOutlined />,
-        },
-        {
-          key: "createTicket",
-          label: "Create Ticket",
-          path: "/ticketing/createTicketFc",
-          icon: <FileAddOutlined />,
-        },
-        {
-          key: "viewTicket",
-          label: "Ticket History",
-          path: "/ticketing/viewTicketFC",
-          icon: <ProfileFilled />,
-        },
-      ],
+      // R03: [
+      //   {
+      //     key: "overview",
+      //     label: "Overview",
+      //     path: "/ticketing/overviewIt",
+      //     icon: <SlackCircleFilled />,
+      //   },
+      //   {
+      //     key: "ticketing",
+      //     label: "Ticketing System",
+      //     path: "/ticketing/it",
+      //     icon: <UserOutlined />,
+      //   },
+      //   {
+      //     key: "createTicket",
+      //     label: "Create Ticket",
+      //     path: "/ticketing/createTicketIt",
+      //     icon: <FileAddOutlined />,
+      //   },
+      //   {
+      //     key: "viewTicket",
+      //     label: "Ticket History",
+      //     path: "/ticketing/viewTicketIt",
+      //     icon: <ProfileFilled />,
+      //   },
+      // ],
+      // R04: [
+      //   {
+      //     key: "overview",
+      //     label: "Overview",
+      //     path: "/ticketing/overviewPy",
+      //     icon: <SlackCircleFilled />,
+      //   },
+      //   {
+      //     key: "ticketing",
+      //     label: "Ticketing System",
+      //     path: "/ticketing/payroll",
+      //     icon: <UserOutlined />,
+      //   },
+      //   {
+      //     key: "createTicket",
+      //     label: "Create Ticket",
+      //     path: "/ticketing/createTicketPy",
+      //     icon: <FileAddOutlined />,
+      //   },
+      //   {
+      //     key: "viewTicket",
+      //     label: "Ticket History",
+      //     path: "/ticketing/viewTicketPy",
+      //     icon: <ProfileFilled />,
+      //   },
+      // ],
+      // R05: [
+      //   {
+      //     key: "overview",
+      //     label: "Overview",
+      //     path: "/ticketing/overviewFc",
+      //     icon: <SlackCircleFilled />,
+      //   },
+      //   {
+      //     key: "ticketing",
+      //     label: "Ticketing System",
+      //     path: "/ticketing/facility",
+      //     icon: <UserOutlined />,
+      //   },
+      //   {
+      //     key: "createTicket",
+      //     label: "Create Ticket",
+      //     path: "/ticketing/createTicketFc",
+      //     icon: <FileAddOutlined />,
+      //   },
+      //   {
+      //     key: "viewTicket",
+      //     label: "Ticket History",
+      //     path: "/ticketing/viewTicketFC",
+      //     icon: <ProfileFilled />,
+      //   },
+      // ],
       // Add more role-based menu mappings as needed
     };
     const menuItems = roleMenuMapping[userRoles] || [];

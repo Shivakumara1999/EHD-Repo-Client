@@ -290,7 +290,7 @@ LoginForm.css */ .login-container {
   width: 110%;
 }
 .content-container {
-  padding-left: 1%;
+
   background-color: aliceblue;
 }
 
@@ -1173,6 +1173,8 @@ color: yellow;
 
 
 /* Admin/Employee */
+
+
 .btn {
   display: flex;
   justify-content: space-between;
@@ -1186,8 +1188,9 @@ color: yellow;
   width: 40%;
   display: flex;
   justify-content: space-between;
-  margin-right: 3%;
+  margin-right: 2%;
 }
+
 
 .ant-table-body {
   max-height: 600px;
@@ -1250,7 +1253,7 @@ color: yellow;
   margin-right: 8%;
 }
 .deactive{
-  margin-left: 2% !important;
+  margin-left: 3% !important;
 }
 .searchfeild {
   width: 80%;
