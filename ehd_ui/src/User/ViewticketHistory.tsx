@@ -187,7 +187,6 @@
           .then((response) => {
             const employeeInfo = response.data;
 
-<<<<<<< HEAD
             // Update the modal content with the retrieved employee information
             setSelectedAssignee((prevAssignee) => ({
               ...prevAssignee,
@@ -199,32 +198,6 @@
           .catch((error) => {
             console.error("Error fetching employee information:", error);
           });
-=======
-  return (
-    <div>
-      <h1 className="head">TICKET HISTORY</h1>
-      <div className="searchs">
-        <div>
-          <Input
-            placeholder="Search..."
-            style={{ marginBottom: 16 }}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-        <Button icon={<RedoOutlined />} onClick={handleRefresh} />
-      </div>
-      <Table
-        columns={columns}
-        dataSource={filterData(data, searchTerm, [
-          "departmentName",
-          "ticketId",
-          "createdDate",
-          "assignee",
-        ])}
-        scroll={{ x: 1500, y: 600 }}
-      />
->>>>>>> parent of 1c6a15a (changes done  in css)
 
         setAssigneeModalVisible(true);
       }
