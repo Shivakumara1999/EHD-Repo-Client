@@ -59,7 +59,7 @@ const AddEmployee = () => {
 
   return (
     <>
-      <Button id="idp" className="addbtn" type="primary" onClick={showModal}>
+      <Button id="idp" type="primary" onClick={showModal}>
         Add Employee
       </Button>
       <Modal
