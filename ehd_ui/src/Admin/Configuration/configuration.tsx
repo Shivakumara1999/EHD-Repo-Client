@@ -874,7 +874,6 @@ const Configuration = () => {
     <>
     <div className="comonclass">
     <h2 style={{color:"rgb(79 64 185)",marginLeft:"2%"}}>Configuration</h2>
-  
       <div style={{ display: "Flex", justifyContent: "space-between" }}>
         <div style={{ alignItems: "screenLeft" }}>
           <Button type="primary" className="buttonclass" onClick={callmodal11}>
@@ -904,7 +903,8 @@ const Configuration = () => {
           <Button className="deactiveclass" onClick={handleDeactiveClick}>
             Deactivate
           </Button>
-          <Button className="refreshicon" icon={<RedoOutlined />} onClick={refreshFunction} />
+          
+          <Button icon={<RedoOutlined />} onClick={refreshFunction} />
         </div>
       </div>
       <div style={{ marginTop: "35px" }}>

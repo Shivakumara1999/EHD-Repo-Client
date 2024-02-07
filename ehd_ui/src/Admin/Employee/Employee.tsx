@@ -336,9 +336,9 @@ const EmployeeComponent: React.FC = () => {
               Activate
             </Button>
             <Button
+            className="deactive"
               type="primary"
               danger
-              className="deactive"
               disabled={
                 !selectedRowKeys.length ||
                 (selectedOption === false && isDeactiveButtonDisabled)
@@ -349,7 +349,7 @@ const EmployeeComponent: React.FC = () => {
             </Button>
             <div className="refreshbtn">
               
-              <Button style={{marginLeft:"8%",marginTop:"-15%"}} icon={<RedoOutlined />} onClick={refreshFunction} />
+          <Button style={{marginTop:"-15%",marginLeft:"8%"}} icon={<RedoOutlined />} onClick={refreshFunction} />
             </div>
           </div>
         </div>

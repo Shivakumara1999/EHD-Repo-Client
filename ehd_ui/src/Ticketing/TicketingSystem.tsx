@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Input, Modal, Row, Select, message } from "antd";
+import { Button, Card, Col, Input, Modal, Row, Select, message, notification } from "antd";
 import Meta from "antd/es/card/Meta";
 import Search from "antd/es/input/Search";
 import "../style.css";
@@ -331,7 +331,7 @@ const TicketingSystem: React.FC = () => {
     })
       .then((response: any) => {
         setValue(true)
-        //setData(response.data);
+        showNotification();
       })
       .catch((error: any) => {
         message.error(error.message);
@@ -422,9 +422,14 @@ const TicketingSystem: React.FC = () => {
     setValue(false)
   }, [value===true]);
 
-  // const handleIrrelevant = (dept: string) => {
-
-  // };
+  const showNotification = () => {
+    notification.success({
+        duration: 6,
+        placement: 'bottomRight',
+        message: <span style={{ fontWeight: 'bold', fontSize: '18px', color: '#1677ff' }}>Successfully!</span>,
+        description: ` successfull `
+    });
+};
 
   const updateDepartment = (ticketId: string, deptId: any) => {
     if (deptId === "") {
@@ -437,15 +442,14 @@ const TicketingSystem: React.FC = () => {
       };
       axios({
         method: "put",
-        // headers: {
-        //     'Authorization': `Bearer ${authToken}`
-        // },
+        
         url: `/api/Ticket/UpdateTicketDepartment`,
         data: data,
       })
         .then((response: any) => {
           setData(response.data);
           setConfirmIrrelevantVisible(false);
+          
         })
         .catch((error: any) => {
           message.error(error.message);
