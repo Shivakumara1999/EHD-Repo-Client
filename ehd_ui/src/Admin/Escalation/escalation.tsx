@@ -58,7 +58,7 @@ export function Escalation() {
 
     const getUnresolvedTicketsData = (departmentId: string, departmentName: string) => {
 
-        if (departmentId !== selectedDepartmentId){
+        if (isCardSelect !== `Unresolved ${departmentId}`){
             localStorage.setItem('isCardSelect',`Unresolved ${departmentId}`);
             localStorage.setItem('selectedDepartmentId',departmentId);
             localStorage.setItem('selectedDepartmentName',departmentName);
@@ -81,7 +81,7 @@ export function Escalation() {
 
     const getReRaisedTicketsData = (departmentId: string, departmentName: string) => {
 
-        if (departmentId !== selectedDepartmentId){
+        if (isCardSelect !== `Re-Raised ${departmentId}`){
             localStorage.setItem('isCardSelect',`Re-Raised ${departmentId}`);
             localStorage.setItem('selectedDepartmentId',departmentId);
             localStorage.setItem('selectedDepartmentName',departmentName);
@@ -189,7 +189,7 @@ export function Escalation() {
             <div className="count-div" style={{ }}>
                 <Row gutter={16}>
                 <Col span={6}>
-                    <Card title="Unresolved tickets" className="count-card"  loading={unresolvedCountData?.length === 0 }
+                    <Card title="Unresolved tickets" className="count-card"  loading={unresolvedCountData == null }
                     style={{}}>
                     <List
                         itemLayout="vertical"
@@ -212,7 +212,7 @@ export function Escalation() {
                 </Card>
             </Col>
             <Col span={6}>
-            <Card title="Re-raised tickets" className="count-card" loading={false}
+            <Card title="Re-raised tickets" className="count-card"  loading={reRaisedCountData == null }
             style={{}}>
                 <List
                     itemLayout="horizontal"
@@ -232,7 +232,7 @@ export function Escalation() {
                     }}
                     ></List>
                  <br></br>
-                </Card>
+            </Card>
             </Col>
             </Row>
             </div>
@@ -253,7 +253,7 @@ export function Escalation() {
                     renderItem={(ticket:any)=>{
                         return(
                             <List.Item style={{}} className="content-card-listitem">
-                                <Card className="content-card" >
+                                <Card className="content-card" loading={ticketsData?.length === 0 }>
                                     <Row>
                                         <Col span={18}>
                                             <Row align="top" style={{}}>
