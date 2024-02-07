@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { EditFilled, RedoOutlined, ReloadOutlined } from "@ant-design/icons";
 import AddEmployee from "./AddEmployee";
+import { EditEmployee } from "./EditEmployee";
 
 interface DataType {
   key: React.Key;
@@ -53,6 +54,10 @@ const EmployeeComponent: React.FC = () => {
 
   const showModal = () => {
     setIsRoleAssignmentVisible(true);
+  };
+  const [editModal, setEditModal] = useState(false)
+  const showEditModal = () => {
+    setEditModal(true);
   };
 
   const handleOk = () => {
@@ -248,7 +253,7 @@ const EmployeeComponent: React.FC = () => {
           <div>
             <Button
               type="primary"
-              onClick={showModal}
+              onClick={showEditModal}
               disabled={
                 selectedRowKeys.length !== 1 ||
                 record.employeeId !== selectedRowKeys[0]
@@ -356,11 +361,17 @@ const EmployeeComponent: React.FC = () => {
       </div>
       <Divider />
       <Modal
-        title="Basic Modal"
-        open={isModalOpen}
+        className="editEmployee"
+        open={editModal}
+        onCancel={() => setEditModal(false)}
+        footer={[]}
+        width={1000}
         onOk={handleOk}
-        onCancel={handleCancel}
-      ></Modal>
+       
+      
+      >
+        <EditEmployee selectedRowKeys={selectedRowKeys} selectedRows={row} />
+      </Modal>
       <Modal
         title="Roles"
         open={isRoleAssignmentVisible}
