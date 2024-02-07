@@ -364,8 +364,7 @@ const CommonLayout = ({ children, userRoles }: any) => {
     );
   }
   return (
-    <div className="layout">
-    <Layout >
+    <Layout style={{ minHeight: "100vh" }}>
       <Sider theme="light">
         <img src="../JoyWhite.png" alt="JOY" className="joylogo" />
         <Divider className="divider"></Divider>
@@ -378,14 +377,20 @@ const CommonLayout = ({ children, userRoles }: any) => {
         </Menu>
       </Sider>
       <Layout className="content-container">
-        
         <Content className="content-container">
-          <Header className="header">
+          <Header
+            className="header"
+            // style={{
+            //   background: "#fff",
+            //   padding: 0,
+            //   display: "flex",
+            //   justifyContent: "flex-end",
+            // }}
+          >
             <UserDetails />
           </Header>
           {children}
         </Content>
-        
       </Layout>
       <Modal
         title="Change Password"
@@ -396,7 +401,6 @@ const CommonLayout = ({ children, userRoles }: any) => {
         <ChangePassword />
       </Modal>
     </Layout>
-    </div>
   );
 };
 

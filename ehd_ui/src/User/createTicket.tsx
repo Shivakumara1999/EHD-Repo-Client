@@ -180,11 +180,10 @@ const CreateTicket: React.FC = () => {
   return (
     <div className="ticket_form">
       <div>
-      <h2  className="head" >Create Ticket</h2>
-       
+        <h1 className="head">CREATE TICKET</h1>
       </div>
       <div className="drop">
-        <Card  className="cardcreate" >
+        <Card style={{ width: 320 }}>
           <h2 className="headings">Department Name</h2>
           <label>
             <select
@@ -203,7 +202,7 @@ const CreateTicket: React.FC = () => {
             </select>
           </label>
         </Card>
-        <Card  className="cardcreate">
+        <Card style={{ width: 320 }}>
           <h2 className="headings">Issue Type</h2>
           <label>
             <select
@@ -224,7 +223,7 @@ const CreateTicket: React.FC = () => {
           </label>
         </Card>
 
-        <Card className="cardcreate" >
+        <Card style={{ width: 320 }}>
           <h2 className="headings">Select Priority</h2>
           <label>
             <select
