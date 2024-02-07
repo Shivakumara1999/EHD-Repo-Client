@@ -123,6 +123,17 @@
               createdDate: moment(ticketData.createdDate).format("YYYY-MM-DD"),
             })
           );
+          // Sort the array, placing records with null statusName first
+          formattedData.sort((a, b) => {
+            if (a.statusName === null && b.statusName !== null) {
+              return -1;
+            } else if (a.statusName !== null && b.statusName === null) {
+              return 1;
+            } else {
+              // Keep the original order for other cases
+              return 0;
+            }
+          });
           setData(formattedData);
           const assigneeIds = ticketDataArray.map(
             (ticketData: any) => ticketData.assigneeId
@@ -292,7 +303,9 @@
       },
 
       {
-        title: <span style={{ color: "navy", fontWeight: "bold" }}>Status</span>,
+        title: (
+          <span style={{ color: "navy", fontWeight: "bold" }}>Status</span>
+        ),
         dataIndex: "statusName",
         key: "statusName",
         width: 150,
@@ -300,23 +313,26 @@
           { text: "Resolved", value: "Resolved" },
           { text: "Rejected", value: "Rejected" },
           { text: "Initiated", value: "Initiated" },
-          { text: "Pending", value: "Pending" },
+          { text: "Pending", value: "" },
         ],
-        onFilter: (value, record) => record.statusName === value,
+        onFilter: (value, record: any) => record.statusName === value,
+
         render: (text, record) => (
           <div>
-            {record.statusName === "Rejected" ? (
+            {record.statusName != null ? (
               <>
                 <span className={getStatusDotClass(record.statusName)} />
                 {text}
-                <MessageFilled
-                  style={{ marginLeft: 8, color: "blue", cursor: "pointer" }}
-                  onClick={() => showRejectedReason(record.rejectedReason)}
-                />
+                {record.statusName == "Rejected" ? (
+                  <MessageFilled
+                    style={{ marginLeft: 8, color: "blue", cursor: "pointer" }}
+                    onClick={() => showRejectedReason(record.rejectedReason)}
+                  />
+                ) : null}
               </>
             ) : (
               <span className={getStatusDotClass((text = "Pending"))}>
-                <p className="status_pending">Pending</p>
+                <p className="status_pending">{text}</p>
               </span>
             )}
           </div>
@@ -332,7 +348,9 @@
         render: (text: string) => moment(text).format("YYYY-MM-DD"),
       },
       {
-        title: <span style={{ color: "navy", fontWeight: "bold" }}>Due On</span>,
+        title: (
+          <span style={{ color: "navy", fontWeight: "bold" }}>Due On</span>
+        ),
         dataIndex: "dueDate",
         key: "dueDate",
         width: 150,
@@ -358,7 +376,7 @@
         key: "reraiseticket",
         width: 150,
         render: (text: string, record: any) =>
-          record.statusName === "Rejected" ? (
+          record.statusName === "Rejected" || record.statusName === "Resolved"   ? (
             <Button
               type="link"
               icon={<RollbackOutlined />}
