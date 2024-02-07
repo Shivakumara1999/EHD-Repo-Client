@@ -480,7 +480,12 @@ const TicketingSystem: React.FC = () => {
   }, [searchQuery, tableData]);
 
   const filteredData = activeData.filter((ticket: any) => {
-    const searchQueryLower = searchQuery.toLowerCase();
+    const searchQueryLower = searchQuery.trim().toLowerCase();
+
+    if (searchQueryLower === '') {
+      return false;
+  }
+
     return (
       (ticket.ticketId &&
         ticket.ticketId.toLowerCase().includes(searchQueryLower)) ||
@@ -765,7 +770,8 @@ const TicketingSystem: React.FC = () => {
                     value="3"
                     disabled={
                       selectedCategory === "Closed" ||
-                      selectedCategory === "Rejected" 
+                      selectedCategory === "Rejected" ||
+                      ticket.statusId !== 1
                     }
                   >
                     Resolved?
