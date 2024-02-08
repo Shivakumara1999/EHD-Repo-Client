@@ -66,6 +66,7 @@ const TicketingSystem: React.FC = () => {
 
   const departmentId = localStorage.getItem("DepartmentId");
   const employeeId = localStorage.getItem("EmployeeId");
+  const token = sessionStorage.getItem("token");
 
   const getCategoryName = () => {
     switch (selectedCategory) {
@@ -89,8 +90,13 @@ const TicketingSystem: React.FC = () => {
   };
 
   const getActiveData = () => {
-    axios
-      .get(`/api/Ticket/GetAllActiveTickets?departmentId=${departmentId}`)
+    axios({
+      method: 'get',
+      headers: {
+          'Authorization': `Bearer ${token}`
+      },
+      url: `/api/Ticket/GetAllActiveTickets?departmentId=${departmentId}`
+     })
       .then((response) => {
         setActiveData(response.data);
       })
@@ -100,38 +106,61 @@ const TicketingSystem: React.FC = () => {
   };
 
   const getDueData = () => {
-    axios
-      .get(`/api/Ticket/GetAllOverDueTickets?departmentId=${departmentId}`)
-      .then((response) => {
+    axios({
+      method: 'get',
+      headers: {
+          'Authorization': `Bearer ${token}`
+      },
+      url: `/api/Ticket/GetAllOverDueTickets?departmentId=${departmentId}`
+     })  
+   .then((response) => {
         setDueData(response.data);
       })
       .catch((error) => {
         message.error("Failed to fetch data");
       });
   };
+
   const getClosedData = () => {
-    axios
-      .get(`/api/Ticket/GetAllClosedTickets?departmentId=${departmentId}`)
-      .then((response) => {
+    axios({
+      method: 'get',
+      headers: {
+          'Authorization': `Bearer ${token}`
+      },
+      url: `/api/Ticket/GetAllClosedTickets?departmentId=${departmentId}`
+     })  
+       .then((response) => {
         setClosedData(response.data);
       })
       .catch((error) => {
         message.error("Failed to fetch data");
       });
   };
+
   const getReraisedData = () => {
-    axios
-      .get(`/api/Ticket/GetAllReRaisedTickets?departmentId=${departmentId}`)
-      .then((response) => {
+    axios({
+      method: 'get',
+      headers: {
+          'Authorization': `Bearer ${token}`
+      },
+      url: `/api/Ticket/GetAllReRaisedTickets?departmentId=${departmentId}`
+     })  
+       .then((response) => {
         setReraisedData(response.data);
       })
       .catch((error) => {
         message.error("Failed to fetch data");
       });
   };
+
   const getRejectedData = () => {
-    axios
-      .get(`/api/Ticket/GetAllRejectedTickets?departmentId=${departmentId}`)
+    axios({
+      method: 'get',
+      headers: {
+          'Authorization': `Bearer ${token}`
+      },
+      url: `/api/Ticket/GetAllRejectedTickets?departmentId=${departmentId}`
+     })  
       .then((response) => {
         setRejectedData(response.data);
       })
@@ -192,7 +221,10 @@ const TicketingSystem: React.FC = () => {
 
     const handleUserClick = async (employeeId: string) => {
       axios({
-        method: "get",
+        method: 'get',
+        headers: {
+          'Authorization': `Bearer ${token}`
+      },
         url: `/api/User/GetUserByEmployeeId?employeeId=${employeeId}`,
       })
         .then((response: any) => {
@@ -263,7 +295,10 @@ const TicketingSystem: React.FC = () => {
       reason: reason,
     };
     axios({
-      method: "put",
+      method: 'put',
+      headers: {
+        'Authorization': `Bearer ${token}`
+    },
       url: `/api/Ticket/UpdateTicketStatus`,
       data: data,
     })
@@ -332,7 +367,10 @@ const TicketingSystem: React.FC = () => {
 
   const getData = () => {
     axios({
-      method: "get",
+      method: 'get',
+      headers: {
+        'Authorization': `Bearer ${token}`
+    },
       url: `/api/Master/GetAllDepartments`,
     })
       .then((response: any) => {
@@ -386,7 +424,6 @@ const TicketingSystem: React.FC = () => {
   };
 
   const updateDepartment = (ticketId: string, deptId: any) => {
-    debugger;
     if (deptId === "") {
       message.error("Please select a department.");
     } else {
@@ -397,7 +434,10 @@ const TicketingSystem: React.FC = () => {
       };
       console.log(data);
       axios({
-        method: "put",
+        method: 'put',
+        headers: {
+          'Authorization': `Bearer ${token}`
+      },
         url: `/api/Ticket/UpdateTicketDepartment`,
         data: data,
       })
@@ -411,8 +451,13 @@ const TicketingSystem: React.FC = () => {
   };
 
   const GetAllTicketsCount = () => {
-    axios
-      .get(`/api/Ticket/GetCount?departmentId=${departmentId}`)
+    axios({
+      method: 'get',
+      headers: {
+          'Authorization': `Bearer ${token}`
+      },
+      url: `/api/Ticket/GetCount?departmentId=${departmentId}`
+    })
       .then((response: any) => {
         console.log(response.data);
         setCounts(response.data);
@@ -489,6 +534,7 @@ const TicketingSystem: React.FC = () => {
         return [];
     }
   };
+
   return (
     <>
       <div className="div">
@@ -741,16 +787,8 @@ const TicketingSystem: React.FC = () => {
                     <b>
                       {" "}
                       <div className="priority">
-                        <p
-                          className={`priority-text ${getPriorityClass(
-                            ticket.priority
-                          )}`}
-                        >
-                          <span
-                            className={`dot ${getPriorityDotClass(
-                              ticket.priority
-                            )}`}
-                          />
+                        <p className={`priority-text ${getPriorityClass(ticket.priority)}`}>
+                          <span className={`dot ${getPriorityDotClass(ticket.priority)}`}/>
                           {ticket.priority}
                         </p>
                       </div>
